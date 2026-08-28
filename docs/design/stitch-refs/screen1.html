@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuizTime Host - Quiz Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary-container": "#1b2b5e",
+                "surface-container-low": "#f4f4f1",
+                "on-secondary-fixed": "#410006",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#ffb3b0",
+                "on-tertiary": "#ffffff",
+                "on-primary": "#ffffff",
+                "secondary-fixed": "#ffdad8",
+                "outline-variant": "#c6c5d1",
+                "on-error": "#ffffff",
+                "surface-bright": "#f9f9f6",
+                "on-surface-variant": "#45464f",
+                "error": "#ba1a1a",
+                "primary": "#021549",
+                "on-tertiary-fixed": "#2a1700",
+                "on-tertiary-fixed-variant": "#653e00",
+                "surface-container": "#eeeeeb",
+                "background": "#f9f9f6",
+                "tertiary-fixed": "#ffddb8",
+                "surface-container-high": "#e8e8e5",
+                "primary-fixed-dim": "#b6c4ff",
+                "surface-dim": "#dadad7",
+                "on-secondary-fixed-variant": "#8c1520",
+                "surface-variant": "#e2e3e0",
+                "on-primary-container": "#8594cd",
+                "surface-container-highest": "#e2e3e0",
+                "inverse-on-surface": "#f1f1ee",
+                "surface": "#f9f9f6",
+                "on-tertiary-container": "#d18500",
+                "on-primary-fixed": "#04174a",
+                "surface-tint": "#4d5c92",
+                "secondary-container": "#ff6b6b",
+                "on-secondary-container": "#6d0010",
+                "on-error-container": "#93000a",
+                "on-surface": "#1a1c1b",
+                "on-background": "#1a1c1b",
+                "tertiary-fixed-dim": "#ffb95f",
+                "inverse-surface": "#2f312f",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed-variant": "#354478",
+                "primary-fixed": "#dce1ff",
+                "outline": "#757680",
+                "inverse-primary": "#b6c4ff",
+                "tertiary-container": "#442800",
+                "secondary": "#ae2f34",
+                "error-container": "#ffdad6",
+                "tertiary": "#281600"
+              },
+              fontFamily: {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Plus Jakarta Sans"],
+                "label": ["Plus Jakarta Sans"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-[#f9f9f6] dark:bg-slate-950 flex justify-between items-center w-full px-6 py-3 border-b border-opacity-10 border-[#1B2B5E] sticky top-0 z-50">
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold text-[#1B2B5E] dark:text-white tracking-tighter">QuizTime</span>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 group cursor-pointer">
+<input class="bg-transparent border-none font-bold text-[#1B2B5E] dark:text-blue-400 p-0 focus:ring-0 text-sm tracking-tight w-64" type="text" value="Monthly Tech Trivia 2024"/>
+<span class="material-symbols-outlined text-sm text-slate-400 group-hover:text-primary transition-colors">edit</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-5 py-2 rounded-xl text-slate-500 hover:text-[#1B2B5E] transition-all font-semibold text-sm">
+<span class="material-symbols-outlined text-lg">visibility</span>
+                Preview
+            </button>
+<button class="bg-secondary-container text-on-secondary-container px-6 py-2.5 rounded-xl font-extrabold text-sm shadow-[0px_10px_20px_rgba(255,107,107,0.2)] active:scale-95 transition-transform">
+                Start Quiz
+            </button>
+<div class="flex items-center gap-2 ml-4">
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary transition-colors">settings</span>
+<div class="w-8 h-8 rounded-full bg-primary-fixed overflow-hidden ml-2">
+<img alt="Host Avatar" class="w-full h-full object-cover" data-alt="User profile avatar placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABf454fhOhtXFPwHIaRbzCk5YtPUl1WkTnouSRD6Ti6aG_HuqygZqFj--ugMrQZn4GRkMWNdtpZUAqaqb8hl-nQAhSvDKVrCbtMzLx9WBaq86FNcXhEu6PzF3G2dkK4o-DA5ZmCI3RsQv0Hbr_SDJs8nOz7oGvdsphB-wyZsGzH_2fMT-VjDkVXIGtbAqMxbBleeG1Wl_TR5exkdlxSx5or-iefFLKQl-3F0nyCeD7r7iC2keq5b5dgTkeyL8QtJQ9nj7pAhgbF44y"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar / Questions List -->
+<aside class="w-80 bg-surface-container-low dark:bg-slate-900 flex flex-col h-[calc(100vh-60px)] border-r border-outline-variant/10">
+<div class="p-6 flex justify-between items-center">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Questions (12)</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">sort</span>
+</div>
+<div class="flex-1 overflow-y-auto px-4 space-y-2 pb-24">
+<!-- Active Question -->
+<div class="bg-[#ffffff] dark:bg-slate-800 p-3 rounded-xl shadow-sm border-l-4 border-primary flex gap-3 group cursor-pointer transition-all">
+<div class="text-[10px] font-bold text-primary/40 mt-1">01</div>
+<div class="flex-1">
+<div class="text-sm font-bold text-[#1B2B5E] line-clamp-1">What is the capital of France?</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-[14px] text-slate-400">quiz</span>
+<span class="text-[10px] font-bold bg-surface-container px-2 py-0.5 rounded-full text-slate-600 tracking-tighter">15s</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
+</div>
+<!-- Inactive Question -->
+<div class="p-3 rounded-xl hover:bg-surface-container transition-all flex gap-3 group cursor-pointer">
+<div class="text-[10px] font-bold text-slate-400 mt-1">02</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-slate-600 line-clamp-1">Identify this famous painting...</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-[14px] text-slate-400">image</span>
+<span class="text-[10px] font-bold bg-surface-container px-2 py-0.5 rounded-full text-slate-600 tracking-tighter">30s</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity">drag_indicator</span>
+</div>
+<!-- Joker Round Question -->
+<div class="p-3 rounded-xl hover:bg-surface-container transition-all flex gap-3 group cursor-pointer relative overflow-hidden">
+<div class="absolute right-0 top-0 bg-tertiary-fixed-dim/20 w-12 h-12 -mr-6 -mt-6 rotate-45"></div>
+<div class="text-[10px] font-bold text-slate-400 mt-1">03</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-slate-600 line-clamp-1">Who invented the lightbulb?</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-[14px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold bg-tertiary-fixed/30 px-2 py-0.5 rounded-full text-on-tertiary-fixed-variant tracking-tighter">JOKER</span>
+</div>
+</div>
+</div>
+<div class="p-3 rounded-xl hover:bg-surface-container transition-all flex gap-3 group cursor-pointer">
+<div class="text-[10px] font-bold text-slate-400 mt-1">04</div>
+<div class="flex-1">
+<div class="text-sm font-semibold text-slate-600 line-clamp-1">True or False: The sky is blue...</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-[14px] text-slate-400">check_circle</span>
+<span class="text-[10px] font-bold bg-surface-container px-2 py-0.5 rounded-full text-slate-600 tracking-tighter">10s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Action -->
+<div class="p-4 bg-surface-container-low border-t border-outline-variant/10">
+<button class="w-full py-4 rounded-xl bg-primary text-on-primary font-bold flex items-center justify-center gap-2 shadow-[0px_10px_20px_rgba(2,21,73,0.1)] active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add_circle</span>
+                    Add Question
+                </button>
+</div>
+</aside>
+<!-- Main Content Area: Question Editor -->
+<main class="flex-1 bg-surface p-8 overflow-y-auto">
+<div class="max-w-4xl mx-auto space-y-8">
+<!-- Question Header & Type Selector -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<h2 class="text-3xl font-extrabold text-primary tracking-tight">Question Editor</h2>
+<div class="flex items-center gap-2 text-xs font-bold text-slate-400 bg-surface-container-low px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-sm">schedule</span>
+                            EDITING QUESTION 01
+                        </div>
+</div>
+<!-- Type Selector Tabs -->
+<div class="bg-surface-container-low p-1.5 rounded-2xl flex gap-1">
+<button class="flex-1 py-3 rounded-xl bg-surface-container-lowest shadow-sm text-primary font-bold text-sm flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined text-lg">list</span>
+                            MC
+                        </button>
+<button class="flex-1 py-3 rounded-xl text-slate-500 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-lg">check_circle</span>
+                            T-F
+                        </button>
+<button class="flex-1 py-3 rounded-xl text-slate-500 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-lg">image</span>
+                            Image
+                        </button>
+<button class="flex-1 py-3 rounded-xl text-slate-500 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-lg">linear_scale</span>
+                            Slider
+                        </button>
+<button class="flex-1 py-3 rounded-xl text-slate-500 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-lg">keyboard</span>
+                            Type-in
+                        </button>
+</div>
+</section>
+<!-- Input Canvas -->
+<div class="space-y-6">
+<!-- Text Input Area -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)]">
+<textarea class="w-full border-none focus:ring-0 p-0 text-2xl font-bold text-primary placeholder:text-slate-200 resize-none" placeholder="Type your question here..." rows="2"></textarea>
+<!-- Image Upload Area -->
+<div class="mt-8 border-2 border-dashed border-outline-variant rounded-2xl p-12 flex flex-col items-center justify-center bg-surface group hover:bg-surface-container transition-all cursor-pointer">
+<div class="w-16 h-16 rounded-full bg-primary-fixed/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">cloud_upload</span>
+</div>
+<p class="text-sm font-bold text-primary">Drop an image here or <span class="text-secondary-container underline">browse</span></p>
+<p class="text-xs text-slate-400 mt-2">PNG, JPG, GIF up to 10MB</p>
+</div>
+</div>
+<!-- Answers Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Answer A -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 border-transparent focus-within:border-primary-fixed">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary font-black text-xs shrink-0">A</div>
+<input class="flex-1 border-none focus:ring-0 p-0 font-bold text-primary" type="text" value="Paris"/>
+<label class="relative flex items-center cursor-pointer">
+<input checked="" class="peer sr-only" name="correct" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-white scale-0 peer-checked:scale-100 transition-transform" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</label>
+</div>
+<!-- Answer B -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 border-transparent focus-within:border-primary-fixed">
+<div class="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container font-black text-xs shrink-0">B</div>
+<input class="flex-1 border-none focus:ring-0 p-0 font-bold text-primary" placeholder="Add answer..." type="text"/>
+<label class="relative flex items-center cursor-pointer">
+<input class="peer sr-only" name="correct" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-white scale-0 peer-checked:scale-100 transition-transform" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</label>
+</div>
+<!-- Answer C -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 border-transparent focus-within:border-primary-fixed">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed font-black text-xs shrink-0">C</div>
+<input class="flex-1 border-none focus:ring-0 p-0 font-bold text-primary" placeholder="Add answer..." type="text"/>
+<label class="relative flex items-center cursor-pointer">
+<input class="peer sr-only" name="correct" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-white scale-0 peer-checked:scale-100 transition-transform" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</label>
+</div>
+<!-- Answer D -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 border-transparent focus-within:border-primary-fixed">
+<div class="w-10 h-10 rounded-xl bg-[#8594cd] flex items-center justify-center text-white font-black text-xs shrink-0">D</div>
+<input class="flex-1 border-none focus:ring-0 p-0 font-bold text-primary" placeholder="Add answer..." type="text"/>
+<label class="relative flex items-center cursor-pointer">
+<input class="peer sr-only" name="correct" type="radio"/>
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-primary peer-checked:bg-primary transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-white scale-0 peer-checked:scale-100 transition-transform" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Settings Controls -->
+<div class="flex items-center justify-between gap-8 pt-4">
+<div class="flex items-center gap-6">
+<div class="flex flex-col gap-1">
+<label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Time Limit</label>
+<div class="flex items-center bg-surface-container-low rounded-xl px-4 py-2 w-32">
+<input class="bg-transparent border-none focus:ring-0 p-0 font-bold text-primary w-full" type="number" value="15"/>
+<span class="text-xs font-bold text-slate-400">SEC</span>
+</div>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant/30 mt-4"></div>
+<div class="flex flex-col gap-1">
+<label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Points</label>
+<div class="flex items-center bg-surface-container-low rounded-xl px-4 py-2 w-32">
+<input class="bg-transparent border-none focus:ring-0 p-0 font-bold text-primary w-full" type="number" value="1000"/>
+<span class="material-symbols-outlined text-sm text-slate-400">bolt</span>
+</div>
+</div>
+</div>
+<!-- Joker Toggle -->
+<div class="flex items-center gap-4 bg-tertiary-fixed-dim/10 border-2 border-tertiary-fixed-dim/20 p-4 rounded-2xl">
+<div class="flex flex-col">
+<span class="text-sm font-black text-on-tertiary-container flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                JOKER ROUND
+                            </span>
+<span class="text-[10px] font-medium text-on-tertiary-fixed-variant">Double points for all players</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary-fixed-dim"></div>
+</label>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

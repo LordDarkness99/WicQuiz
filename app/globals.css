@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Core brand tokens */
+  --color-cream: #FAFAF7;
+  --color-navy: #1B2B5E;
+  --color-coral: #FF6B6B;
+  --color-amber: #F59E0B;
+  --color-ink: #1A1A1A;
+  --color-navy-light: #2A3F7E;
+  --color-coral-light: #FF8A8A;
+  --color-cream-dark: #F0F0EB;
+  --color-periwinkle: #8594CD;
+
+  /* MD3 Design System tokens (from stitch refs) */
+  --color-primary: #021549;
+  --color-primary-container: #1b2b5e;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #8594cd;
+  --color-secondary: #ae2f34;
+  --color-secondary-container: #ff6b6b;
+  --color-on-secondary-container: #6d0010;
+  --color-tertiary-fixed-dim: #ffb95f;
+  --color-tertiary-fixed: #ffddb8;
+  --color-tertiary-container: #442800;
+  --color-on-tertiary-fixed: #2a1700;
+  --color-on-tertiary-fixed-variant: #653e00;
+  --color-on-tertiary-container: #d18500;
+  --color-surface: #f9f9f6;
+  --color-surface-bright: #f9f9f6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f4f1;
+  --color-surface-container: #eeeeeb;
+  --color-surface-container-high: #e8e8e5;
+  --color-surface-container-highest: #e2e3e0;
+  --color-surface-dim: #dadad7;
+  --color-on-surface: #1a1c1b;
+  --color-on-surface-variant: #45464f;
+  --color-outline: #757680;
+  --color-outline-variant: #c6c5d1;
+  --color-primary-fixed: #dce1ff;
+  --color-primary-fixed-dim: #b6c4ff;
+  --color-on-primary-fixed: #04174a;
+  --color-on-primary-fixed-variant: #354478;
+  --color-secondary-fixed: #ffdad8;
+  --color-secondary-fixed-dim: #ffb3b0;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-inverse-surface: #2f312f;
+
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Answer button colors for multiple choice */
+.answer-btn-0 { background: #FF6B6B; }
+.answer-btn-1 { background: #4ECDC4; }
+.answer-btn-2 { background: #F59E0B; }
+.answer-btn-3 { background: #7C3AED; }
+
+.answer-btn-0:hover { background: #FF8A8A; }
+.answer-btn-1:hover { background: #6EE7DF; }
+.answer-btn-2:hover { background: #FBBF24; }
+.answer-btn-3:hover { background: #8B5CF6; }
+
+/* Timer bar animation */
+@keyframes timer-shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.timer-bar {
+  animation: timer-shrink var(--timer-duration) linear forwards;
+}
+
+/* Horse race animation */
+@keyframes gallop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.horse-gallop {
+  animation: gallop 0.3s ease-in-out infinite;
+}
+
+/* Suspense mode glow */
+.suspense-glow {
+  box-shadow: 0 0 20px rgba(255, 185, 95, 0.3);
+}
+
+/* Glass panel effect */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+}
+
+/* End game podium shimmer for 1st place */
+@keyframes podium-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.podium-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 185, 95, 0.2) 25%,
+    rgba(255, 185, 95, 0.4) 50%,
+    rgba(255, 185, 95, 0.2) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: podium-shimmer 1s ease-in-out forwards;
+}
+
+/* End game confetti */
+@keyframes endgame-confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(var(--confetti-rot, 720deg));
+    opacity: 0;
+  }
+}

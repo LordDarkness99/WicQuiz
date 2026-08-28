@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuizTime - Quiz Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary": "#281600",
+                        "on-primary-fixed-variant": "#354478",
+                        "surface-container-highest": "#e2e3e0",
+                        "surface-container": "#eeeeeb",
+                        "outline-variant": "#c6c5d1",
+                        "outline": "#757680",
+                        "inverse-primary": "#b6c4ff",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#f1f1ee",
+                        "surface-container-high": "#e8e8e5",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "primary": "#021549",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "error": "#ba1a1a",
+                        "primary-container": "#1b2b5e",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-background": "#1a1c1b",
+                        "on-secondary-fixed": "#410006",
+                        "on-surface": "#1a1c1b",
+                        "secondary-fixed-dim": "#ffb3b0",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#4d5c92",
+                        "surface": "#f9f9f6",
+                        "on-secondary-fixed-variant": "#8c1520",
+                        "secondary": "#ae2f34",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#6d0010",
+                        "inverse-surface": "#2f312f",
+                        "on-primary-container": "#8594cd",
+                        "secondary-container": "#ff6b6b",
+                        "on-surface-variant": "#45464f",
+                        "surface-variant": "#e2e3e0",
+                        "primary-fixed": "#dce1ff",
+                        "tertiary-container": "#442800",
+                        "surface-container-low": "#f4f4f1",
+                        "secondary-fixed": "#ffdad8",
+                        "surface-dim": "#dadad7",
+                        "background": "#f9f9f6",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#d18500",
+                        "on-primary-fixed": "#04174a",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9f6"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center w-full px-6 py-3 bg-[#f9f9f6] z-50">
+<div class="flex items-center gap-8">
+<div class="text-xl font-bold text-primary tracking-tighter">QuizTime</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-bold tracking-tight text-primary">Quiz Builder</span>
+<span class="text-xs font-semibold text-outline-variant">/</span>
+<div class="flex items-center gap-2">
+<span class="text-xs font-medium text-on-surface-variant">8 questions · 2m 15s total</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-5 py-2 rounded-xl text-sm font-bold text-primary border border-primary/20 hover:bg-surface-container transition-colors">
+                Preview Quiz
+            </button>
+<button class="px-6 py-2 rounded-xl text-sm font-extrabold text-on-secondary bg-secondary shadow-[0px_10px_20px_rgba(174,47,52,0.15)] hover:scale-105 active:scale-95 transition-all">
+                Start Quiz
+            </button>
+<div class="flex items-center gap-2 ml-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container rounded-full" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-container rounded-full" data-icon="settings">settings</span>
+<img alt="Host Avatar" class="w-8 h-8 rounded-full ml-2 bg-surface-container-high" data-alt="User profile avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnQH5nSkWDaTo6rng_R4uLohtfhX95n6MngiSvqR-a-wGihptqJ1GxbkO7Eq7-sESaILxBNF37v03Awa5Jlrx3pkvjrzN7SeEQ2cVVEqLqkl94UmcEddOk3gyjUHj6v4TATFL42jKBwvTDAM6JrLmH6wQIelYKWHk5F0tJBkO9kWTmJN1SFZ9dyh33Q8k_5VHNkWfgJJ_6QjYdg0XF8M9vNFVbtdXWMMtJNvu98TZSydrz_k69ZujYoboDbrjvKzLq6VtWtnh4uBwD"/>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<!-- Left Panel: Sidebar Question List -->
+<aside class="w-72 bg-surface-container-low flex flex-col h-full z-40 relative">
+<div class="p-6">
+<div class="flex items-center justify-between group cursor-pointer mb-6 bg-surface-container-lowest p-3 rounded-xl shadow-sm">
+<h2 class="font-bold text-primary text-sm tracking-tight">GSFS Tuesday Quiz</h2>
+<span class="material-symbols-outlined text-xs text-outline opacity-40 group-hover:opacity-100 transition-opacity" data-icon="edit">edit</span>
+</div>
+<div class="space-y-3 overflow-y-auto max-h-[calc(100vh-220px)] pr-2 custom-scrollbar">
+<!-- Selected Card -->
+<div class="relative bg-surface-container-lowest p-4 rounded-xl shadow-[0px_10px_25px_rgba(2,21,73,0.06)] border-l-4 border-primary">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-bold text-on-primary-container bg-primary/5 px-2 py-0.5 rounded-full mb-2 block uppercase tracking-wider">Question 1</span>
+<span class="material-symbols-outlined text-outline-variant text-lg cursor-grab active:cursor-grabbing" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<p class="text-sm font-bold text-primary leading-snug mb-3">What is the capital of France?</p>
+<div class="flex items-center gap-3 text-[10px] font-bold text-outline uppercase tracking-widest">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="list">list</span>
+<span>MC</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span>15s</span>
+</div>
+</div>
+</div>
+<!-- Question Card 2 -->
+<div class="relative bg-surface-container-high/50 p-4 rounded-xl hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-bold text-outline px-2 py-0.5 rounded-full mb-2 block uppercase tracking-wider">Question 2</span>
+<span class="material-symbols-outlined text-outline-variant text-lg opacity-0 group-hover:opacity-100 transition-opacity" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<p class="text-sm font-semibold text-on-surface-variant leading-snug mb-3">The sky is blue</p>
+<div class="flex items-center gap-3 text-[10px] font-bold text-outline-variant uppercase tracking-widest">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+<span>T/F</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span>10s</span>
+</div>
+</div>
+</div>
+<!-- Question Card 3 -->
+<div class="relative bg-surface-container-high/50 p-4 rounded-xl hover:bg-surface-container-high transition-colors group">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-bold text-outline px-2 py-0.5 rounded-full mb-2 block uppercase tracking-wider">Question 3</span>
+<span class="material-symbols-outlined text-outline-variant text-lg opacity-0 group-hover:opacity-100 transition-opacity" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<p class="text-sm font-semibold text-on-surface-variant leading-snug mb-3">Identify this famous bridge</p>
+<div class="flex items-center gap-3 text-[10px] font-bold text-outline-variant uppercase tracking-widest">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="image">image</span>
+<span>IMAGE</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span>30s</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Add Question Button -->
+<div class="mt-auto p-6 bg-surface-container-low">
+<button class="w-full flex items-center justify-center gap-2 bg-secondary text-on-secondary py-4 rounded-xl font-bold hover:scale-[1.02] active:scale-98 transition-all shadow-lg">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                    Add Question
+                </button>
+</div>
+</aside>
+<!-- Right Panel: Editor Canvas -->
+<section class="flex-grow bg-surface-container-lowest p-8 overflow-y-auto">
+<div class="max-w-4xl mx-auto">
+<!-- Question Type Selector -->
+<nav class="flex items-center gap-2 mb-10 p-1 bg-surface-container rounded-xl w-fit">
+<button class="px-6 py-2 rounded-lg text-xs font-bold transition-all bg-primary text-on-primary shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="list">list</span>
+                        MC
+                    </button>
+<button class="px-6 py-2 rounded-lg text-xs font-bold transition-all text-on-surface-variant hover:bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                        T/F
+                    </button>
+<button class="px-6 py-2 rounded-lg text-xs font-bold transition-all text-on-surface-variant hover:bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="image">image</span>
+                        Image
+                    </button>
+<button class="px-6 py-2 rounded-lg text-xs font-bold transition-all text-on-surface-variant hover:bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="linear_scale">linear_scale</span>
+                        Slider
+                    </button>
+<button class="px-6 py-2 rounded-lg text-xs font-bold transition-all text-on-surface-variant hover:bg-surface-container-high flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="keyboard">keyboard</span>
+                        Type-in
+                    </button>
+</nav>
+<!-- Question Prompt -->
+<div class="mb-12">
+<label class="block text-[10px] font-extrabold text-outline uppercase tracking-[0.15em] mb-4">Question Text</label>
+<textarea class="w-full bg-transparent border-none p-0 text-3xl font-bold text-primary placeholder:text-outline-variant focus:ring-0 resize-none h-auto leading-tight" placeholder="Type your question here...">What is the capital of France?</textarea>
+</div>
+<!-- Answer Grid -->
+<div class="mb-12">
+<h3 class="text-[10px] font-extrabold text-outline uppercase tracking-[0.15em] mb-6">Answers</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Answer A -->
+<div class="flex items-center bg-surface-container-low p-5 rounded-xl group transition-all hover:bg-surface-container-high shadow-sm border-2 border-primary/10">
+<div class="w-3 h-3 rounded-full bg-primary mr-4"></div>
+<input class="flex-grow bg-transparent border-none p-0 text-lg font-bold text-primary focus:ring-0" type="text" value="Paris"/>
+<span class="material-symbols-outlined text-secondary-container" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Answer B -->
+<div class="flex items-center bg-surface-container-low p-5 rounded-xl group transition-all hover:bg-surface-container-high">
+<div class="w-3 h-3 rounded-full bg-secondary mr-4"></div>
+<input class="flex-grow bg-transparent border-none p-0 text-lg font-bold text-primary focus:ring-0" type="text" value="Lyon"/>
+<span class="material-symbols-outlined text-outline-variant hover:text-secondary-container transition-colors cursor-pointer" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+<!-- Answer C -->
+<div class="flex items-center bg-surface-container-low p-5 rounded-xl group transition-all hover:bg-surface-container-high">
+<div class="w-3 h-3 rounded-full bg-tertiary-fixed-dim mr-4"></div>
+<input class="flex-grow bg-transparent border-none p-0 text-lg font-bold text-primary focus:ring-0" type="text" value="Marseille"/>
+<span class="material-symbols-outlined text-outline-variant hover:text-secondary-container transition-colors cursor-pointer" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+<!-- Answer D -->
+<div class="flex items-center bg-surface-container-low p-5 rounded-xl group transition-all hover:bg-surface-container-high">
+<div class="w-3 h-3 rounded-full bg-on-primary-container mr-4"></div>
+<input class="flex-grow bg-transparent border-none p-0 text-lg font-bold text-primary focus:ring-0" type="text" value="Bordeaux"/>
+<span class="material-symbols-outlined text-outline-variant hover:text-secondary-container transition-colors cursor-pointer" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<!-- Settings Row -->
+<div class="flex flex-wrap items-center justify-between gap-8 pt-8 border-t border-surface-container">
+<div class="flex items-center gap-12">
+<!-- Time Limit -->
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-extrabold text-outline uppercase tracking-widest">Time Limit</label>
+<div class="flex items-center gap-4 bg-surface-container px-4 py-2 rounded-lg">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="timer">timer</span>
+<span class="font-bold text-primary">15 Seconds</span>
+<span class="material-symbols-outlined text-outline cursor-pointer" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Joker Toggle -->
+<div class="flex flex-col gap-2">
+<label class="text-[10px] font-extrabold text-outline uppercase tracking-widest">Question Perk</label>
+<div class="flex items-center gap-3">
+<div class="w-12 h-6 bg-tertiary-fixed-dim rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-primary">Joker Round</span>
+<span class="bg-tertiary-container text-tertiary-fixed text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">2x Points</span>
+</div>
+</div>
+</div>
+</div>
+<button class="bg-primary text-white px-10 py-4 rounded-xl font-extrabold hover:bg-primary-container transition-all shadow-[0px_20px_40px_rgba(2,21,73,0.15)] active:scale-95">
+                        Save Question
+                    </button>
+</div>
+</div>
+</section>
+</main>
+</body></html>

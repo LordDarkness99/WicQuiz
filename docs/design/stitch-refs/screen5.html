@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuizTime Host Suspense Controls</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#1b2b5e",
+              "surface-container-low": "#f4f4f1",
+              "on-secondary-fixed": "#410006",
+              "on-secondary": "#ffffff",
+              "secondary-fixed-dim": "#ffb3b0",
+              "on-tertiary": "#ffffff",
+              "on-primary": "#ffffff",
+              "secondary-fixed": "#ffdad8",
+              "outline-variant": "#c6c5d1",
+              "on-error": "#ffffff",
+              "surface-bright": "#f9f9f6",
+              "on-surface-variant": "#45464f",
+              "error": "#ba1a1a",
+              "primary": "#021549",
+              "on-tertiary-fixed": "#2a1700",
+              "on-tertiary-fixed-variant": "#653e00",
+              "surface-container": "#eeeeeb",
+              "background": "#f9f9f6",
+              "tertiary-fixed": "#ffddb8",
+              "surface-container-high": "#e8e8e5",
+              "primary-fixed-dim": "#b6c4ff",
+              "surface-dim": "#dadad7",
+              "on-secondary-fixed-variant": "#8c1520",
+              "surface-variant": "#e2e3e0",
+              "on-primary-container": "#8594cd",
+              "surface-container-highest": "#e2e3e0",
+              "inverse-on-surface": "#f1f1ee",
+              "surface": "#f9f9f6",
+              "on-tertiary-container": "#d18500",
+              "on-primary-fixed": "#04174a",
+              "surface-tint": "#4d5c92",
+              "secondary-container": "#ff6b6b",
+              "on-secondary-container": "#6d0010",
+              "on-error-container": "#93000a",
+              "on-surface": "#1a1c1b",
+              "on-background": "#1a1c1b",
+              "tertiary-fixed-dim": "#ffb95f",
+              "inverse-surface": "#2f312f",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed-variant": "#354478",
+              "primary-fixed": "#dce1ff",
+              "outline": "#757680",
+              "inverse-primary": "#b6c4ff",
+              "tertiary-container": "#442800",
+              "secondary": "#ae2f34",
+              "error-container": "#ffdad6",
+              "tertiary": "#281600"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .suspense-glow {
+        box-shadow: 0 0 20px rgba(255, 185, 95, 0.3);
+      }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-secondary-fixed">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 z-50 flex justify-between items-center w-full px-6 py-3 border-b border-opacity-10 border-primary-container bg-surface-bright">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-primary-container tracking-tighter">QuizTime</span>
+<div class="hidden md:flex gap-6">
+<a class="font-headline text-sm font-bold tracking-tight text-slate-500 hover:text-primary-container transition-colors" href="#">Dashboard</a>
+<a class="font-headline text-sm font-bold tracking-tight text-primary-container border-b-2 border-primary-container" href="#">Sessions</a>
+<a class="font-headline text-sm font-bold tracking-tight text-slate-500 hover:text-primary-container transition-colors" href="#">Quizzes</a>
+<a class="font-headline text-sm font-bold tracking-tight text-slate-500 hover:text-primary-container transition-colors" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:text-primary-container transition-transform active:scale-90" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-slate-500 hover:text-primary-container transition-transform active:scale-90" data-icon="settings">settings</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="Host Avatar" data-alt="Stylized avatar of the quiz host" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAABv8ON_xTlZnQ-9WpacDtfQMZDsjumvr5iqLGwA8XMtbTWrxc1clx1f0tf3AchUu1uVq-8tn4FwRZc-tvhMLhsTX1WN6oGtVi_iIQH7zUUmeIG3Hkq3OkfQyMA_ZYBFkeIbulQOvNZRMicEYJ2bICJnnXznWZulQNKWE4khPLBtNYEX5sfT9o-2Nm3br2VtGtmFQMDFdLzF9QMtlzs8aHKo8pCmXL2Xvd_ljllvefyX2XBDw39fLPKxbgQ1JOyKTVn-uUzXbC9kcS"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full hidden lg:flex flex-col p-4 z-40 bg-surface-container-low w-64 rounded-r-3xl shadow-[0px_20px_40px_rgba(27,43,94,0.06)] mt-16">
+<div class="mb-8 px-4 py-6">
+<h2 class="text-lg font-black text-primary-container">Host Panel</h2>
+<p class="text-xs text-slate-600 font-semibold">Live Control</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-bright hover:translate-x-1 transition-all duration-200 rounded-xl font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-bright hover:translate-x-1 transition-all duration-200 rounded-xl font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span>Quizzes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-surface-container-lowest text-primary-container rounded-xl shadow-sm font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+<span>Sessions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-bright hover:translate-x-1 transition-all duration-200 rounded-xl font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/20 space-y-2">
+<button class="w-full bg-primary-container text-white py-3 rounded-xl font-bold text-sm shadow-sm active:scale-95 transition-transform">Create New Quiz</button>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-surface-bright rounded-xl font-semibold text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area (Blurred Dashboard) -->
+<main class="ml-0 lg:ml-64 pt-24 px-8 pb-12 min-h-screen">
+<div class="max-w-5xl mx-auto opacity-40 select-none pointer-events-none filter blur-[2px]">
+<div class="flex justify-between items-end mb-12">
+<div class="space-y-2">
+<span class="text-xs font-bold tracking-widest text-on-surface-variant uppercase">Current Session</span>
+<h1 class="text-4xl font-extrabold tracking-tight text-primary-container">Ultimate Tech Trivia 2024</h1>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm">
+<p class="text-[10px] font-bold text-outline uppercase tracking-wider">Live Players</p>
+<p class="text-2xl font-bold text-primary-container">124</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-surface-container-lowest p-8 rounded-xl h-96"></div>
+<div class="bg-surface-container-lowest p-8 rounded-xl h-96"></div>
+</div>
+</div>
+</main>
+<!-- Modal Overlay: SUSPENSE MODE -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6">
+<div class="absolute inset-0 bg-primary-container/20 backdrop-blur-md"></div>
+<div class="relative bg-surface-container-lowest w-full max-w-xl rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.15)] overflow-hidden flex flex-col">
+<!-- Header Section -->
+<div class="p-8 pb-0">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-tertiary-fixed rounded-full animate-pulse suspense-glow">
+<span class="material-symbols-outlined text-on-tertiary-fixed text-sm" data-icon="warning">warning</span>
+<span class="text-xs font-black text-on-tertiary-fixed tracking-widest">SUSPENSE MODE</span>
+</div>
+<button class="material-symbols-outlined text-outline hover:text-primary-container transition-colors" data-icon="close">close</button>
+</div>
+<h2 class="headline-md text-2xl font-bold tracking-tight text-primary-container mb-2">Positions are currently SCRAMBLED</h2>
+<p class="text-on-surface-variant text-sm font-medium leading-relaxed">Players see fake positions to build anticipation for the final reveal.</p>
+</div>
+<!-- Toggle Control -->
+<div class="mx-8 mt-8 p-4 bg-surface-container-low rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="visibility_off" style="font-variation-settings: 'FILL' 1;">visibility_off</span>
+<span class="font-bold text-sm text-primary-container">Enable Suspense Mode</span>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<div class="w-12 h-6 bg-primary-container rounded-full"></div>
+<div class="absolute right-1 w-4 h-4 bg-white rounded-full transition-transform"></div>
+</div>
+</div>
+<!-- Reveal List (Bento-style list) -->
+<div class="p-8">
+<div class="grid grid-cols-2 gap-3 mb-8">
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg opacity-60">
+<span class="text-xs font-black text-outline">6.</span>
+<span class="text-sm font-bold text-primary-container">Luna</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg opacity-60">
+<span class="text-xs font-black text-outline">5.</span>
+<span class="text-sm font-bold text-primary-container">David</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg opacity-70">
+<span class="text-xs font-black text-outline">4.</span>
+<span class="text-sm font-bold text-primary-container">Jessica</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg opacity-80">
+<span class="text-xs font-black text-outline">3.</span>
+<span class="text-sm font-bold text-primary-container">Mike</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container-low rounded-lg opacity-90">
+<span class="text-xs font-black text-outline">2.</span>
+<span class="text-sm font-bold text-primary-container">Alex</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface-container rounded-lg border-2 border-primary-container/10">
+<span class="text-xs font-black text-primary-container">1.</span>
+<span class="text-sm font-bold text-primary-container">Sarah</span>
+<span class="ml-auto material-symbols-outlined text-tertiary-fixed-dim text-sm" data-icon="stars" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+</div>
+<!-- Main CTA -->
+<div class="text-center space-y-4">
+<button class="w-full bg-secondary-container text-on-secondary-container py-5 rounded-xl font-black text-lg shadow-[0px_10px_20px_rgba(255,107,107,0.3)] hover:translate-y-[-2px] active:scale-95 transition-all">
+                        🔥 START FINAL REVEAL
+                    </button>
+<div class="flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="pacing">pace</span>
+<p class="text-[10px] font-black text-outline uppercase tracking-[0.2em]">Reveals positions 6th → 1st with drumroll</p>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="mt-auto p-6 bg-surface-container-low text-center">
+<button class="text-sm font-bold text-outline hover:text-secondary transition-colors underline underline-offset-4 decoration-outline/30">Cancel / Skip to results</button>
+</div>
+</div>
+</div>
+</body></html>

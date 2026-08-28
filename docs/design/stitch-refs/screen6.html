@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#1b2b5e",
+              "surface-container-low": "#f4f4f1",
+              "on-secondary-fixed": "#410006",
+              "on-secondary": "#ffffff",
+              "secondary-fixed-dim": "#ffb3b0",
+              "on-tertiary": "#ffffff",
+              "on-primary": "#ffffff",
+              "secondary-fixed": "#ffdad8",
+              "outline-variant": "#c6c5d1",
+              "on-error": "#ffffff",
+              "surface-bright": "#f9f9f6",
+              "on-surface-variant": "#45464f",
+              "error": "#ba1a1a",
+              "primary": "#021549",
+              "on-tertiary-fixed": "#2a1700",
+              "on-tertiary-fixed-variant": "#653e00",
+              "surface-container": "#eeeeeb",
+              "background": "#f9f9f6",
+              "tertiary-fixed": "#ffddb8",
+              "surface-container-high": "#e8e8e5",
+              "primary-fixed-dim": "#b6c4ff",
+              "surface-dim": "#dadad7",
+              "on-secondary-fixed-variant": "#8c1520",
+              "surface-variant": "#e2e3e0",
+              "on-primary-container": "#8594cd",
+              "surface-container-highest": "#e2e3e0",
+              "inverse-on-surface": "#f1f1ee",
+              "surface": "#f9f9f6",
+              "on-tertiary-container": "#d18500",
+              "on-primary-fixed": "#04174a",
+              "surface-tint": "#4d5c92",
+              "secondary-container": "#ff6b6b",
+              "on-secondary-container": "#6d0010",
+              "on-error-container": "#93000a",
+              "on-surface": "#1a1c1b",
+              "on-background": "#1a1c1b",
+              "tertiary-fixed-dim": "#ffb95f",
+              "inverse-surface": "#2f312f",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed-variant": "#354478",
+              "primary-fixed": "#dce1ff",
+              "outline": "#757680",
+              "inverse-primary": "#b6c4ff",
+              "tertiary-container": "#442800",
+              "secondary": "#ae2f34",
+              "error-container": "#ffdad6",
+              "tertiary": "#281600"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation Bar (Shared Component Context) -->
+<header class="bg-[#f9f9f6] flex justify-between items-center w-full px-8 py-4 z-50">
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold text-[#1B2B5E] tracking-tighter">QuizTime</span>
+<div class="h-6 w-[1px] bg-outline-variant opacity-20"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest font-bold text-outline">Current Session</span>
+<span class="text-sm font-bold text-primary">World Landmarks Blitz</span>
+</div>
+</div>
+<!-- Live Timer & Question Counter -->
+<div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-8 glass-panel px-10 py-3 rounded-full shadow-[0px_20px_40px_rgba(27,43,94,0.06)]">
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-primary opacity-60 uppercase tracking-widest">Progress</span>
+<span class="text-lg font-black text-primary">Question 5 of 10</span>
+</div>
+<div class="h-10 w-[2px] bg-primary opacity-10"></div>
+<div class="flex items-center gap-4">
+<div class="relative flex items-center justify-center">
+<svg class="w-12 h-12 -rotate-90">
+<circle class="text-surface-container-highest" cx="24" cy="24" fill="transparent" r="20" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-tertiary-fixed-dim" cx="24" cy="24" fill="transparent" r="20" stroke="currentColor" stroke-dasharray="125.6" stroke-dashoffset="40" stroke-width="4"></circle>
+</svg>
+<span class="absolute text-xl font-black text-primary">18</span>
+</div>
+<span class="text-xs font-bold text-primary">Seconds Left</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 rounded-xl text-sm font-bold text-primary border border-primary/10 hover:bg-surface-container-low transition-colors">
+                End Early
+            </button>
+<div class="flex items-center gap-3 pl-4">
+<span class="material-symbols-outlined text-primary" data-icon="settings">settings</span>
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden">
+<img alt="Host Avatar" class="w-full h-full object-cover" data-alt="Host profile portrait placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMzUeeEQfw87CDuv5rp9mk8wXtmygE4hi6OXpJgsuYJv2kj_yid14myrhs0DliKsI3mzUjLCd2iT-V3Pg67LnsmTUA7_F0cMWKI-tsEjYWq5pAwrMU9IkWznkOaqZ1sHjqtwzw1ocEjLO2-12eCgFqVmLyCJHkBchjXW2_uljxIQpqyYr-7wvy08msVHlH513iBq3rwcPeOc_P0__NjQ3QTQI0KAmFo6TadKoPw9TXA6CCt14y3y1cfIyPCnlTfw9EF2-rjl-n5k4u"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex p-8 gap-8 max-w-[1600px] mx-auto w-full overflow-hidden">
+<!-- Left Section: Question & Media -->
+<section class="flex-[1.2] flex flex-col gap-6">
+<div class="bg-surface-container-lowest p-10 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)] flex-1 flex flex-col justify-between relative overflow-hidden">
+<!-- Decorative element -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl"></div>
+<div>
+<span class="inline-block px-4 py-1.5 rounded-full bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest mb-6">Geography • Level 2</span>
+<h1 class="text-4xl font-bold text-primary leading-tight tracking-tight max-w-2xl">
+                        In which city would you find this iconic wrought-iron lattice tower completed in 1889?
+                    </h1>
+</div>
+<div class="mt-8 relative group rounded-lg overflow-hidden h-[400px]">
+<img alt="Eiffel Tower" class="w-full h-full object-cover rounded-lg shadow-lg" data-alt="Close up view of Eiffel Tower in Paris" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL7088VWr12UjjNtaIuljqV6C5FgTbzcXfJlltI4Sw6pZaIf4SYBP1zBNBMz6WqL8Nlz9412wDjvDoh-yRAVFXfHqcA_Gw20b-xHVTfCBcFCBPJpNeXK8UqvEPAu8TQxbL-ekecRDK4ACWYvsJNmwPkf3Yc8LhevGcaO9NvFCWjHdIBzvjwweGrwhUBcRc-4M8b4DSutLflGnb-sEFxUPJBae6l7LmCcUP_e7OoLvYoB_kd_YMAb-xGbF8HPb3ke7j3Sto9S8u4AmF"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+</div>
+</div>
+</section>
+<!-- Right Section: Real-time Analytics -->
+<section class="flex-1 flex flex-col gap-6">
+<div class="bg-surface-container-low p-8 rounded-xl flex flex-col h-full">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-2xl font-bold text-primary">Live Distribution</h2>
+<p class="text-sm text-outline font-medium mt-1">Real-time player responses</p>
+</div>
+<div class="text-right">
+<span class="text-3xl font-black text-secondary-container">7/8</span>
+<p class="text-[10px] font-bold text-primary uppercase tracking-widest">Players Ready</p>
+</div>
+</div>
+<!-- Answer Bar Chart -->
+<div class="flex-1 flex flex-col justify-center gap-6">
+<!-- Option A -->
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm font-bold text-primary">
+<span>A: Paris</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded-full text-xs">4 Votes</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 57%"></div>
+</div>
+</div>
+<!-- Option B -->
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm font-bold text-primary opacity-60">
+<span>B: Lyon</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded-full text-xs">1 Vote</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full" style="width: 14%"></div>
+</div>
+</div>
+<!-- Option C -->
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm font-bold text-primary opacity-60">
+<span>C: Marseille</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded-full text-xs">2 Votes</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full" style="width: 28%"></div>
+</div>
+</div>
+<!-- Option D -->
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm font-bold text-primary opacity-40">
+<span>D: Bordeaux</span>
+<span class="bg-surface-container-highest px-3 py-1 rounded-full text-xs">0 Votes</span>
+</div>
+<div class="h-4 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary/20 rounded-full" style="width: 2%"></div>
+</div>
+</div>
+</div>
+<!-- Player List Snapshot -->
+<div class="mt-8 pt-8 border-t border-primary/5">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary-fixed flex items-center justify-center text-[10px] font-bold">JD</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-secondary-fixed flex items-center justify-center text-[10px] font-bold">AM</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-tertiary-fixed flex items-center justify-center text-[10px] font-bold">RK</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container-highest flex items-center justify-center text-[10px] font-bold">+4</div>
+</div>
+<p class="text-[11px] font-semibold text-outline mt-3 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        Waiting for "QuizMaster_99" to answer...
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Controls Bar -->
+<footer class="bg-surface-container-lowest px-12 py-6 flex justify-between items-center shadow-[0px_-10px_30px_rgba(0,0,0,0.03)] relative">
+<div class="flex items-center gap-10">
+<!-- Leaderboard Toggle -->
+<label class="flex items-center cursor-pointer group">
+<div class="relative">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-high rounded-full peer peer-checked:bg-primary-container transition-colors"></div>
+<div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-6"></div>
+</div>
+<span class="ml-3 text-sm font-bold text-primary group-hover:text-primary-container transition-colors">Show Leaderboard After Reveal</span>
+</label>
+<div class="flex items-center gap-2 text-outline">
+<span class="material-symbols-outlined text-[20px]" data-icon="volume_up">volume_up</span>
+<span class="text-xs font-bold uppercase tracking-widest">Game Audio: On</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Secondary Button (Hidden until revealed or context shift) -->
+<button class="hidden flex items-center gap-2 px-8 py-4 bg-primary text-on-primary rounded-xl font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+<span>Next Question</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Primary Reveal Button -->
+<button class="flex items-center gap-3 px-10 py-4 bg-secondary-container text-on-secondary-container rounded-xl font-extrabold text-lg shadow-[0px_10px_25px_rgba(255,107,107,0.3)] hover:scale-[1.02] active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span>Reveal Answer</span>
+</button>
+</div>
+</footer>
+<!-- Absolute Overlay Context (Side Control Hints) -->
+<div class="fixed left-6 bottom-32 flex flex-col gap-3">
+<div class="p-3 bg-surface-container-lowest rounded-full shadow-xl text-primary hover:bg-primary hover:text-white transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</div>
+<div class="p-3 bg-surface-container-lowest rounded-full shadow-xl text-primary hover:bg-primary hover:text-white transition-all cursor-pointer">
+<span class="material-symbols-outlined" data-icon="group_add">group_add</span>
+</div>
+</div>
+</body></html>

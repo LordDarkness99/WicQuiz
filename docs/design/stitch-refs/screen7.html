@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuizTime - Host Lobby</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-container": "#1b2b5e",
+              "surface-container-low": "#f4f4f1",
+              "on-secondary-fixed": "#410006",
+              "on-secondary": "#ffffff",
+              "secondary-fixed-dim": "#ffb3b0",
+              "on-tertiary": "#ffffff",
+              "on-primary": "#ffffff",
+              "secondary-fixed": "#ffdad8",
+              "outline-variant": "#c6c5d1",
+              "on-error": "#ffffff",
+              "surface-bright": "#f9f9f6",
+              "on-surface-variant": "#45464f",
+              "error": "#ba1a1a",
+              "primary": "#021549",
+              "on-tertiary-fixed": "#2a1700",
+              "on-tertiary-fixed-variant": "#653e00",
+              "surface-container": "#eeeeeb",
+              "background": "#f9f9f6",
+              "tertiary-fixed": "#ffddb8",
+              "surface-container-high": "#e8e8e5",
+              "primary-fixed-dim": "#b6c4ff",
+              "surface-dim": "#dadad7",
+              "on-secondary-fixed-variant": "#8c1520",
+              "surface-variant": "#e2e3e0",
+              "on-primary-container": "#8594cd",
+              "surface-container-highest": "#e2e3e0",
+              "inverse-on-surface": "#f1f1ee",
+              "surface": "#f9f9f6",
+              "on-tertiary-container": "#d18500",
+              "on-primary-fixed": "#04174a",
+              "surface-tint": "#4d5c92",
+              "secondary-container": "#ff6b6b",
+              "on-secondary-container": "#6d0010",
+              "on-error-container": "#93000a",
+              "on-surface": "#1a1c1b",
+              "on-background": "#1a1c1b",
+              "tertiary-fixed-dim": "#ffb95f",
+              "inverse-surface": "#2f312f",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed-variant": "#354478",
+              "primary-fixed": "#dce1ff",
+              "outline": "#757680",
+              "inverse-primary": "#b6c4ff",
+              "tertiary-container": "#442800",
+              "secondary": "#ae2f34",
+              "error-container": "#ffdad6",
+              "tertiary": "#281600"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #f9f9f6;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(16px);
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen overflow-hidden">
+<!-- Top Navigation Shell (Mapped from Shared Component JSON) -->
+<header class="bg-[#f9f9f6] dark:bg-slate-950 flex justify-between items-center w-full px-8 py-4 border-b border-opacity-10 border-[#1B2B5E] sticky top-0 z-50">
+<div class="flex items-center gap-6">
+<span class="text-xl font-bold text-[#1B2B5E] dark:text-white tracking-tighter">QuizTime</span>
+<div class="h-6 w-px bg-outline-variant/30"></div>
+<div class="flex flex-col">
+<h1 class="font-headline text-lg font-bold text-primary tracking-tight">Global Trivia</h1>
+<p class="font-label text-[10px] uppercase tracking-widest text-outline">10 Questions</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="group">group</span>
+<span class="font-label text-sm font-bold text-primary">6 players joined</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-slate-500 hover:text-[#1B2B5E] transition-transform active:scale-90">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-[#1B2B5E] transition-transform active:scale-90">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto p-8 lg:p-12 h-[calc(100vh-80px)] flex gap-12">
+<!-- Left Section: Join Instructions (Asymmetric Focus) -->
+<section class="flex-1 flex flex-col justify-center items-start space-y-8">
+<div class="space-y-2">
+<span class="font-label text-sm font-extrabold text-on-tertiary-container bg-tertiary-fixed px-3 py-1 rounded-full uppercase tracking-widest">Join the Game</span>
+<h2 class="font-headline text-5xl font-extrabold text-primary tracking-tighter leading-tight">Waiting for your <br/>squad to arrive...</h2>
+</div>
+<div class="relative group">
+<!-- QR Code Card -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.06)] relative z-10">
+<div class="bg-white p-4 rounded-lg">
+<img alt="Join Quiz QR Code" class="w-60 h-60" data-alt="QR code for quiz room access" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPEt8IR4hQMy4eiFqjlVEhEoy5em4DnPaZPCYa5WpM5uLZGXZfnsl5HnYdLDMWaN4SoD4wxs2u4Jc1MEWBmXMm_L2fWWUkwlZYUFqFG2xThsGYAwArYsjSghRqLD2e75e6-iM9lHOr0G7ejIiBODWS1bxnKvBgxcnTVjc3mbZwBNGkqtDjoux4vupvv2UDHSWfa-RS643ZRV1o4dJsDntuNXKt1H6nCbum40Ut3BBBfsfqL6-kYZX3owC5vfsPvNL3v5MomZqJCqVN"/>
+</div>
+</div>
+<!-- Decorative Layer -->
+<div class="absolute -top-4 -left-4 w-full h-full bg-surface-container-low rounded-xl -z-10 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"></div>
+</div>
+<div class="space-y-1">
+<p class="font-label text-outline text-xs uppercase tracking-widest font-bold">Room Code</p>
+<div class="flex items-center gap-4">
+<span class="font-headline text-7xl font-black text-primary tracking-tighter">GSFS01</span>
+<button class="bg-surface-container-high p-3 rounded-full text-primary hover:bg-primary hover:text-white transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+<p class="font-body text-outline font-medium">quiztime.vercel.app/play</p>
+</div>
+</section>
+<!-- Right Section: Player List (Bento-style Glass Container) -->
+<aside class="w-[450px] flex flex-col gap-6">
+<div class="flex-1 bg-surface-container-low rounded-xl p-6 flex flex-col gap-4 overflow-hidden relative shadow-inner">
+<div class="flex justify-between items-center mb-2">
+<h3 class="font-headline text-xl font-bold text-primary">Live Players</h3>
+<div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+</div>
+<!-- Player Grid -->
+<div class="grid grid-cols-2 gap-3 overflow-y-auto pr-2 custom-scrollbar">
+<!-- Player Card 1 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3 shadow-[0px_10px_20px_rgba(27,43,94,0.03)] border-b-2 border-transparent hover:border-primary transition-all">
+<div class="text-2xl">🦊</div>
+<span class="font-body font-bold text-primary truncate">SlyFox99</span>
+</div>
+<!-- Player Card 2 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3 shadow-[0px_10px_20px_rgba(27,43,94,0.03)] border-b-2 border-transparent">
+<div class="text-2xl">🍕</div>
+<span class="font-body font-bold text-primary truncate">PizzaLover</span>
+</div>
+<!-- Player Card 3 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3 shadow-[0px_10px_20px_rgba(27,43,94,0.03)] border-b-2 border-transparent">
+<div class="text-2xl">🚀</div>
+<span class="font-body font-bold text-primary truncate">MarsBound</span>
+</div>
+<!-- Player Card 4 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3 shadow-[0px_10px_20px_rgba(27,43,94,0.03)] border-b-2 border-transparent">
+<div class="text-2xl">🥑</div>
+<span class="font-body font-bold text-primary truncate">GuacKing</span>
+</div>
+<!-- Player Card 5 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3 shadow-[0px_10px_20px_rgba(27,43,94,0.03)] border-b-2 border-transparent">
+<div class="text-2xl">🎮</div>
+<span class="font-body font-bold text-primary truncate">LevelUp</span>
+</div>
+<!-- Player Card 6 -->
+<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center gap-3 shadow-[0px_10px_20px_rgba(27,43,94,0.03)] border-b-2 border-transparent">
+<div class="text-2xl">🐘</div>
+<span class="font-body font-bold text-primary truncate">BigTrunk</span>
+</div>
+</div>
+<!-- Fade overlay for scrolling -->
+<div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-surface-container-low to-transparent pointer-events-none"></div>
+</div>
+<!-- Start Button Section -->
+<div class="space-y-4">
+<button class="w-full bg-secondary-container text-on-secondary-container font-headline font-extrabold text-xl py-6 rounded-xl shadow-[0px_20px_40px_rgba(174,47,52,0.15)] hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined font-bold" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    Start Quiz
+                </button>
+<div class="flex items-center justify-center gap-2 text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+<span class="font-label text-xs font-semibold">Only the host can start the broadcast</span>
+</div>
+</div>
+</aside>
+</main>
+<!-- Background Decoration -->
+<div class="fixed top-0 right-0 -z-50 w-1/3 h-full opacity-5 pointer-events-none overflow-hidden">
+<svg class="w-full h-full scale-150 text-primary" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,77.4,-44.7C85.5,-31.3,90.8,-15.7,91.8,0.6C92.8,16.8,89.5,33.7,81.4,48.1C73.3,62.5,60.4,74.5,45.6,81.8C30.8,89.1,14,91.6,-2,95C-18,98.4,-36.1,102.7,-51.7,96.6C-67.4,90.4,-80.6,73.8,-88.4,56.1C-96.2,38.3,-98.6,19.2,-96.2,1.4C-93.7,-16.4,-86.3,-32.8,-76.1,-47.4C-65.8,-62.1,-52.7,-74.9,-37.9,-81.1C-23.1,-87.3,-6.5,-86.9,9.4,-81.4C25.4,-76,41.4,-65.4,44.7,-76.4Z" fill="currentColor" transform="translate(100 100)"></path>
+</svg>
+</div>
+</body></html>
