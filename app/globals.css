@@ -57,6 +57,91 @@ body {
   font-family: var(--font-sans);
 }
 
+/* ==========================================================================
+   Dyslexia / low-vision friendly "easy reading" mode
+   Toggled by adding .readability-mode to <html> (see ReadabilityToggle.tsx)
+
+   Design choices, based on common dyslexia-accessibility guidance:
+   - Atkinson Hyperlegible: a font designed for maximum letter distinction
+     (no OpenDyslexic license concerns, and it's used by braille institutes'
+     own low-vision guidance for a similar reason).
+   - Wider letter, word and line spacing so characters don't crowd together.
+   - Left-aligned, never justified, text so word spacing stays even.
+   - Slightly larger base size and a soft cream background instead of
+     stark white, to reduce visual glare/"river" effects while reading.
+   - Underlined links (color alone shouldn't be the only cue).
+   ========================================================================== */
+
+html.readability-mode {
+  --font-sans: "Atkinson Hyperlegible", "Atkinson Hyperlegible Fallback",
+    system-ui, sans-serif;
+}
+
+html.readability-mode body {
+  background: var(--color-cream-dark);
+  font-family: var(--font-readability), var(--font-sans);
+  letter-spacing: 0.04em;
+  word-spacing: 0.12em;
+  line-height: 1.7;
+  font-size: 1.0625rem;
+}
+
+html.readability-mode :is(
+  p,
+  li,
+  label,
+  h1,
+  h2,
+  h3,
+  h4
+):not(.material-symbols-outlined) {
+  font-family: var(--font-readability), var(--font-sans) !important;
+}
+
+html.readability-mode p,
+html.readability-mode li,
+html.readability-mode label {
+  letter-spacing: 0.04em;
+  word-spacing: 0.12em;
+  line-height: 1.7;
+  text-align: left;
+}
+
+html.readability-mode h1,
+html.readability-mode h2,
+html.readability-mode h3,
+html.readability-mode h4 {
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+html.readability-mode .material-symbols-outlined {
+  font-family: "Material Symbols Outlined" !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+  text-align: center;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+html.readability-mode .material-symbols-outlined + * {
+  vertical-align: middle;
+}
+
+html.readability-mode a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Slightly calmer contrast for large blocks of dark text - true black on
+   bright white is a common source of visual "vibration" for some readers. */
+html.readability-mode .bg-white,
+html.readability-mode [class*="bg-surface-container-lowest"] {
+  background-color: var(--color-cream) !important;
+}
+
 /* Answer button colors for multiple choice */
 .answer-btn-0 { background: #FF6B6B; }
 .answer-btn-1 { background: #4ECDC4; }

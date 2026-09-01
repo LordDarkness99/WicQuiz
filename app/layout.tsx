@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Atkinson_Hyperlegible } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { ReadabilityModeProvider } from "@/shared/hooks/useReadabilityMode";
+import ReadabilityToggle from "@/shared/ui/ReadabilityToggle";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
+});
+
+// Atkinson Hyperlegible is a free, open font designed by the Braille
+// Institute specifically to maximize legibility and letter distinction —
+// a strong, well-supported choice for dyslexia/low-vision friendly reading.
+const atkinsonHyperlegible = Atkinson_Hyperlegible({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-readability",
 });
 
 export const metadata: Metadata = {
@@ -21,7 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${plusJakarta.variable} ${atkinsonHyperlegible.variable} h-full antialiased`}
+    >
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -29,7 +43,10 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col font-sans">
-        {children}
+        <ReadabilityModeProvider>
+          {children}
+          <ReadabilityToggle />
+        </ReadabilityModeProvider>
         <Toaster
           position="bottom-center"
           richColors
