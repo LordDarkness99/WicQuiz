@@ -1,0 +1,365 @@
+{
+  ".claude/skills/ngodingpakeai/SKILL.md": {
+    "summary": "Definisi skill Claude Code untuk integrasi NgodingPakeAI. Memuat instruksi sync, manajemen plan baseline, aturan penulisan ringkasan, dan alur kerja agentik."
+  },
+  ".github/workflows/ci.yml": {
+    "summary": "Konfigurasi alur kerja CI GitHub Actions untuk menjalankan linting (eslint), boundary checks (check-boundaries.mjs), unit test vitest, dan verifikasi build Next.js pada push dan pull request."
+  },
+  ".gitignore": {
+    "summary": "Konfigurasi file dan direktori yang diabaikan oleh Git, termasuk node_modules, build artifacts .next, file environment .env*, dan cache lokal."
+  },
+  ".ngodingpakeaiignore": {
+    "summary": "Daftar pola file dan direktori yang diabaikan saat pemindaian dan sinkronisasi metadata oleh CLI NgodingPakeAI."
+  },
+  "AGENTS.md": {
+    "summary": "Dokumentasi aturan instruksi untuk AI coding agent yang bekerja di repositori WicQuiz, mencakup panduan Next.js App Router dan batasan arsitektur modul."
+  },
+  "app/api/generate-question/route.ts": {
+    "summary": "API route Next.js (POST /api/generate-question) untuk men-generate soal kuis menggunakan integrasi model Anthropic Claude melalui AnthropicQuestionGenerator."
+  },
+  "app/globals.css": {
+    "summary": "File stylesheet global aplikasi yang mengonfigurasi direktif Tailwind CSS, variabel tema warna CSS, keyframes animasi pacuan kuda, dan styling typography."
+  },
+  "app/host/dashboard/page.tsx": {
+    "summary": "Halaman Next.js untuk rute /host/dashboard yang me-render HostDashboardRoute untuk manajemen kuis host."
+  },
+  "app/host/new/page.tsx": {
+    "summary": "Halaman Next.js untuk rute /host/new yang me-render NewQuizRoute untuk pembuatan template kuis baru."
+  },
+  "app/host/quiz/[quizId]/edit/page.tsx": {
+    "summary": "Halaman dinamis Next.js untuk rute /host/quiz/[quizId]/edit yang me-render EditQuizRoute untuk mengedit kuis berdasarkan quizId."
+  },
+  "app/host/results/[sessionId]/page.tsx": {
+    "summary": "Halaman dinamis Next.js untuk rute /host/results/[sessionId] yang me-render SessionResultsRoute untuk melihat hasil dan statistik sesi kuis."
+  },
+  "app/host/[roomCode]/display/page.tsx": {
+    "summary": "Halaman dinamis Next.js untuk rute /host/[roomCode]/display yang me-render DisplayRoute untuk layar proyektor / big screen publik."
+  },
+  "app/host/[roomCode]/leaderboard/page.tsx": {
+    "summary": "Halaman dinamis Next.js untuk rute /host/[roomCode]/leaderboard yang me-render LeaderboardRoute untuk menampilkan papan peringkat host."
+  },
+  "app/host/[roomCode]/page.tsx": {
+    "summary": "Halaman dinamis Next.js untuk rute /host/[roomCode] yang me-render HostRoomRoute sebagai panel kontrol host selama game berlangsung."
+  },
+  "app/layout.tsx": {
+    "summary": "Root layout Next.js App Router yang mendefinisikan struktur HTML dasar, konfigurasi font Google, metadata aplikasi, dan wrapper styling global."
+  },
+  "app/page.tsx": {
+    "summary": "Halaman utama (landing page) WicQuiz yang menyediakan form bagi pemain untuk bergabung ke room kuis via kode serta link menuju dashboard host."
+  },
+  "app/play/[roomCode]/page.tsx": {
+    "summary": "Halaman dinamis Next.js untuk rute /play/[roomCode] yang me-render PlayerRoomRoute sebagai antarmuka interaktif pemain."
+  },
+  "CLAUDE.md": {
+    "summary": "File konfigurasi singkat Claude Code untuk workspace repositori WicQuiz."
+  },
+  "docs/adrs/0001-domain-first-structure.md": {
+    "summary": "Architectural Decision Record (ADR) yang mendokumentasikan keputusan penggunaan struktur direktori domain-first / feature-based pada codebase WicQuiz."
+  },
+  "docs/architecture/boundaries.md": {
+    "summary": "Dokumentasi arsitektur yang mendefinisikan aturan batas modul (boundaries) antar layer (shared, features, integrations, app) untuk mencegah circular dependencies."
+  },
+  "docs/architecture/project-structure.md": {
+    "summary": "Panduan struktur folder proyek WicQuiz, menjelaskan peranan masing-masing direktori feature, shared modules, integrations, dan Next.js app router."
+  },
+  "docs/contracts/data-model.md": {
+    "summary": "Spesifikasi kontrak model data database Supabase, mencakup relasi tabel quizzes, questions, rooms, players, dan answers."
+  },
+  "docs/contracts/realtime-events.md": {
+    "summary": "Spesifikasi kontrak payload event realtime Supabase Broadcast untuk sinkronisasi state room, pertanyaan, jawaban, dan leaderboard."
+  },
+  "docs/contracts/scoring.md": {
+    "summary": "Spesifikasi kontrak algoritma penilaian skor kuis, mencakup perhitungan skor dasar (base score), bonus kecepatan (speed bonus), dan streak multiplier."
+  },
+  "docs/design/stitch-refs/screen1.html": {
+    "summary": "Referensi visual HTML/CSS Stitch untuk mockup layar landing page dan lobby kuis."
+  },
+  "docs/design/stitch-refs/screen2.html": {
+    "summary": "Referensi visual HTML/CSS Stitch untuk mockup layar tampilan pertanyaan kuis pada big screen."
+  },
+  "docs/design/stitch-refs/screen3.html": {
+    "summary": "Referensi visual HTML/CSS Stitch untuk mockup layar antarmuka pilihan jawaban bagi pemain (mobile view)."
+  },
+  "docs/design/stitch-refs/screen4.html": {
+    "summary": "Referensi visual HTML/CSS Stitch untuk mockup layar animasi pacuan kuda (Horse Race) leaderboard."
+  },
+  "docs/design/stitch-refs/screen5.html": {
+    "summary": "Referensi visual HTML/CSS Stitch untuk mockup layar distribusi jawaban pemain."
+  },
+  "docs/design/stitch-refs/screen6.html": {
+    "summary": "Referensi visual HTML/CSS Stitch untuk mockup layar podium pemenang akhir (Final Reveal)."
+  },
+  "docs/design/stitch-refs/screen7.html": {
+    "summary": "Referensi visual HTML/CSS Stitch untuk mockup editor pembuatan dan penyuntingan kuis."
+  },
+  "eslint.config.mjs": {
+    "summary": "Konfigurasi ESLint flat config untuk proyek Next.js TypeScript, mengintegrasikan plugin core-web-vitals dan typescript-eslint."
+  },
+  "features/ai-question-generation/index.ts": {
+    "summary": "Titik ekspor publik modul ai-question-generation, mengekspor generator pertanyaan AI AnthropicQuestionGenerator."
+  },
+  "features/ai-question-generation/server/anthropicQuestionGenerator.ts": {
+    "summary": "Implementasi service backend AnthropicQuestionGenerator yang memanggil API Claude Anthropic untuk menghasilkan soal kuis terstruktur berdasarkan topik dan jumlah pertanyaan."
+  },
+  "features/host-dashboard/index.ts": {
+    "summary": "Titik ekspor publik modul host-dashboard, mengekspor komponen HostDashboardRoute."
+  },
+  "features/host-dashboard/routes/HostDashboardRoute.tsx": {
+    "summary": "Komponen halaman dashboard host untuk membuat kuis baru, melihat daftar template kuis, meluncurkan room live, dan meninjau riwayat sesi kuis."
+  },
+  "features/leaderboard/components/FinalReveal.tsx": {
+    "summary": "Komponen visualisasi podium akhir kuis dengan efek dramatis dan animasi bertahap dari juara 3 hingga juara 1."
+  },
+  "features/leaderboard/components/HorseRace.tsx": {
+    "summary": "Komponen visualisasi leaderboard bertema pacuan kuda dengan lintasan animasi yang menunjukkan posisi masing-masing pemain."
+  },
+  "features/leaderboard/components/RankedList.tsx": {
+    "summary": "Komponen daftar peringkat pemain berbasis tabel/kartu yang menampilkan ranking, avatar kuda, skor akumulasi, dan delta perolehan poin."
+  },
+  "features/leaderboard/domain/leaderboard.ts": {
+    "summary": "Modul domain berisi fungsi komputasi ranking, kalkulasi selisih skor, dan penentuan streak pemain dalam leaderboard."
+  },
+  "features/leaderboard/domain/suspense.ts": {
+    "summary": "Fungsi domain untuk mengatur waktu jeda, tahapan pengungkapan skor, dan animasi suspense pada tampilan leaderboard."
+  },
+  "features/leaderboard/index.ts": {
+    "summary": "Titik ekspor publik modul leaderboard, mengekspor komponen HorseRace, RankedList, FinalReveal, serta fungsi domain leaderboard."
+  },
+  "features/leaderboard/__tests__/leaderboard.test.ts": {
+    "summary": "Unit test Vitest untuk memverifikasi logika domain pengurutan leaderboard dan kalkulasi peringkat pemain."
+  },
+  "features/live-room/application/scoreAnswers.ts": {
+    "summary": "Service aplikasi untuk memproses dan menilai kumpulan jawaban pemain pada satu pertanyaan berdasarkan kunci jawaban dan waktu respons."
+  },
+  "features/live-room/application/__tests__/scoreAnswers.test.ts": {
+    "summary": "Unit test Vitest untuk memverifikasi logika penilaian jawaban dan kalkulasi skor di application layer."
+  },
+  "features/live-room/components/AnswerDistribution.tsx": {
+    "summary": "Komponen grafik batang untuk menampilkan distribusi statistik pilihan jawaban yang dipilih pemain secara langsung."
+  },
+  "features/live-room/components/DisplayView.tsx": {
+    "summary": "Komponen tampilan layar besar (proyektor/TV) yang merender status lobby, timer pertanyaan, media soal, dan transisi antar fase permainan."
+  },
+  "features/live-room/components/EndGame.tsx": {
+    "summary": "Komponen layar penutupan permainan yang menyajikan ringkasan pertandingan, statistik akurasi, dan tombol navigasi kembali."
+  },
+  "features/live-room/components/Lobby.tsx": {
+    "summary": "Komponen ruang tunggu (lobby) game yang menampilkan kode ruangan, QR code untuk join, dan daftar pemain yang telah bergabung dengan avatar kuda masing-masing."
+  },
+  "features/live-room/components/QuestionDisplay.tsx": {
+    "summary": "Komponen render pertanyaan aktif lengkap dengan teks pertanyaan, gambar/audio/video soal, pilihan jawaban bernomor, dan hitung mundur timer."
+  },
+  "features/live-room/components/SuspenseModal.tsx": {
+    "summary": "Komponen modal animasi untuk menciptakan ketegangan sebelum pengumuman jawaban benar atau hasil ranking."
+  },
+  "features/live-room/data/liveRoomRepository.ts": {
+    "summary": "Repository Supabase untuk live room, menyediakan fungsi createRoom, getRoomByCode, updateRoomState, subscribeToRoom, dan manajemen sesi permainan."
+  },
+  "features/live-room/index.ts": {
+    "summary": "Titik ekspor publik modul live-room, mengekspor komponen routes, views, dan repository liveRoomRepository."
+  },
+  "features/live-room/routes/DisplayRoute.tsx": {
+    "summary": "Komponen route untuk layar proyektor publik yang menghubungkan state realtime Supabase ke komponen DisplayView."
+  },
+  "features/live-room/routes/HostRoomRoute.tsx": {
+    "summary": "Komponen pengendali utama bagi host kuis untuk mengontrol jalannya game, mengubah fase pertanyaan, mengungkap jawaban, dan mengakhiri sesi."
+  },
+  "features/live-room/routes/LeaderboardRoute.tsx": {
+    "summary": "Komponen route untuk menampilkan tampilan papan skor leaderboard selama sesi kuis live berlangsung."
+  },
+  "features/media/components/AudioPlayer.tsx": {
+    "summary": "Komponen pemutar audio kuis dengan kontrol play/pause, durasi, dan progress bar visual."
+  },
+  "features/media/components/AudioUpload.tsx": {
+    "summary": "Komponen form upload file audio ke storage bucket Supabase beserta preview audio."
+  },
+  "features/media/components/ImageUpload.tsx": {
+    "summary": "Komponen upload gambar soal ke Supabase Storage dengan dukungan drag-and-drop dan preview gambar."
+  },
+  "features/media/components/VideoPlayer.tsx": {
+    "summary": "Komponen pemutar video tersemat untuk pertanyaan kuis yang menggunakan media video."
+  },
+  "features/media/index.ts": {
+    "summary": "Titik ekspor publik modul media, mengekspor komponen AudioPlayer, AudioUpload, ImageUpload, dan VideoPlayer."
+  },
+  "features/player-experience/components/AnswerButtons.tsx": {
+    "summary": "Komponen tombol pilihan jawaban interaktif yang responsif dioptimalkan untuk perangkat mobile layar sentuh pemain."
+  },
+  "features/player-experience/components/AnswerReveal.tsx": {
+    "summary": "Komponen layar umpan balik pemain yang mengumumkan apakah jawaban yang dipilih benar/salah beserta poin yang didapat."
+  },
+  "features/player-experience/components/WaitingScreen.tsx": {
+    "summary": "Komponen layar transisi menunggu pertanyaan berikutnya atau menunggu pemain lain menyelesaikan jawaban."
+  },
+  "features/player-experience/data/playerRepository.ts": {
+    "summary": "Repository Supabase untuk interaksi data pemain, mencakup joinRoom, submitAnswer, getPlayerState, dan updateHeartbeat."
+  },
+  "features/player-experience/domain/horses.ts": {
+    "summary": "Modul domain yang mengatur palet warna, avatar kuda pacuan, dan penugasan identitas karakter unik untuk pemain."
+  },
+  "features/player-experience/index.ts": {
+    "summary": "Titik ekspor publik modul player-experience, mengekspor PlayerRoomRoute dan fungsi domain avatar kuda."
+  },
+  "features/player-experience/routes/PlayerRoomRoute.tsx": {
+    "summary": "Komponen route utama sisi pemain yang mengelola pendaftaran nickname, sinkronisasi realtime status pertanyaan, pengiriman jawaban, dan animasi respon."
+  },
+  "features/player-experience/__tests__/horses.test.ts": {
+    "summary": "Unit test Vitest untuk menguji konsistensi penugasan warna dan avatar kuda bagi pemain yang bergabung."
+  },
+  "features/quiz-authoring/components/AIGenerateButton.tsx": {
+    "summary": "Komponen tombol UI dan modal generator kuis cerdas berbasis AI untuk memicu pembuatan soal otomatis."
+  },
+  "features/quiz-authoring/components/QuestionEditor.tsx": {
+    "summary": "Form editor komprehensif untuk menyusun detail pertanyaan kuis, opsi pilihan ganda, batas waktu, media lampiran, dan bobot poin."
+  },
+  "features/quiz-authoring/components/SortableQuestionCard.tsx": {
+    "summary": "Komponen kartu pertanyaan yang mendukung fitur drag-and-drop reordering untuk mengatur urutan soal kuis."
+  },
+  "features/quiz-authoring/data/quizTemplateRepository.ts": {
+    "summary": "Repository Supabase untuk operasi CRUD template kuis dan pertanyaan (tabel quizzes dan questions)."
+  },
+  "features/quiz-authoring/domain/types.ts": {
+    "summary": "Definisi tipe TypeScript untuk struktur data kuis, konfigurasi pertanyaan, dan opsi pilihan jawaban dalam modul authoring."
+  },
+  "features/quiz-authoring/index.ts": {
+    "summary": "Titik ekspor publik modul quiz-authoring, mengekspor route editor kuis dan repository quizTemplateRepository."
+  },
+  "features/quiz-authoring/routes/EditQuizRoute.tsx": {
+    "summary": "Komponen route untuk memuat dan menyunting template kuis yang sudah ada beserta pertanyaan-pertanyaannya."
+  },
+  "features/quiz-authoring/routes/NewQuizRoute.tsx": {
+    "summary": "Komponen route untuk membuat template kuis baru dari awal atau menggunakan bantuan generator AI."
+  },
+  "features/realtime/contracts.ts": {
+    "summary": "Definisi tipe TypeScript untuk event payload saluran realtime Supabase (ROOM_STATE_CHANGE, PLAYER_JOINED, SUBMIT_ANSWER, LEADERBOARD_UPDATE)."
+  },
+  "features/realtime/hooks.ts": {
+    "summary": "Custom React hooks (seperti useRealtimeRoom) untuk mengelola langganan Supabase Realtime channel, event broadcasting, dan sinkronisasi state."
+  },
+  "features/realtime/index.ts": {
+    "summary": "Titik ekspor publik modul realtime, mengekspor hooks dan kontrak tipe event realtime."
+  },
+  "features/scoring/domain/scoring.ts": {
+    "summary": "Logika domain perhitungan skor murni yang menghitung poin berdasarkan kebenaran jawaban, rasio kecepatan respons terhadap time limit, dan streak combo multiplier."
+  },
+  "features/scoring/index.ts": {
+    "summary": "Titik ekspor publik modul scoring, mengekspor fungsi kalkulasi calculateScore."
+  },
+  "features/scoring/__tests__/scoring.test.ts": {
+    "summary": "Unit test Vitest komprehensif untuk algoritma perhitungan skor, batas waktu nol, speed bonus, dan multiplier combo streak."
+  },
+  "features/session-results/application/sessionStats.ts": {
+    "summary": "Fungsi kalkulasi analitik sesi kuis untuk menghitung tingkat kesulitan soal, rata-rata waktu respons, dan skor tertinggi."
+  },
+  "features/session-results/data/sessionResultsRepository.ts": {
+    "summary": "Repository Supabase untuk mengambil data hasil sesi kuis, log jawaban pemain, dan metrik akhir dari database."
+  },
+  "features/session-results/index.ts": {
+    "summary": "Titik ekspor publik modul session-results, mengekspor SessionResultsRoute dan repository sessionResultsRepository."
+  },
+  "features/session-results/routes/SessionResultsRoute.tsx": {
+    "summary": "Komponen route untuk menampilkan dasbor hasil pasca pertandingan dengan statistik performa, breakdown pertanyaan, dan podium juara."
+  },
+  "features/session-results/__tests__/sessionStats.test.ts": {
+    "summary": "Unit test Vitest untuk fungsi analitik agregasi statistik sesi kuis."
+  },
+  "integrations/supabase/client.ts": {
+    "summary": "Konfigurasi inisialisasi Supabase client untuk browser (createClient) dan server-side rendering menggunakan variabel lingkungan publik."
+  },
+  "integrations/supabase/storage.ts": {
+    "summary": "Helper fungsi integrasi Supabase Storage untuk upload media gambar dan audio kuis ke bucket penyimpanan."
+  },
+  "integrations/supabase/__tests__/client.test.ts": {
+    "summary": "Unit test Vitest untuk memverifikasi inisialisasi dan konfigurasi Supabase client."
+  },
+  "next.config.ts": {
+    "summary": "Konfigurasi Next.js untuk pengaturan image domains, optimasi compiler, dan opsi runtime."
+  },
+  "package-lock.json": {
+    "summary": "File lock dependensi NPM yang mengunci versi paket-paket dependency pada proyek WicQuiz."
+  },
+  "package.json": {
+    "summary": "Manifest konfigurasi proyek Node.js/Next.js yang mendefinisikan scripts (dev, build, test, lint) dan dependensi library."
+  },
+  "postcss.config.mjs": {
+    "summary": "Konfigurasi PostCSS untuk mengintegrasikan Tailwind CSS dan Autoprefixer ke pipeline build Next.js."
+  },
+  "README.md": {
+    "summary": "Dokumen dokumentasi utama proyek WicQuiz yang berisi ringkasan fitur, cara instalasi lokal, dan panduan kontribusi."
+  },
+  "scripts/check-boundaries.mjs": {
+    "summary": "Skrip verifikasi arsitektur mandiri untuk memeriksa impor file antar modul fitur agar mematuhi aturan isolasi boundaries."
+  },
+  "shared/domain/types.ts": {
+    "summary": "Definisi tipe domain global aplikasi WicQuiz (Quiz, Question, Room, Player, Answer, GameStatus)."
+  },
+  "shared/hooks/useReducedMotion.ts": {
+    "summary": "Custom React hook untuk mendeteksi preferensi pengguna terhadap reduced motion demi aksesibilitas animasi."
+  },
+  "shared/hostIdentity.ts": {
+    "summary": "Helper untuk mengelola token identitas unik host di localStorage agar host dapat melanjutkan sesi kuis yang aktif."
+  },
+  "shared/ui/AnimatedContainer.tsx": {
+    "summary": "Komponen wrapper animasi reusable yang membungkus konten dengan transisi Framer Motion / CSS transitions halus."
+  },
+  "shared/ui/Button.tsx": {
+    "summary": "Komponen tombol UI bersama dengan varian gaya (primary, secondary, danger, ghost) dan indikator loading."
+  },
+  "shared/ui/QRCodeDisplay.tsx": {
+    "summary": "Komponen UI untuk me-render QR Code join room yang dapat dipindai oleh perangkat smartphone pemain."
+  },
+  "shared/ui/RacerAvatar.tsx": {
+    "summary": "Komponen SVG renderer untuk karakter avatar kuda pemain dengan variasi warna dan ornamen balap."
+  },
+  "shared/ui/Skeleton.tsx": {
+    "summary": "Komponen placeholder loading skeleton UI dengan efek shimmering untuk transisi data asynchronous."
+  },
+  "shared/ui/TimerBar.tsx": {
+    "summary": "Komponen progress bar animasi hitung mundur waktu tersisa untuk menjawab soal kuis."
+  },
+  "shared/utils/cn.ts": {
+    "summary": "Fungsi utilitas penggabung class CSS Tailwind yang mengombinasikan clsx dan tailwind-merge."
+  },
+  "supabase/.temp/cli-latest": {
+    "summary": "File metadata cache versi CLI Supabase lokal."
+  },
+  "supabase/.temp/gotrue-version": {
+    "summary": "File metadata cache versi GoTrue auth service Supabase lokal."
+  },
+  "supabase/.temp/pooler-url": {
+    "summary": "File metadata cache URL Supabase connection pooler."
+  },
+  "supabase/.temp/postgres-version": {
+    "summary": "File metadata cache versi database PostgreSQL Supabase."
+  },
+  "supabase/.temp/project-ref": {
+    "summary": "File metadata cache ID referensi proyek lokal Supabase."
+  },
+  "supabase/.temp/rest-version": {
+    "summary": "File metadata cache versi PostgREST service Supabase."
+  },
+  "supabase/.temp/storage-migration": {
+    "summary": "File metadata status migrasi storage Supabase."
+  },
+  "supabase/.temp/storage-version": {
+    "summary": "File metadata cache versi Storage service Supabase."
+  },
+  "supabase/migrations/001_initial.sql": {
+    "summary": "Skrip migrasi database SQL Supabase inisial yang membuat tabel quizzes, questions, rooms, players, answers beserta indeks dan security policy RLS."
+  },
+  "supabase/migrations/002_quiz_management.sql": {
+    "summary": "Skrip migrasi SQL Supabase untuk menambahkan kolom manajemen kuis, metadata author, tag kuis, dan hak akses host."
+  },
+  "supabase/migrations/003_blur_column.sql": {
+    "summary": "Skrip migrasi SQL Supabase yang menambahkan kolom blur_image pada tabel questions untuk efek tebak gambar bertahap."
+  },
+  "supabase/migrations/004_room_game_state.sql": {
+    "summary": "Skrip migrasi SQL Supabase untuk menambahkan enum state game baru dan kolom penunjang sinkronisasi live room."
+  },
+  "tsconfig.json": {
+    "summary": "Konfigurasi compiler TypeScript dengan target ESNext, konfigurasi path alias @/*, dan integrasi Next.js plugin."
+  },
+  "vitest.config.ts": {
+    "summary": "Konfigurasi test runner Vitest untuk menjalankan unit test TypeScript dan React testing-library dalam lingkungan jsdom."
+  }
+}
