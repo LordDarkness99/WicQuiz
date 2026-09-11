@@ -5,97 +5,19 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { getHostId } from "@/shared/hostIdentity";
-import { saveQuizTemplate, markTemplateAsRun } from "@/features/quiz-authoring";
-import type { QuestionFormData } from "@/features/quiz-authoring";
-import QuestionEditor from "@/features/quiz-authoring/components/QuestionEditor";
-import SortableQuestionCard from "@/features/quiz-authoring/components/SortableQuestionCard";
-
-function createEmptyQuestion(): QuestionFormData {
-  return {
-    type: "multiple_choice",
-    question_text: "",
-    options: ["", "", "", ""],
-    correct_answer: "",
-    time_limit: 15,
-    image_url: "",
-    is_joker: false,
-    slider_min: 0,
-    slider_max: 100,
-    video_url: "",
-    video_start_seconds: 0,
-    video_end_seconds: null,
-    audio_url: "",
-  };
-}
+import { createDraftTemplate } from "@/features/quiz-authoring";
 
 export default function NewQuizPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [saveSuccess, setSaveSuccess] = useState(false);
 
-  const handleQuestionChange = useCallback(
-    (index: number, updated: QuestionFormData) => {
-      setQuestions((prev) => prev.map((q, i) => (i === index ? updated : q)));
-    },
-    []
-  );
-
-  const handleRemoveQuestion = useCallback(
-    (index: number) => {
-      setQuestions((prev) => {
-        if (prev.length <= 1) return prev;
-        return prev.filter((_, i) => i !== index);
-      });
-      if (selectedIndex >= index && selectedIndex > 0) {
-        setSelectedIndex((prev) => prev - 1);
-      }
-    },
-    [selectedIndex]
-  );
-
-  const addQuestion = () => {
-    setQuestions((prev) => [...prev, createEmptyQuestion()]);
-    setSelectedIndex(questions.length);
-  };
-
-  const validate = (): string | null => {
-    if (!title.trim()) return "Give your quiz a title first.";
-    const hasValidQuestion = questions.some(
-      (q) => q.question_text.trim().length > 0
-    );
-    if (!hasValidQuestion)
-      return "Add at least one question with some text — your audience needs something to answer!";
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
-      if (!q.question_text.trim()) continue;
-      if (
-        (q.type === "multiple_choice" ||
-          q.type === "image_question" ||
-          q.type === "video_question" ||
-          q.type === "audio_question") &&
-        !q.correct_answer.trim()
-      ) {
-        return `Question ${i + 1}: Please select a correct answer.`;
-      }
-      if (q.type === "true_false" && !q.correct_answer.trim()) {
-        return `Question ${i + 1}: Please select True or False.`;
-      }
-      if (
-        (q.type === "slider" || q.type === "type_in") &&
-        !q.correct_answer.trim()
-      ) {
-        return `Question ${i + 1}: Please provide a correct answer.`;
-      }
-    }
-    return null;
-  };
-
-  const handleCreate = async () => {
-    const validationError = validate();
-    if (validationError) {
-      setError(validationError);
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = title.trim();
+    if (!trimmed) {
+      setError("Masukkan nama quiz terlebih dahulu.");
       return;
     }
     setError(null);
@@ -151,92 +73,67 @@ export default function NewQuizPage() {
             Beri nama dulu, lalu tambahkan pertanyaanmu di editor.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          {error && (
-            <span className="text-error text-xs font-bold max-w-[220px] truncate" title={error}>
-              {error}
-            </span>
-          )}
-          <motion.button
-            onClick={handleSaveDraft}
-            disabled={isSavingDraft || isCreating}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-5 py-2.5 rounded-xl font-bold text-sm text-primary border border-primary/10 hover:bg-surface-container-low transition-colors disabled:opacity-50"
-          >
-            {isSavingDraft ? "Saving..." : "Save as Draft"}
-          </motion.button>
-          <motion.button
-            onClick={handleCreate}
-            disabled={isCreating}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-secondary-container text-white px-6 py-2.5 rounded-xl font-extrabold text-sm shadow-[0px_10px_20px_rgba(255,107,107,0.2)] transition-shadow disabled:opacity-50 min-w-[120px]"
-          >
-            {saveSuccess ? (
-              <motion.span
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="inline-flex items-center gap-1"
+
+        {/* Card */}
+        <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/10 shadow-[0px_20px_60px_rgba(27,43,94,0.06)] p-8">
+          <form onSubmit={handleCreate} className="space-y-6">
+            <div>
+              <label
+                htmlFor="quiz-title"
+                className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                Saved!
-              </motion.span>
-            ) : isCreating ? (
-              "Setting up the room..."
-            ) : (
-              "Launch Quiz"
-            )}
-          </motion.button>
-        </div>
-      </header>
+                Nama Quiz
+              </label>
+              <input
+                id="quiz-title"
+                type="text"
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  if (error) setError(null);
+                }}
+                placeholder="contoh: Kuis Sejarah Indonesia 2024"
+                autoFocus
+                autoComplete="off"
+                maxLength={120}
+                disabled={creating}
+                className={`w-full px-4 py-3.5 rounded-xl border bg-surface text-on-surface text-lg font-semibold placeholder:text-on-surface-variant/30 focus:outline-none transition-colors ${
+                  error
+                    ? "border-error focus:border-error"
+                    : "border-outline-variant/40 focus:border-primary"
+                }`}
+              />
+              <AnimatePresence>
+                {error && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="mt-2 text-xs text-error font-medium flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">error</span>
+                    {error}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+              <p className="mt-1.5 text-xs text-outline">
+                {title.length}/120 karakter
+              </p>
+            </div>
 
-      {/* Error banner */}
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-error-container text-error px-6 py-3 text-center text-sm font-medium"
-        >
-          {error}
-        </motion.div>
-      )}
+            {/* Tips */}
+            <div className="bg-surface-container rounded-xl p-4 flex items-start gap-3">
+              <span
+                className="material-symbols-outlined text-primary text-[18px] mt-0.5"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                lightbulb
+              </span>
+              <p className="text-xs text-on-surface-variant leading-relaxed">
+                Kamu bisa mengubah nama quiz kapan saja di editor. Setelah memberi nama, quiz akan langsung tersimpan sebagai draft dan kamu bisa mulai menambahkan pertanyaan.
+              </p>
+            </div>
 
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar: Question List */}
-        <aside className="w-80 bg-surface-container-low flex flex-col h-[calc(100vh-57px)] border-r border-outline-variant/10">
-          <div className="p-6 flex justify-between items-center">
-            <span className="text-xs font-bold uppercase tracking-widest text-outline">
-              Questions ({questions.length})
-            </span>
-          </div>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={questionIds}
-              strategy={verticalListSortingStrategy}
-            >
-              <div className="flex-1 overflow-y-auto px-4 space-y-2 pb-24">
-                {questions.map((q, idx) => (
-                  <SortableQuestionCard
-                    key={idx}
-                    id={String(idx)}
-                    question={q}
-                    index={idx}
-                    isSelected={idx === selectedIndex}
-                    onClick={() => setSelectedIndex(idx)}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
-          {/* Add Question Button */}
-          <div className="p-4 bg-surface-container-low border-t border-outline-variant/10">
             <motion.button
               type="submit"
               disabled={creating || !title.trim()}
@@ -251,15 +148,18 @@ export default function NewQuizPage() {
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  <span
+                    className="material-symbols-outlined text-[20px]"
+                    style={{ fontVariationSettings: "'FILL' 1" }}
+                  >
                     edit_note
                   </span>
                   Lanjut ke Editor
                 </>
               )}
             </motion.button>
-          </div>
-        </aside>
+          </form>
+        </div>
 
         {/* Footer hint */}
         <p className="text-center text-xs text-outline mt-6">
