@@ -12,6 +12,8 @@ import {
   fetchPlayerScore,
   joinRoom,
   submitAnswer,
+  fetchPlayerAnswer,
+  fetchQuestionAnswerDistribution,
 } from "@/features/player-experience/data/playerRepository";
 import { generateHorseName } from "@/features/player-experience/domain/horses";
 import type { Question, LeaderboardEntry } from "@/shared/domain/types";
@@ -105,6 +107,9 @@ export default function PlayPage() {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [timeLimit, setTimeLimit] = useState(0);
   const questionStartRef = useRef<number>(0);
+  const currentQuestionRef = useRef<Question | null>(null);
+  currentQuestionRef.current = currentQuestion;
+  const quizQuestionsRef = useRef<Question[]>([]);
 
   // Answer tracking
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -115,6 +120,11 @@ export default function PlayPage() {
   const [revealPoints, setRevealPoints] = useState(0);
   const [revealCorrectAnswer, setRevealCorrectAnswer] = useState("");
   const [revealIsJoker, setRevealIsJoker] = useState(false);
+  const [answerDistribution, setAnswerDistribution] = useState<
+    { answer_value: string; count: number }[]
+  >([]);
+  const currentQuestionIndexRef = useRef<number>(-1);
+  currentQuestionIndexRef.current = questionNumber > 0 ? questionNumber - 1 : -1;
 
   // Leaderboard
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
@@ -170,13 +180,22 @@ export default function PlayPage() {
         return;
       }
 
-      if (data.status === "finished") {
-        setRoomError("This quiz has already finished. Ask the host to start a new game!");
+      if (!data) {
+        setRoomError("Room not found. Double-check the code and try again.");
         setPhase("join");
         return;
       }
 
       setRoomId(data.id);
+
+      // Pre-cache quiz questions for smooth transitions without reload
+      if (data.current_quiz_id) {
+        fetchQuizQuestions(data.current_quiz_id).then((qs) => {
+          if (!cancelled && qs && qs.length > 0) {
+            quizQuestionsRef.current = qs;
+          }
+        });
+      }
 
       // Check for existing player session (reconnect)
       const stored = loadPlayerData(roomCode);
@@ -190,8 +209,14 @@ export default function PlayPage() {
           setHorseName(playerRow.horse_name);
           setTotalScore(playerRow.score);
 
-          // Late-join catch-up: if game is already active, jump to current question
-          if (data.status === 'active' && data.current_question_index >= 0 && data.current_quiz_id) {
+          // If room status is completed or finished, show finished view (never kick player to error!)
+          if (data.status === "completed" || data.status === "finished") {
+            setPhase("finished");
+            return;
+          }
+
+          // Late-join catch-up: if game is already active, jump to current question or answered view
+          if (data.status === "active" && data.current_question_index >= 0 && data.current_quiz_id) {
             const questions = await fetchQuizQuestions(data.current_quiz_id);
 
             if (!cancelled && questions.length > 0) {
@@ -201,11 +226,38 @@ export default function PlayPage() {
                 const safeQ: Partial<Question> = { ...q };
                 delete safeQ.correct_answer;
                 setCurrentQuestion(safeQ as Question);
+                currentQuestionIndexRef.current = idx;
                 setQuestionNumber(idx + 1);
                 setTotalQuestions(questions.length);
                 setTimeLimit(q.time_limit);
-                setTimeRemaining(0);
-                setPhase('question');
+
+                // Check if this player has already submitted an answer for this question
+                const existing = await fetchPlayerAnswer(q.id, playerRow.id);
+                if (existing) {
+                  setSelectedAnswer(existing.answer_value);
+                  setTimeTakenMs(0);
+                  setRevealIsCorrect(existing.is_correct ?? false);
+                  setRevealPoints(existing.points_earned ?? 0);
+                  setRevealCorrectAnswer(q.correct_answer || "");
+                  const dist = await fetchQuestionAnswerDistribution(q.id);
+                  const counts: Record<string, number> = {};
+                  dist.forEach((d) => {
+                    counts[d.answer_value] = (counts[d.answer_value] || 0) + 1;
+                  });
+                  setAnswerDistribution(
+                    Object.entries(counts).map(([answer_value, count]) => ({
+                      answer_value,
+                      count,
+                    }))
+                  );
+                  setPhase("answer_revealed");
+                  return;
+                }
+
+                // If not answered yet, give player time to answer safely
+                questionStartRef.current = Date.now();
+                setTimeRemaining(q.time_limit);
+                setPhase("question");
                 return;
               }
             }
@@ -214,6 +266,12 @@ export default function PlayPage() {
           setPhase("lobby");
           return;
         }
+      }
+
+      if (data.status === "finished") {
+        setRoomError("This quiz has already finished. Ask the host to start a new game!");
+        setPhase("join");
+        return;
       }
 
       setPhase("join");
@@ -238,7 +296,7 @@ export default function PlayPage() {
           const p = payload as GameStatePayload;
 
           if (p.state === "question_start") {
-            // Reset answer state — question will arrive via question_reveal
+            // Reset answer state
             setSelectedAnswer(null);
             setTimeTakenMs(0);
             setRevealIsCorrect(false);
@@ -246,6 +304,54 @@ export default function PlayPage() {
             setRevealCorrectAnswer("");
             setRevealIsJoker(false);
             setRevealPhase(null);
+            setAnswerDistribution([]);
+
+            const qPayload = p as unknown as {
+              question?: Partial<Question>;
+              question_number?: number;
+              total_questions?: number;
+              current_question_index?: number;
+            };
+
+            const idx =
+              typeof qPayload.current_question_index === "number"
+                ? qPayload.current_question_index
+                : typeof qPayload.question_number === "number"
+                ? qPayload.question_number - 1
+                : 0;
+            currentQuestionIndexRef.current = idx;
+
+            if (qPayload.question) {
+              const safeQuestion = { ...qPayload.question };
+              delete safeQuestion.correct_answer;
+              setCurrentQuestion(safeQuestion as Question);
+              setImageLoaded(false);
+              setQuestionNumber(
+                qPayload.question_number ?? (idx + 1)
+              );
+              if (qPayload.total_questions) setTotalQuestions(qPayload.total_questions);
+              setTimeRemaining(safeQuestion.time_limit ?? 15);
+              setTimeLimit(safeQuestion.time_limit ?? 15);
+              questionStartRef.current = Date.now();
+              setPhase("question");
+            } else if (
+              typeof qPayload.current_question_index === "number" &&
+              quizQuestionsRef.current.length > 0
+            ) {
+              const q = quizQuestionsRef.current[qPayload.current_question_index];
+              if (q) {
+                const safeQ: Partial<Question> = { ...q };
+                delete safeQ.correct_answer;
+                setCurrentQuestion(safeQ as Question);
+                setImageLoaded(false);
+                setQuestionNumber(qPayload.current_question_index + 1);
+                setTotalQuestions(quizQuestionsRef.current.length);
+                setTimeLimit(q.time_limit);
+                setTimeRemaining(q.time_limit);
+                questionStartRef.current = Date.now();
+                setPhase("question");
+              }
+            }
           }
 
           if (p.state === "question_end") {
@@ -264,6 +370,9 @@ export default function PlayPage() {
           }
 
           if (p.state === "lobby") {
+            setTotalScore(0);
+            setSelectedAnswer(null);
+            currentQuestionIndexRef.current = -1;
             setPhase("lobby");
           }
         })
@@ -272,6 +381,7 @@ export default function PlayPage() {
           const safeQuestion = { ...p.question };
           delete (safeQuestion as Partial<Question>).correct_answer;
           setCurrentQuestion(safeQuestion as Question);
+          currentQuestionIndexRef.current = p.question_number - 1;
           setImageLoaded(false);
           setQuestionNumber(p.question_number);
           setTotalQuestions(p.total_questions);
@@ -279,6 +389,13 @@ export default function PlayPage() {
           setTimeLimit(safeQuestion.time_limit);
           questionStartRef.current = Date.now();
           setSelectedAnswer(null);
+          setTimeTakenMs(0);
+          setRevealIsCorrect(false);
+          setRevealPoints(0);
+          setRevealCorrectAnswer("");
+          setRevealIsJoker(false);
+          setRevealPhase(null);
+          setAnswerDistribution([]);
           setPhase("question");
         })
         .on("broadcast", { event: "timer_tick" }, ({ payload }) => {
@@ -297,6 +414,9 @@ export default function PlayPage() {
             // Player didn't answer
             setRevealIsCorrect(false);
             setRevealPoints(0);
+          }
+          if (p.answerDistribution) {
+            setAnswerDistribution(p.answerDistribution);
           }
           setRevealCorrectAnswer(p.correctAnswer);
           setPhase("answer_revealed");
@@ -330,11 +450,63 @@ export default function PlayPage() {
           }
           setPhase("leaderboard");
         })
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "qt_rooms",
+            filter: roomId ? `id=eq.${roomId}` : undefined,
+          },
+          async (payload) => {
+            const updated = payload.new as {
+              status?: string;
+              current_question_index?: number;
+              current_quiz_id?: string;
+            };
+
+            if (updated.status === "lobby") {
+              setTotalScore(0);
+              setSelectedAnswer(null);
+              setPhase("lobby");
+              return;
+            }
+
+            if (
+              updated.status === "active" &&
+              typeof updated.current_question_index === "number" &&
+              updated.current_question_index >= 0 &&
+              updated.current_quiz_id
+            ) {
+              let questions = quizQuestionsRef.current;
+              if (questions.length === 0) {
+                const fetched = await fetchQuizQuestions(updated.current_quiz_id);
+                questions = fetched;
+                quizQuestionsRef.current = fetched;
+              }
+
+              const q = questions[updated.current_question_index];
+              if (q && currentQuestionRef.current?.id !== q.id) {
+                const safeQ: Partial<Question> = { ...q };
+                delete safeQ.correct_answer;
+                setCurrentQuestion(safeQ as Question);
+                setImageLoaded(false);
+                setQuestionNumber(updated.current_question_index + 1);
+                setTotalQuestions(questions.length);
+                setTimeLimit(q.time_limit);
+                setTimeRemaining(q.time_limit);
+                questionStartRef.current = Date.now();
+                setSelectedAnswer(null);
+                setPhase("question");
+              }
+            }
+          }
+        )
         .subscribe();
 
       channelRef.current = channel;
     },
-    [roomCode]
+    [roomCode, roomId]
   );
 
   // Set up channel when playerId is available
@@ -350,6 +522,105 @@ export default function PlayPage() {
       }
     };
   }, [playerId, roomId, setupChannel]);
+
+  // ── Auto-sync with room state (heartbeat & tab visibility) ───────
+  useEffect(() => {
+    if (!roomCode || phase === "join" || phase === "loading") return;
+
+    let cancelled = false;
+
+    async function syncWithRoom() {
+      if (cancelled) return;
+      const room = await fetchRoomByCode(roomCode);
+      if (cancelled || !room) return;
+
+      // 1. Room reset to lobby (e.g. host clicked "Play Again")
+      if (room.status === "lobby") {
+        if (phase !== "lobby") {
+          setPhase("lobby");
+          setTotalScore(0);
+          setSelectedAnswer(null);
+          currentQuestionIndexRef.current = -1;
+        }
+        return;
+      }
+
+      // 2. Room finished / stopped by host
+      if (room.status === "finished") {
+        if (phase !== "finished") {
+          setPhase("finished");
+        }
+        return;
+      }
+
+      // 3. Room completed (final leaderboard/podium shown by host)
+      if (room.status === "completed") {
+        if (phase !== "finished") {
+          setPhase("finished");
+          if (playerId) fetchFinalScore(playerId);
+        }
+        return;
+      }
+
+      // 4. Room active - host advanced to a new question
+      if (
+        room.status === "active" &&
+        typeof room.current_question_index === "number" &&
+        room.current_question_index >= 0
+      ) {
+        const newIdx = room.current_question_index;
+        const curIdx = currentQuestionIndexRef.current;
+
+        if (newIdx > curIdx) {
+          let questions = quizQuestionsRef.current;
+          if (questions.length === 0 && room.current_quiz_id) {
+            questions = await fetchQuizQuestions(room.current_quiz_id);
+            quizQuestionsRef.current = questions;
+          }
+
+          const nextQ = questions[newIdx];
+          if (nextQ && !cancelled) {
+            currentQuestionIndexRef.current = newIdx;
+            const safeQ: Partial<Question> = { ...nextQ };
+            delete safeQ.correct_answer;
+            setCurrentQuestion(safeQ as Question);
+            setImageLoaded(false);
+            setQuestionNumber(newIdx + 1);
+            setTotalQuestions(questions.length);
+            setTimeLimit(nextQ.time_limit);
+            setTimeRemaining(nextQ.time_limit);
+            questionStartRef.current = Date.now();
+            setSelectedAnswer(null);
+            setTimeTakenMs(0);
+            setRevealIsCorrect(false);
+            setRevealPoints(0);
+            setRevealCorrectAnswer("");
+            setRevealIsJoker(false);
+            setRevealPhase(null);
+            setAnswerDistribution([]);
+            setPhase("question");
+          }
+        }
+      }
+    }
+
+    const interval = setInterval(syncWithRoom, 1500);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        syncWithRoom();
+      }
+    };
+    window.addEventListener("focus", syncWithRoom);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+      window.removeEventListener("focus", syncWithRoom);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [roomCode, phase, playerId]);
 
   // ── Fetch final score ──────────────────────────────────────────
 
@@ -401,14 +672,22 @@ export default function PlayPage() {
   async function handleAnswer(answer: string) {
     if (!currentQuestion || !playerId) return;
 
-    const taken = Date.now() - questionStartRef.current;
+    const limitMs = (currentQuestion.time_limit || 15) * 1000;
+    const now = Date.now();
+    const rawTaken = questionStartRef.current > 0 ? now - questionStartRef.current : 0;
+    const taken = Math.min(Math.max(0, rawTaken), Math.max(limitMs, 1000));
+
     setSelectedAnswer(answer);
     setTimeTakenMs(taken);
     setPhase("answered");
 
     toast(`Answer locked in! ✅`, { duration: 2000 });
 
-    await submitAnswer(currentQuestion.id, playerId, answer, taken);
+    try {
+      await submitAnswer(currentQuestion.id, playerId, answer, taken);
+    } catch (err) {
+      console.error("Failed to submit answer:", err);
+    }
   }
 
   // ── Render ─────────────────────────────────────────────────────
@@ -628,7 +907,7 @@ export default function PlayPage() {
                 <AnswerButtons
                   question={currentQuestion}
                   onAnswer={handleAnswer}
-                  disabled={waitingForImage}
+                  disabled={waitingForImage || timeRemaining <= 0}
                 />
               </div>
             </AnimatedContainer>
@@ -778,6 +1057,9 @@ export default function PlayPage() {
                 isJoker={revealIsJoker}
                 questionNumber={questionNumber}
                 totalQuestions={totalQuestions}
+                options={currentQuestion?.options || undefined}
+                answerDistribution={answerDistribution}
+                playerAnswer={selectedAnswer}
               />
             </AnimatedContainer>
           )}
@@ -1007,6 +1289,16 @@ export default function PlayPage() {
               >
                 Thanks for playing! 🐎
               </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 }}
+                className="flex items-center gap-2 mt-3 px-4 py-2 rounded-full bg-navy/5 border border-navy/10 text-xs font-bold text-navy/70"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Menunggu host memulai ulang quiz (Play Again) atau menutup room...
+              </motion.div>
 
               <p className="text-sm text-outline/60 mt-4 text-center">
                 You can close this tab now.

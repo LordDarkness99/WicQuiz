@@ -186,12 +186,14 @@ export default function DisplayScreen() {
           }
         }
         setAnswerDistribution(
-          options.map((label) => ({
-            label,
-            count: counts[label] || 0,
-            percent: total > 0 ? ((counts[label] || 0) / total) * 100 : 0,
-            isCorrect: label === correct,
-          }))
+          options
+            .filter((opt) => typeof opt === "string" && opt.trim() !== "")
+            .map((label) => ({
+              label,
+              count: counts[label] || 0,
+              percent: total > 0 ? ((counts[label] || 0) / total) * 100 : 0,
+              isCorrect: label === correct,
+            }))
         );
       } else if (question.type === "true_false") {
         const trueCount = answers.filter((a) => a.answer_value === "true").length;
@@ -578,7 +580,7 @@ export default function DisplayScreen() {
           <AnimatePresence>
             {answerDistribution.map((item, idx) => (
               <motion.div
-                key={item.label}
+                key={`${item.label}-${idx}`}
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1, type: "spring", stiffness: 300, damping: 30 }}

@@ -36,12 +36,16 @@ export async function saveSessionResult(
   questionStats: QuestionStat[],
   startedAt: string | null
 ): Promise<string> {
+  const { data: { user } } = await supabase.auth.getUser();
+  const owner_id = user?.id || null;
+  const effectiveHostId = owner_id || hostId;
   const { data, error } = await supabase
     .from("qt_session_results")
     .insert({
       room_id: roomId,
       quiz_template_id: templateId,
-      host_id: hostId,
+      host_id: effectiveHostId,
+      owner_id,
       title,
       player_count: playerCount,
       question_count: questionCount,
@@ -62,10 +66,11 @@ export async function getSessionResults(
   hostId: string,
   limit = 20
 ): Promise<SessionResult[]> {
+  if (!hostId) return [];
   const { data, error } = await supabase
     .from("qt_session_results")
     .select("*")
-    .eq("host_id", hostId)
+    .or(`host_id.eq.${hostId},owner_id.eq.${hostId}`)
     .order("created_at", { ascending: false })
     .limit(limit);
 

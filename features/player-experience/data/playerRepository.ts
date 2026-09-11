@@ -79,17 +79,49 @@ export async function joinRoom(
   return data.id as string;
 }
 
-/** Submit an answer for the current question (fire-and-forget). */
+/** Submit an answer for the current question (safe bounded time to avoid integer overflow). */
 export async function submitAnswer(
   questionId: string,
   playerId: string,
   answerValue: string,
   timeTakenMs: number
-): Promise<void> {
-  await supabase.from("qt_answers").insert({
+): Promise<{ success: boolean; error?: string }> {
+  // Bound time taken to [0, 120000] ms to strictly prevent integer overflow in DB
+  const safeTime = Math.min(Math.max(0, Math.round(timeTakenMs || 0)), 120000);
+  const { error } = await supabase.from("qt_answers").insert({
     question_id: questionId,
     player_id: playerId,
     answer_value: answerValue,
-    time_taken_ms: timeTakenMs,
+    time_taken_ms: safeTime,
   });
+  if (error) {
+    console.error("submitAnswer error:", error);
+    return { success: false, error: error.message };
+  }
+  return { success: true };
+}
+
+/** Check if player has already answered a specific question. */
+export async function fetchPlayerAnswer(
+  questionId: string,
+  playerId: string
+): Promise<{ answer_value: string; is_correct: boolean; points_earned: number } | null> {
+  const { data } = await supabase
+    .from("qt_answers")
+    .select("answer_value, is_correct, points_earned")
+    .eq("question_id", questionId)
+    .eq("player_id", playerId)
+    .maybeSingle();
+  return data ?? null;
+}
+
+/** Fetch all answer values for a question (distribution). */
+export async function fetchQuestionAnswerDistribution(
+  questionId: string
+): Promise<{ answer_value: string }[]> {
+  const { data } = await supabase
+    .from("qt_answers")
+    .select("answer_value")
+    .eq("question_id", questionId);
+  return data ?? [];
 }

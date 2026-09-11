@@ -34,6 +34,12 @@ import type { QuestionFormData } from "@/features/quiz-authoring";
 import type { QuestionType } from "@/shared/domain/types";
 import QuestionEditor from "@/features/quiz-authoring/components/QuestionEditor";
 import SortableQuestionCard from "@/features/quiz-authoring/components/SortableQuestionCard";
+import { supabase } from "@/integrations/supabase/client";
+
+async function getAuthOwnerId(): Promise<string | null> {
+  const { data: { user } } = await supabase.auth.getUser();
+  return user?.id ?? null;
+}
 
 function createEmptyQuestion(): QuestionFormData {
   return {
@@ -118,6 +124,7 @@ export default function EditQuizPage() {
       setSaving(true);
       try {
         const hostId = getHostId();
+        const ownerId = await getAuthOwnerId();
         const validQuestions = questions.filter(
           (q) => q.question_text.trim().length > 0
         );
@@ -136,6 +143,7 @@ export default function EditQuizPage() {
 
         const rows = validQuestions.map((q) => ({
           host_id: hostId,
+          owner_id: ownerId,
           type: q.type,
           question_text: q.question_text.trim(),
           options:

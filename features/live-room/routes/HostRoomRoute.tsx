@@ -22,8 +22,10 @@ import {
   setRoomFinished,
   deleteAnswersForQuestions,
   deleteRoomPlayers,
+  resetRoomPlayerScores,
   resetRoomToLobby,
 } from "@/features/live-room/data/liveRoomRepository";
+import { supabase } from "@/integrations/supabase/client";
 import {
   saveSessionResult,
   computeAvgTimeMap,
@@ -94,6 +96,8 @@ export default function HostControlPanel() {
   const [showSuspenseModal, setShowSuspenseModal] = useState(false);
   const [hostImageLoaded, setHostImageLoaded] = useState(false);
   const [hostBlurAmount, setHostBlurAmount] = useState(0);
+  const [autoAdvanceSeconds, setAutoAdvanceSeconds] = useState<number | null>(null);
+  const scoredResultsRef = useRef<Record<string, { isCorrect: boolean; pointsEarned: number }>>({});
 
   // Refs to avoid stale closures
   const playersRef = useRef<Player[]>(players);
@@ -268,6 +272,7 @@ export default function HostControlPanel() {
     const question = questionsRef.current[index];
     if (!question) return;
 
+    setAutoAdvanceSeconds(null);
     setCurrentQuestionIndex(index);
     setAnsweredCount(0);
     setCurrentAnswers([]);
@@ -307,6 +312,9 @@ export default function HostControlPanel() {
     broadcast("game_state_change", {
       state: "question_start",
       current_question_index: index,
+      question: safeQuestion,
+      question_number: index + 1,
+      total_questions: questionsRef.current.length,
     });
 
     // Persist current question index to DB for late-join catch-up
@@ -322,10 +330,36 @@ export default function HostControlPanel() {
       return;
 
     async function runScoring() {
+      // Ensure we have all answers submitted up to now (including DB fallback)
+      let answersToScore = currentAnswers;
+      if (currentQuestion) {
+        const { data: dbAnswers } = await supabase
+          .from("qt_answers")
+          .select("*")
+          .eq("question_id", currentQuestion.id);
+        if (dbAnswers && dbAnswers.length > 0) {
+          answersToScore = dbAnswers as Answer[];
+          setCurrentAnswers(answersToScore);
+        }
+      }
+
       const { updates, playerPointsMap } = scoreAnswers(
         currentQuestion!,
-        currentAnswers
+        answersToScore
       );
+
+      // Build playerResults directly in memory from scored updates
+      const playerResults: Record<string, { isCorrect: boolean; pointsEarned: number }> = {};
+      for (const answer of answersToScore) {
+        const u = updates.find((up) => up.id === answer.id);
+        if (u) {
+          playerResults[answer.player_id] = {
+            isCorrect: u.is_correct,
+            pointsEarned: u.points_earned,
+          };
+        }
+      }
+      scoredResultsRef.current = playerResults;
 
       for (const u of updates) {
         await updateAnswerScore(u.id, u.is_correct, u.points_earned);
@@ -348,6 +382,9 @@ export default function HostControlPanel() {
       }
 
       setScoringComplete(true);
+
+      // Auto-reveal immediately so players and host see the results and distribution!
+      await revealAnswer(playerResults);
     }
 
     runScoring();
@@ -363,21 +400,22 @@ export default function HostControlPanel() {
     [players]
   );
 
-  const revealAnswer = async () => {
+  const revealAnswer = async (inMemoryResults?: Record<string, { isCorrect: boolean; pointsEarned: number }>) => {
     if (!currentQuestion) return;
 
-    // Build playerResults from currentAnswers (already scored)
-    const playerResults: Record<string, { isCorrect: boolean; pointsEarned: number }> = {};
+    // Use inMemoryResults or scoredResultsRef first to avoid race conditions with DB
+    const playerResults: Record<string, { isCorrect: boolean; pointsEarned: number }> =
+      inMemoryResults || scoredResultsRef.current || {};
 
-    for (const answer of currentAnswers) {
-      // Fetch the scored answer from DB to get is_correct and points_earned
-      const data = await fetchAnswerScore(answer.id);
-
-      if (data) {
-        playerResults[answer.player_id] = {
-          isCorrect: data.is_correct,
-          pointsEarned: data.points_earned,
-        };
+    if (Object.keys(playerResults).length === 0) {
+      for (const answer of currentAnswers) {
+        const data = await fetchAnswerScore(answer.id);
+        if (data) {
+          playerResults[answer.player_id] = {
+            isCorrect: data.is_correct,
+            pointsEarned: data.points_earned,
+          };
+        }
       }
     }
 
@@ -390,14 +428,18 @@ export default function HostControlPanel() {
       questionId: currentQuestion.id,
       correctAnswer: currentQuestion.correct_answer,
       playerResults,
+      answerDistribution,
       nextImageUrl,
     });
 
     setAnswerRevealed(true);
+    // Start 5-second countdown to auto-advance
+    setAutoAdvanceSeconds(5);
   };
   revealAnswerRef.current = revealAnswer;
 
   const showLeaderboard = async () => {
+    setAutoAdvanceSeconds(null);
     // Fetch fresh scores from DB before showing leaderboard
     let latestPlayers = players;
     if (room) {
@@ -420,6 +462,7 @@ export default function HostControlPanel() {
   showLeaderboardRef.current = showLeaderboard;
 
   const nextQuestion = () => {
+    setAutoAdvanceSeconds(null);
     const nextIdx = currentQuestionIndex + 1;
     if (nextIdx < questions.length) {
       startQuestion(nextIdx);
@@ -429,7 +472,28 @@ export default function HostControlPanel() {
   };
   nextQuestionRef.current = nextQuestion;
 
+  // Auto-advance countdown timer
+  useEffect(() => {
+    if (autoAdvanceSeconds === null) return;
+
+    if (autoAdvanceSeconds > 0) {
+      const timer = setTimeout(() => {
+        setAutoAdvanceSeconds((prev) => (prev !== null && prev > 0 ? prev - 1 : 0));
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (autoAdvanceSeconds === 0) {
+      setAutoAdvanceSeconds(null);
+      const isLast = currentQuestionIndexRef.current >= questionsRef.current.length - 1;
+      if (isLast) {
+        void finishGameRef.current();
+      } else {
+        nextQuestionRef.current();
+      }
+    }
+  }, [autoAdvanceSeconds]);
+
   const finishGame = async () => {
+    setAutoAdvanceSeconds(null);
     setGameState("finished");
 
     // Compute per-player average time (correct answers only)
@@ -464,7 +528,10 @@ export default function HostControlPanel() {
     broadcast("game_state_change", { state: "finished" });
 
     if (room) {
-      await setRoomFinished(room.id);
+      await supabase
+        .from("qt_rooms")
+        .update({ status: "completed" })
+        .eq("id", room.id);
       setRoom((prev) => (prev ? { ...prev, status: "finished" } : prev));
 
       // Save session results
@@ -547,20 +614,6 @@ export default function HostControlPanel() {
   const circumference = 2 * Math.PI * 20;
   const timerDashoffset = circumference * (1 - timerFraction);
 
-  // ---------- VIEW MODE TOGGLE ----------
-
-  const viewToggle = (
-    <button
-      onClick={() => setViewMode(v => v === 'host' ? 'display' : 'host')}
-      className="fixed bottom-6 right-6 z-[100] flex items-center gap-2 px-4 py-3 rounded-2xl bg-black/70 backdrop-blur-md border border-white/10 shadow-xl text-white text-sm font-bold hover:bg-black/80 active:scale-95 transition-all"
-    >
-      <span className="material-symbols-outlined text-base">
-        {viewMode === 'host' ? 'tv' : 'dashboard'}
-      </span>
-      {viewMode === 'host' ? 'Display View' : 'Host Panel'}
-    </button>
-  );
-
   // ---------- DISPLAY MODE ----------
 
   if (viewMode === 'display') {
@@ -579,7 +632,7 @@ export default function HostControlPanel() {
           questionNumber={currentQuestionIndex + 1}
           totalQuestions={questions.length}
           roomCode={roomCode}
-          onReveal={revealAnswer}
+          onReveal={() => void revealAnswer()}
           onShowLeaderboard={showLeaderboard}
           onNextQuestion={nextQuestion}
           onFinishGame={finishGame}
@@ -594,7 +647,7 @@ export default function HostControlPanel() {
         />
         <button
           onClick={() => setViewMode('host')}
-          className="fixed bottom-6 right-6 z-[100] bg-black/50 backdrop-blur-sm text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 hover:bg-black/70 flex items-center gap-1.5"
+          className="fixed top-4 right-4 z-[100] bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 hover:bg-black/80 flex items-center gap-1.5 shadow-lg transition-all"
         >
           <span className="material-symbols-outlined text-[14px]">dashboard</span>
           Host Panel
@@ -608,7 +661,6 @@ export default function HostControlPanel() {
   if (loading) {
     return (
       <div className="min-h-screen bg-primary flex items-center justify-center">
-        {viewToggle}
         <motion.div
           className="w-12 h-12 border-4 border-surface/20 border-t-surface rounded-full"
           animate={{ rotate: 360 }}
@@ -621,7 +673,6 @@ export default function HostControlPanel() {
   if (error || !room || !quiz) {
     return (
       <div className="min-h-screen bg-primary flex items-center justify-center px-4">
-        {viewToggle}
         <AnimatedContainer className="text-center">
           <h1 className="text-3xl font-bold text-white mb-4">
             {error || "Something went wrong"}
@@ -637,9 +688,19 @@ export default function HostControlPanel() {
   // ---------- LOBBY STATE ----------
 
   if (gameState === "lobby") {
+    const handleBackToDashboard = () => {
+      // Go back to dashboard WITHOUT stopping the room
+      router.push("/host/dashboard");
+    };
+
+    const handleStopQuiz = async () => {
+      if (room) {
+        await setRoomFinished(room.id);
+      }
+      router.push("/host/dashboard");
+    };
+
     return (
-      <>
-      {viewToggle}
       <Lobby
         players={players.map((p) => ({
           name: p.name,
@@ -652,8 +713,9 @@ export default function HostControlPanel() {
         onStart={startGame}
         canStart={players.length > 0}
         displayUrl={displayUrl}
+        onBackToDashboard={handleBackToDashboard}
+        onStopQuiz={handleStopQuiz}
       />
-      </>
     );
   }
 
@@ -661,7 +723,6 @@ export default function HostControlPanel() {
 
   return (
     <div className="bg-surface text-on-surface min-h-screen flex flex-col overflow-hidden">
-      {viewToggle}
       {/* Top Header */}
       <header className="bg-surface-bright flex justify-between items-center w-full px-8 py-4 z-50">
         <div className="flex items-center gap-6">
@@ -963,7 +1024,7 @@ export default function HostControlPanel() {
                     className="flex gap-4"
                   >
                     <button
-                      onClick={revealAnswer}
+                      onClick={() => void revealAnswer()}
                       className="flex-1 flex items-center justify-center gap-3 py-4 bg-secondary-container text-white rounded-xl font-extrabold text-lg shadow-[0px_10px_25px_rgba(255,107,107,0.3)] hover:scale-[1.02] active:scale-95 transition-all"
                     >
                       <span
@@ -983,11 +1044,45 @@ export default function HostControlPanel() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex flex-col gap-3"
                   >
-                    <div className="flex items-center justify-center gap-2 py-2 text-emerald-600 font-bold text-sm">
+                    {/* Auto-advance notification banner */}
+                    {autoAdvanceSeconds !== null && (
+                      <div className="bg-primary/5 border border-primary/20 rounded-xl p-3.5 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-black text-sm animate-pulse">
+                            {autoAdvanceSeconds}
+                          </span>
+                          <span className="text-xs font-bold text-primary">
+                            {isLastQuestion
+                              ? `Menampilkan hasil akhir dalam ${autoAdvanceSeconds} detik...`
+                              : `Melanjutkan ke soal berikutnya dalam ${autoAdvanceSeconds} detik...`}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setAutoAdvanceSeconds(null)}
+                            className="px-2.5 py-1 rounded-lg border border-primary/20 text-[11px] font-bold text-primary hover:bg-primary/10 transition-colors"
+                          >
+                            Jeda Otomatis
+                          </button>
+                          <button
+                            onClick={() => {
+                              setAutoAdvanceSeconds(null);
+                              if (isLastQuestion) finishGame();
+                              else nextQuestion();
+                            }}
+                            className="px-3 py-1 rounded-lg bg-primary text-white text-[11px] font-bold hover:bg-primary/90 transition-colors"
+                          >
+                            Lanjut Sekarang
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-center gap-2 py-1 text-emerald-600 font-bold text-sm">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
-                      Revealed
+                      Jawaban Ditampilkan
                     </div>
                     <div className="flex gap-4">
                       <button
@@ -1200,9 +1295,9 @@ export default function HostControlPanel() {
                 if (qIds.length) {
                   await deleteAnswersForQuestions(qIds);
                 }
-                // Delete ALL players — they'll rejoin via QR code
-                await deleteRoomPlayers(room.id);
-                setPlayers([]);
+                // Reset player scores to 0 (keep players in the room!)
+                await resetRoomPlayerScores(room.id);
+                setPlayers((prev) => prev.map((p) => ({ ...p, score: 0 })));
                 // Reset room to lobby
                 await resetRoomToLobby(room.id);
                 setCurrentQuestionIndex(0);

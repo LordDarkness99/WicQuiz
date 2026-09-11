@@ -21,6 +21,19 @@ export function getHostId(): string {
   return hostId;
 }
 
+/** Explicitly set host ID (e.g. from authenticated user). */
+export function setHostId(id: string): void {
+  if (typeof window === "undefined" || !id) return;
+  localStorage.setItem(HOST_ID_KEY, id);
+}
+
+/** Clear host ID on logout so next user doesn't inherit it. */
+export function clearHostId(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(HOST_ID_KEY);
+  localStorage.removeItem(LEGACY_KEY);
+}
+
 /** Check if a host ID exists (user has hosted before). */
 export function hasHostId(): boolean {
   if (typeof window === "undefined") return false;

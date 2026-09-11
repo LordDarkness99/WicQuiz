@@ -14,6 +14,9 @@ interface AnswerRevealProps {
   isJoker: boolean;
   questionNumber: number;
   totalQuestions: number;
+  options?: string[];
+  answerDistribution?: { answer_value: string; count: number }[];
+  playerAnswer?: string | null;
 }
 
 export default function AnswerReveal({
@@ -26,6 +29,9 @@ export default function AnswerReveal({
   isJoker,
   questionNumber,
   totalQuestions,
+  options,
+  answerDistribution,
+  playerAnswer,
 }: AnswerRevealProps) {
   const [displayPoints, setDisplayPoints] = useState(0);
   const [showNextMessage, setShowNextMessage] = useState(false);
@@ -104,8 +110,8 @@ export default function AnswerReveal({
 
           {/* Points — spring overshoot */}
           <motion.div
-            initial={noAnim ? undefined : { y: 20, scale: 0, opacity: 0 }}
-            animate={{ y: 0, scale: [0, 1.2, 1.0], opacity: 1 }}
+            initial={noAnim ? undefined : { y: 20, scale: 0.8, opacity: 0 }}
+            animate={{ y: 0, scale: 1, opacity: 1 }}
             transition={{
               type: "spring",
               stiffness: 200,
@@ -169,8 +175,8 @@ export default function AnswerReveal({
 
           {/* 0 pts — spring overshoot */}
           <motion.div
-            initial={noAnim ? undefined : { y: 20, scale: 0, opacity: 0 }}
-            animate={{ y: 0, scale: [0, 1.2, 1.0], opacity: 1 }}
+            initial={noAnim ? undefined : { y: 20, scale: 0.8, opacity: 0 }}
+            animate={{ y: 0, scale: 1, opacity: 1 }}
             transition={{
               type: "spring",
               stiffness: 200,
@@ -214,16 +220,95 @@ export default function AnswerReveal({
         )}
       </motion.div>
 
-      {/* Next question message */}
-      {showNextMessage && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-sm text-ink/30 font-medium mt-2"
+      {/* Answer Distribution (Pilihan Jawaban & Yang Paling Banyak Dipilih) */}
+      {options && options.length > 0 && (
+        <motion.div
+          initial={noAnim ? undefined : { opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="w-full max-w-md space-y-2 mt-2"
         >
-          Next question coming up...
-        </motion.p>
+          <p className="text-xs font-bold text-ink/50 uppercase tracking-wider text-left">
+            Pilihan Semua Pemain:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
+            {options.map((opt, i) => {
+              if (!opt.trim()) return null;
+              const count =
+                answerDistribution?.find(
+                  (d) => d.answer_value.toLowerCase() === opt.toLowerCase()
+                )?.count ?? 0;
+              const isOptionCorrect =
+                opt.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+              const isPlayerPick =
+                playerAnswer?.trim().toLowerCase() === opt.trim().toLowerCase();
+
+              const label = ["A", "B", "C", "D"][i] ?? String(i + 1);
+              const labelColors = [
+                "bg-[#1b2b5e]",
+                "bg-[#FF6B6B]",
+                "bg-[#FFB95F]",
+                "bg-[#8594CD]",
+              ];
+
+              return (
+                <div
+                  key={i}
+                  className={`relative p-3 rounded-xl border-2 flex items-center justify-between gap-3 text-left transition-all ${
+                    isOptionCorrect
+                      ? "border-emerald-500 bg-emerald-50/80 shadow-sm"
+                      : isPlayerPick
+                      ? "border-red-400 bg-red-50/60"
+                      : "border-ink/10 bg-white/70"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className={`w-6 h-6 rounded-lg ${labelColors[i] ?? "bg-navy"} text-white text-xs font-black flex items-center justify-center shrink-0`}
+                    >
+                      {label}
+                    </span>
+                    <span
+                      className={`text-sm font-bold truncate ${
+                        isOptionCorrect ? "text-emerald-900 font-extrabold" : "text-ink"
+                      }`}
+                    >
+                      {opt}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {isOptionCorrect && (
+                      <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white px-2 py-0.5 rounded-full">
+                        Benar
+                      </span>
+                    )}
+                    {isPlayerPick && !isOptionCorrect && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full">
+                        Pilihanmu
+                      </span>
+                    )}
+                    <span className="text-xs font-black text-navy/70 bg-navy/5 px-2 py-0.5 rounded-md">
+                      {count}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
       )}
+
+      {/* Waiting for host message */}
+      <motion.div
+        initial={noAnim ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+        className="flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-navy/5 border border-navy/10 text-xs font-bold text-navy/70"
+      >
+        <span className="w-2 h-2 rounded-full bg-amber animate-ping" />
+        Menunggu host melanjutkan ke soal berikutnya...
+      </motion.div>
     </motion.div>
   );
 }

@@ -20,6 +20,8 @@ interface LobbyProps {
   onStart: () => void;
   canStart: boolean;
   displayUrl?: string;
+  onBackToDashboard?: () => void;
+  onStopQuiz?: () => void;
 }
 
 export default function Lobby({
@@ -31,10 +33,13 @@ export default function Lobby({
   onStart,
   canStart,
   displayUrl,
+  onBackToDashboard,
+  onStopQuiz,
 }: LobbyProps) {
   const reduced = useReducedMotion();
   const [countPulse, setCountPulse] = useState(false);
   const [joinedToast, setJoinedToast] = useState<string | null>(null);
+  const [confirmStop, setConfirmStop] = useState(false);
   const prevCountRef = useRef(players.length);
 
   // Detect new player joins
@@ -61,6 +66,17 @@ export default function Lobby({
       {/* Top Nav */}
       <header className="bg-surface-bright flex justify-between items-center w-full px-8 py-4 border-b border-primary/10 sticky top-0 z-50">
         <div className="flex items-center gap-6">
+          {onBackToDashboard && (
+            <button
+              onClick={onBackToDashboard}
+              className="flex items-center gap-1.5 text-sm font-bold text-outline hover:text-primary transition-colors"
+              title="Kembali ke Dashboard (room tetap aktif)"
+            >
+              <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+              Dashboard
+            </button>
+          )}
+          {onBackToDashboard && <div className="h-6 w-px bg-outline-variant/30" />}
           <span className="text-xl font-bold text-primary-container tracking-tighter">
             QuizTime
           </span>
@@ -74,7 +90,7 @@ export default function Lobby({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {displayUrl && (
             <a
               href={displayUrl}
@@ -102,6 +118,37 @@ export default function Lobby({
               {players.length} player{players.length !== 1 ? "s" : ""} in the room
             </span>
           </motion.div>
+          {/* Stop Quiz button */}
+          {onStopQuiz && (
+            <>
+              {confirmStop ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-error font-bold">Yakin stop?</span>
+                  <button
+                    onClick={() => { onStopQuiz(); setConfirmStop(false); }}
+                    className="px-3 py-1.5 rounded-lg bg-error text-white text-xs font-bold hover:opacity-90 transition-opacity"
+                  >
+                    Ya, Stop
+                  </button>
+                  <button
+                    onClick={() => setConfirmStop(false)}
+                    className="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors"
+                  >
+                    Batal
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setConfirmStop(true)}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-error/30 text-error text-sm font-bold hover:bg-error/10 transition-colors"
+                  title="Hentikan quiz dan kembali ke dashboard"
+                >
+                  <span className="material-symbols-outlined text-[16px]">stop_circle</span>
+                  Stop Quiz
+                </button>
+              )}
+            </>
+          )}
         </div>
       </header>
 
@@ -146,7 +193,97 @@ export default function Lobby({
               {joinUrl.replace(/^https?:\/\//, "")}
             </p>
           </div>
+
+          {/* Quick Host Navigation Banner */}
+          <div className="w-full max-w-md bg-surface-container-low rounded-2xl p-4 border border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="material-symbols-outlined text-secondary-container text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                sensors
+              </span>
+              <p className="text-xs text-on-surface-variant font-medium">
+                Room aktif. Anda bisa kembali ke Dashboard tanpa menutup room ini.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+              {onBackToDashboard && (
+                <button
+                  onClick={onBackToDashboard}
+                  className="px-3.5 py-2 rounded-xl bg-surface text-primary text-xs font-bold border border-outline-variant/30 hover:border-primary transition-colors flex items-center justify-center gap-1 shadow-xs"
+                  title="Kembali ke Dashboard (room tetap berjalan)"
+                >
+                  <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+                  Dashboard
+                </button>
+              )}
+              {onStopQuiz && (
+                <button
+                  onClick={() => setConfirmStop(true)}
+                  className="px-3.5 py-2 rounded-xl bg-error/10 text-error text-xs font-bold hover:bg-error/20 transition-colors flex items-center justify-center gap-1"
+                  title="Hentikan quiz dan selesaikan room"
+                >
+                  <span className="material-symbols-outlined text-[16px]">stop_circle</span>
+                  Stop
+                </button>
+              )}
+            </div>
+          </div>
         </section>
+
+        {/* Custom Stop Quiz Modal */}
+        <AnimatePresence>
+          {confirmStop && (
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="stop-quiz-modal-title"
+              className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+              onClick={() => setConfirmStop(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                transition={{ duration: 0.2 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-md bg-surface-container-lowest rounded-3xl border border-outline-variant/20 shadow-2xl p-6 text-center"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-error/10 text-error flex items-center justify-center mx-auto mb-4">
+                  <span className="material-symbols-outlined text-[32px]">stop_circle</span>
+                </div>
+                <h3 id="stop-quiz-modal-title" className="text-xl font-extrabold text-primary mb-2">
+                  Hentikan Quiz?
+                </h3>
+                <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
+                  Room <span className="font-mono font-bold text-primary">{roomCode}</span> akan ditutup dan statusnya diselesaikan. Pemain yang sudah masuk tidak dapat melanjutkan.
+                  <br /><br />
+                  <span className="text-xs text-outline">
+                    💡 Tips: Jika hanya ingin melihat dashboard sementara waktu, klik <strong>Batal</strong> lalu pilih tombol <strong>Dashboard</strong>.
+                  </span>
+                </p>
+                <div className="flex items-center gap-3 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmStop(false)}
+                    className="flex-1 py-3 px-4 rounded-xl border border-outline-variant/30 text-sm font-bold text-on-surface-variant hover:bg-surface-container transition-colors"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfirmStop(false);
+                      onStopQuiz?.();
+                    }}
+                    className="flex-1 py-3 px-4 rounded-xl bg-error text-white text-sm font-extrabold shadow-[0_6px_20px_rgba(186,26,26,0.25)] hover:bg-error/90 transition-all flex items-center justify-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">stop</span>
+                    Ya, Hentikan
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
         {/* Right Section: Player List */}
         <aside className="w-[450px] flex flex-col gap-6">

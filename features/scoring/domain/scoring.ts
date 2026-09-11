@@ -10,11 +10,12 @@ export function calculateTimeDecayPoints(
   timeLimitMs: number,
   pointsBase: number = 1000
 ): number {
-  if (timeRemainingMs <= 0) return 0;
+  const minPoints = Math.round(pointsBase * 0.25);
+  if (timeRemainingMs <= 0) return minPoints;
   // Treat first second as grace — shift time remaining up by grace amount
   const adjustedRemaining = Math.min(timeRemainingMs + READING_GRACE_MS, timeLimitMs);
   const ratio = Math.min(adjustedRemaining / timeLimitMs, 1);
-  return Math.round(pointsBase * ratio);
+  return Math.max(minPoints, Math.round(pointsBase * ratio));
 }
 
 /**
@@ -66,14 +67,17 @@ export function calculateTypeInPoints(
   const isCorrect =
     playerAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
   if (!isCorrect) return { points: 0, isCorrect: false };
+  const rawPoints = calculateTimeDecayPoints(timeRemainingMs, timeLimitMs, pointsBase);
+  const minPoints = Math.round(pointsBase * 0.25);
   return {
-    points: calculateTimeDecayPoints(timeRemainingMs, timeLimitMs, pointsBase),
+    points: Math.max(minPoints, rawPoints),
     isCorrect: true,
   };
 }
 
 /**
  * Score a standard question (multiple_choice, true_false, image_question).
+ * Resilient to option text vs option index matching, and guarantees minimum points for any correct answer.
  */
 export function scoreStandardQuestion(
   playerAnswer: string,
@@ -81,17 +85,46 @@ export function scoreStandardQuestion(
   timeRemainingMs: number,
   timeLimitMs: number,
   isJoker: boolean,
-  pointsBase: number = 1000
+  pointsBase: number = 1000,
+  options?: string[] | null
 ): { points: number; isCorrect: boolean } {
-  const isCorrect =
-    playerAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+  const pNorm = playerAnswer.trim().toLowerCase();
+  const cNorm = correctAnswer.trim().toLowerCase();
+
+  let isCorrect = pNorm === cNorm;
+
+  // If not direct match, check options array if provided
+  if (!isCorrect && options && options.length > 0) {
+    const cIdx = parseInt(correctAnswer, 10);
+    if (!isNaN(cIdx) && options[cIdx]) {
+      isCorrect = pNorm === options[cIdx].trim().toLowerCase();
+    }
+    const pIdx = parseInt(playerAnswer, 10);
+    if (!isNaN(pIdx) && options[pIdx]) {
+      isCorrect = options[pIdx].trim().toLowerCase() === cNorm;
+    }
+    const labels = ["a", "b", "c", "d"];
+    const pLabelIdx = labels.indexOf(pNorm);
+    if (pLabelIdx !== -1 && options[pLabelIdx]) {
+      isCorrect = options[pLabelIdx].trim().toLowerCase() === cNorm;
+    }
+    const cLabelIdx = labels.indexOf(cNorm);
+    if (cLabelIdx !== -1 && options[cLabelIdx]) {
+      isCorrect = options[cLabelIdx].trim().toLowerCase() === pNorm;
+    }
+  }
+
   if (!isCorrect) return { points: 0, isCorrect: false };
 
-  const basePoints = calculateTimeDecayPoints(
+  const rawDecay = calculateTimeDecayPoints(
     timeRemainingMs,
     timeLimitMs,
     pointsBase
   );
+  // Guarantee a minimum of 25% base points for any correct answer (never 0 points!)
+  const minPoints = Math.round(pointsBase * 0.25);
+  const basePoints = Math.max(minPoints, rawDecay);
+
   return {
     points: applyJokerMultiplier(basePoints, isJoker),
     isCorrect: true,

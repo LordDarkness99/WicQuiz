@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, resetBrowserClient } from "@/integrations/supabase/client";
 import type {
   RegisterFormData,
   LoginFormData,
@@ -112,6 +112,8 @@ export async function logoutUser(): Promise<{ error: string | null }> {
   try {
     const { error } = await supabase.auth.signOut();
     if (error) return { error: error.message };
+    // Clear the in-memory singleton so the next user starts with a fresh client
+    resetBrowserClient();
     return { error: null };
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Gagal logout." };

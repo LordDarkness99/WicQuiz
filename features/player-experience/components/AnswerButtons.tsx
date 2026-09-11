@@ -165,7 +165,7 @@ export default function AnswerButtons({
                 transition={
                   isRevealed
                     ? isCorrectOption
-                      ? { type: "spring", stiffness: 300, damping: 15 }
+                      ? { duration: 0.5, ease: "easeOut" }
                       : { duration: 0.3, delay: 0.08, ease: "easeOut" }
                     : isSelected
                     ? { duration: 0.45, ease: "easeOut" }

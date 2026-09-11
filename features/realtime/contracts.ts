@@ -58,4 +58,5 @@ export interface AnswerRevealPayload {
   correctAnswer: string;
   playerResults: Record<string, PlayerResult>;
   nextImageUrl?: string | null;
+  answerDistribution?: { answer_value: string; count: number }[];
 }

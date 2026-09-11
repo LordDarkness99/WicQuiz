@@ -22,6 +22,11 @@ export function getBrowserClient(): SupabaseClient {
   return _supabase;
 }
 
+/** Reset singleton so next login creates a fresh client (call after signOut). */
+export function resetBrowserClient(): void {
+  _supabase = null;
+}
+
 export const supabase: SupabaseClient = new Proxy({} as SupabaseClient, {
   get(_target, prop) {
     const client = getBrowserClient();

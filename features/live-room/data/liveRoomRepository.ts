@@ -237,6 +237,11 @@ export async function deleteRoomPlayers(roomId: string): Promise<void> {
   await supabase.from("qt_players").delete().eq("room_id", roomId);
 }
 
+/** Reset all players' score to 0 in a room (play-again reset). */
+export async function resetRoomPlayerScores(roomId: string): Promise<void> {
+  await supabase.from("qt_players").update({ score: 0 }).eq("room_id", roomId);
+}
+
 /** Reset a room back to the lobby (play-again reset). */
 export async function resetRoomToLobby(roomId: string): Promise<void> {
   await supabase
@@ -252,9 +257,12 @@ export async function createRoom(
   hostId: string
 ): Promise<{ id: string; room_code: string }> {
   const room_code = generateRoomCode();
+  const { data: { user } } = await supabase.auth.getUser();
+  const host_user_id = user?.id || null;
+  const effectiveHostId = host_user_id || hostId;
   const { data, error } = await supabase
     .from("qt_rooms")
-    .insert({ room_code, host_id: hostId, status: "lobby" })
+    .insert({ room_code, host_id: effectiveHostId, host_user_id, status: "lobby" })
     .select()
     .single();
   if (error || !data) throw new Error(error?.message || "Failed to create room.");
@@ -281,4 +289,18 @@ export async function insertRoomQuestions(
 ): Promise<void> {
   const { error } = await supabase.from("qt_questions").insert(rows);
   if (error) throw new Error(error.message || "Failed to create questions.");
+}
+
+/** Mark a room finished (alias for setRoomFinished, used when host stops from lobby). */
+export async function stopRoom(roomId: string): Promise<void> {
+  await supabase.from("qt_rooms").update({ status: "finished" }).eq("id", roomId);
+}
+
+/** Get player count for a room. */
+export async function fetchRoomPlayerCount(roomId: string): Promise<number> {
+  const { count } = await supabase
+    .from("qt_players")
+    .select("id", { count: "exact", head: true })
+    .eq("room_id", roomId);
+  return count ?? 0;
 }

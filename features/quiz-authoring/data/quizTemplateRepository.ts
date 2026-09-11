@@ -1,6 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { QuestionFormData } from "../domain/types";
 
+/** Get current auth user id (null if not logged in) */
+async function getAuthUserId(): Promise<string | null> {
+  const { data: { user } } = await supabase.auth.getUser();
+  return user?.id ?? null;
+}
+
 // ── Types ──────────────────────────────────────────────────────
 
 export interface QuizTemplate {
@@ -45,9 +51,10 @@ export interface QuestionBankItem {
 
 // ── Helpers ────────────────────────────────────────────────────
 
-function questionFormToRow(hostId: string, q: QuestionFormData) {
+function questionFormToRow(hostId: string, q: QuestionFormData, ownerId?: string | null) {
   return {
     host_id: hostId,
+    owner_id: ownerId ?? null,
     type: q.type,
     question_text: q.question_text.trim(),
     options:
@@ -92,8 +99,10 @@ export async function saveQuizTemplate(
     (q) => q.question_text.trim().length > 0
   );
 
+  const ownerId = await getAuthUserId();
+
   // Insert questions into the bank
-  const rows = validQuestions.map((q) => questionFormToRow(hostId, q));
+  const rows = validQuestions.map((q) => questionFormToRow(hostId, q, ownerId));
   const { data: inserted, error: qErr } = await supabase
     .from("qt_question_bank")
     .insert(rows)
@@ -126,6 +135,7 @@ export async function saveQuizTemplate(
     .from("qt_quiz_templates")
     .insert({
       host_id: hostId,
+      owner_id: ownerId,
       title: title.trim(),
       question_ids: questionIds,
       question_order: questionOrder,
@@ -135,6 +145,32 @@ export async function saveQuizTemplate(
     .single();
 
   if (tErr || !template) throw new Error(tErr?.message || "Failed to save template.");
+  return template.id;
+}
+
+/**
+ * Create a blank draft template with just a title (no questions yet).
+ * Used by the new quiz naming flow.
+ */
+export async function createDraftTemplate(
+  hostId: string,
+  title: string
+): Promise<string> {
+  const ownerId = await getAuthUserId();
+  const effectiveHostId = ownerId || hostId;
+  const { data: template, error } = await supabase
+    .from("qt_quiz_templates")
+    .insert({
+      host_id: effectiveHostId,
+      owner_id: ownerId,
+      title: title.trim(),
+      question_ids: [],
+      question_order: {},
+      is_draft: true,
+    })
+    .select("id")
+    .single();
+  if (error || !template) throw new Error(error?.message || "Failed to create template.");
   return template.id;
 }
 
@@ -176,11 +212,14 @@ export async function duplicateQuizTemplate(
   quizId: string,
   hostId: string
 ): Promise<string> {
+  const ownerId = await getAuthUserId();
+  const effectiveHostId = ownerId || hostId;
   const { template, questions } = await loadQuizTemplate(quizId);
 
   // Re-insert questions as new bank items
   const rows = questions.map((q) => ({
-    host_id: hostId,
+    host_id: effectiveHostId,
+    owner_id: ownerId,
     type: q.type,
     question_text: q.question_text,
     options: q.options,
@@ -215,7 +254,8 @@ export async function duplicateQuizTemplate(
   const { data: newTemplate, error: tErr } = await supabase
     .from("qt_quiz_templates")
     .insert({
-      host_id: hostId,
+      host_id: effectiveHostId,
+      owner_id: ownerId,
       title: `${template.title} (Copy)`,
       description: template.description,
       question_ids: newIds,
@@ -239,16 +279,23 @@ export async function deleteQuizTemplate(quizId: string): Promise<void> {
   if (error) throw new Error(error.message);
 }
 
-/** Get templates for a host. */
+/** Get templates for the current auth user. */
 export async function getQuizTemplates(
-  _hostId?: string
+  hostId?: string
 ): Promise<QuizTemplate[]> {
-  // Show all quizzes — internal tool, no multi-tenant isolation needed
-  const { data, error } = await supabase
+  const ownerId = await getAuthUserId();
+  const effectiveId = ownerId || hostId;
+
+  let query = supabase
     .from("qt_quiz_templates")
     .select("*")
     .order("updated_at", { ascending: false });
 
+  if (effectiveId) {
+    query = query.or(`owner_id.eq.${effectiveId},host_id.eq.${effectiveId}`);
+  }
+
+  const { data, error } = await query;
   if (error) throw new Error(error.message);
   return (data || []) as QuizTemplate[];
 }
@@ -319,4 +366,40 @@ export async function updateTemplateQuestions(
       updated_at: new Date().toISOString(),
     })
     .eq("id", templateId);
+}
+
+export interface ActiveRoomInfo {
+  id: string;
+  room_code: string;
+  status: string;
+  host_id: string;
+  quiz_title: string | null;
+  player_count: number;
+}
+
+/** Fetch active/lobby rooms with their quiz title and player count (for dashboard running indicators). */
+export async function getActiveRoomsForHost(hostId: string): Promise<ActiveRoomInfo[]> {
+  if (!hostId) return [];
+  const { data, error } = await supabase
+    .from("qt_rooms")
+    .select("id, room_code, status, host_id, host_user_id, qt_quizzes!qt_quizzes_room_id_fkey(title), qt_players(count)")
+    .or(`host_id.eq.${hostId},host_user_id.eq.${hostId}`)
+    .in("status", ["lobby", "active"])
+    .order("created_at", { ascending: false });
+
+  if (error) return [];
+  return (data || []).map((r: Record<string, unknown>) => {
+    const quizzes = r.qt_quizzes as { title?: string }[] | null;
+    const players = r.qt_players as { count?: number }[] | null;
+    const title = Array.isArray(quizzes) && quizzes[0]?.title ? quizzes[0].title : null;
+    const count = Array.isArray(players) && players[0]?.count != null ? players[0].count : 0;
+    return {
+      id: r.id as string,
+      room_code: r.room_code as string,
+      status: r.status as string,
+      host_id: r.host_id as string,
+      quiz_title: title,
+      player_count: count,
+    };
+  });
 }

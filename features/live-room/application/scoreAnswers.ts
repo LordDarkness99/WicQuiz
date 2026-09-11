@@ -50,7 +50,8 @@ export function scoreAnswers(
           timeRemainingMs,
           timeLimitMs,
           question.is_joker,
-          question.points_base
+          question.points_base,
+          (question.options as string[]) || null
         );
         points = result.points;
         isCorrect = result.isCorrect;

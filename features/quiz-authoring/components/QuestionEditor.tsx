@@ -260,56 +260,83 @@ export default function QuestionEditor({
             </p>
           )}
           <div className="grid grid-cols-2 gap-4">
-            {question.options.slice(0, 4).map((opt, i) => (
-              <div
-                key={i}
-                className="bg-surface-container-lowest p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 border-transparent focus-within:border-primary-fixed"
-              >
+            {question.options.slice(0, 4).map((opt, i) => {
+              const isCorrect = question.correct_answer === opt && opt !== "";
+              return (
                 <div
-                  className={`w-10 h-10 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0`}
+                  key={i}
+                  className={`p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 ${
+                    isCorrect
+                      ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500"
+                      : "bg-surface-container-lowest border-transparent focus-within:border-primary-fixed hover:border-outline-variant/30"
+                  }`}
                 >
-                  {answerLabels[i]}
-                </div>
-                <input
-                  className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-primary bg-transparent placeholder:text-outline"
-                  type="text"
-                  value={opt}
-                  onChange={(e) => {
-                    const oldVal = opt;
-                    updateOption(i, e.target.value);
-                    if (question.correct_answer === oldVal) {
-                      update({
-                        correct_answer: e.target.value,
-                        options: question.options.map((o, j) =>
-                          j === i ? e.target.value : o
-                        ),
-                      });
-                    }
-                  }}
-                  placeholder="Add answer..."
-                />
-                <label className="relative flex items-center gap-2 cursor-pointer">
-                  <input
-                    className="peer sr-only"
-                    name={`correct-${index}`}
-                    type="radio"
-                    checked={question.correct_answer === opt && opt !== ""}
-                    onChange={() => update({ correct_answer: opt })}
-                  />
-                  <div className="w-6 h-6 rounded-full border-2 border-outline-variant peer-checked:border-emerald-500 peer-checked:bg-emerald-500 transition-all flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[14px] text-white scale-0 peer-checked:scale-100 transition-transform" style={{ fontVariationSettings: "'wght' 700" }}>
-                      check
-                    </span>
+                  <div
+                    className={`w-10 h-10 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0 cursor-pointer`}
+                    onClick={() => {
+                      if (opt.trim()) update({ correct_answer: opt });
+                    }}
+                    title="Click to mark as correct answer"
+                  >
+                    {answerLabels[i]}
                   </div>
-                  {question.correct_answer === opt && opt !== "" && (
-                    <span className="text-[10px] font-bold text-emerald-600 whitespace-nowrap flex items-center gap-1">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                      Correct
-                    </span>
-                  )}
-                </label>
-              </div>
-            ))}
+                  <input
+                    className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-primary bg-transparent placeholder:text-outline"
+                    type="text"
+                    value={opt}
+                    onChange={(e) => {
+                      const oldVal = opt;
+                      const newVal = e.target.value;
+                      updateOption(i, newVal);
+                      if (oldVal !== "" && question.correct_answer === oldVal) {
+                        update({
+                          correct_answer: newVal,
+                          options: question.options.map((o, j) =>
+                            j === i ? newVal : o
+                          ),
+                        });
+                      }
+                    }}
+                    placeholder="Add answer..."
+                  />
+                  <label className="relative flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      className="peer sr-only"
+                      name={`correct-${index}`}
+                      type="radio"
+                      checked={isCorrect}
+                      onChange={() => {
+                        if (opt.trim()) update({ correct_answer: opt });
+                      }}
+                    />
+                    <div
+                      className={`w-7 h-7 rounded-full border-2 transition-all flex items-center justify-center ${
+                        isCorrect
+                          ? "border-emerald-500 bg-emerald-500 shadow-sm"
+                          : "border-outline-variant hover:border-emerald-400 bg-white"
+                      }`}
+                      onClick={() => {
+                        if (opt.trim()) update({ correct_answer: opt });
+                      }}
+                    >
+                      <span
+                        className={`material-symbols-outlined text-[16px] text-white transition-transform ${
+                          isCorrect ? "scale-100" : "scale-0"
+                        }`}
+                        style={{ fontVariationSettings: "'wght' 700" }}
+                      >
+                        check
+                      </span>
+                    </div>
+                    {isCorrect && (
+                      <span className="text-[11px] font-black text-emerald-700 whitespace-nowrap flex items-center gap-1">
+                        Correct
+                      </span>
+                    )}
+                  </label>
+                </div>
+              );
+            })}
           </div>
           </>
         )}
