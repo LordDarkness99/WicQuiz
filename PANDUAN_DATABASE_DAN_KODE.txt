@@ -1,0 +1,291 @@
+================================================================================
+   PANDUAN DATABASE & KODE — WicQuiz (QuizTime)
+   Tanggal: 12 September 2026
+   Untuk: Teman Rico — JANGAN UBAH/HAPUS APAPUN TANPA KONFIRMASI
+================================================================================
+
+
+================================================================================
+BAGIAN 1: DAFTAR TABEL DATABASE (Supabase) — JANGAN DIHAPUS/DIUBAH
+================================================================================
+
+Supabase Project: xfgjpxadsjsuzqeuolgi.supabase.co
+Total: 10 tabel + 2 storage bucket
+
+--- TABEL 1: profiles (3 rows) ---
+Fungsi: Profil user yang login via Supabase Auth
+Kolom: id (UUID PK), display_name, avatar_url, created_at, updated_at
+Data aktual:
+  86212253-cc71-4939-9a6d-8b78e06cbb51 | rico firman       (ricofirmansya250@gmail.com)
+  86fc16cf-61b5-4ff9-aea1-33b5efc1d6ba | Vanadol Extra     (akun lain)
+  008545b8-02c8-4c3a-a647-1637caff2364 | Rico Fir          (24051204173@mhs.unesa.ac.id)
+
+--- TABEL 2: qt_rooms (27 rows) ---
+Fungsi: Room quiz yang dibuat saat host menjalankan quiz
+Kolom: id (UUID PK), room_code (unik 6 char), host_id, status, created_at,
+       host_user_id (UUID FK -> auth.users), current_question_index, current_quiz_id
+Status: 'lobby' | 'active' | 'finished'
+
+--- TABEL 3: qt_quizzes (27 rows) ---
+Fungsi: Quiz instance per room (copy dari template saat room dibuat)
+Kolom: id (UUID PK), room_id (FK -> qt_rooms), title, created_at
+
+--- TABEL 4: qt_questions (ada di room quiz) ---
+Fungsi: Pertanyaan per quiz instance (per room)
+Kolom: id, quiz_id (FK -> qt_quizzes), type, question_text, options (jsonb),
+       correct_answer, time_limit, points_base, order_index, image_url,
+       is_joker, slider_min, slider_max, video_url, video_start_seconds,
+       video_end_seconds, audio_url, is_image_blurred
+
+--- TABEL 5: qt_players (19 rows) ---
+Fungsi: Player yang join ke room quiz
+Kolom: id (UUID PK), room_id (FK), name, horse_name, score, joined_at,
+       user_id (UUID FK -> auth.users)
+
+--- TABEL 6: qt_answers (16 rows) ---
+Fungsi: Jawaban player untuk setiap pertanyaan
+Kolom: id, question_id (FK), player_id (FK), answer_value, is_correct,
+       points_earned, answered_at, time_taken_ms
+
+--- TABEL 7: qt_question_bank (28 rows) ---
+Fungsi: Bank soal permanen (tidak terikat room, bisa dipakai ulang)
+Kolom: id, host_id, type, question_text, options (jsonb), correct_answer,
+       time_limit, points_base, image_url, is_joker, is_image_blurred,
+       slider_min, slider_max, slider_tolerance, video_url, video_start_seconds,
+       video_end_seconds, audio_url, category, tags (text[]), times_used,
+       created_at, updated_at, owner_id (UUID FK -> auth.users)
+
+--- TABEL 8: qt_quiz_templates (18 rows) ---
+Fungsi: Template quiz yang disimpan host (kumpulan soal dari bank)
+Kolom: id, host_id, title, description, question_ids (uuid[]),
+       question_order (jsonb), is_draft, times_run, last_run_at,
+       created_at, updated_at, owner_id (UUID FK -> auth.users)
+Data template penting:
+  287ff7c9... | Quiz 2 Questions    | runs=7  | owner=86212253 (rico firman)
+  97ddcfcc... | Kuis Uji Coba       | runs=9  | owner=86212253 (rico firman)
+  f50ae4ba... | Untitled Quiz       | runs=2  | owner=86212253 (rico firman)
+  d5bdab01... | 123                 | runs=1  | owner=86212253 (rico firman)
+  2654d3b6... | halo                | runs=1  | owner=008545b8 (Rico Fir / unesa)
+  d112247f... | 1231                | runs=1  | owner=008545b8 (Rico Fir / unesa)
+
+--- TABEL 9: qt_session_results (15 rows) ---
+Fungsi: Riwayat hasil quiz yang sudah selesai (leaderboard, stats)
+Kolom: id, room_id, quiz_template_id, host_id, title, player_count,
+       question_count, final_leaderboard (jsonb), question_stats (jsonb),
+       started_at, finished_at, created_at, owner_id (UUID, baru ditambah)
+
+--- TABEL 10: user_quiz_logs (0 rows) ---
+Fungsi: Log aktivitas user (quiz_created, quiz_joined, dll)
+Kolom: id, user_id (FK -> auth.users), quiz_id, room_id, activity_type,
+       score, rank, correct_answers, total_questions, idempotency_key,
+       metadata (jsonb), created_at
+
+--- TABEL 11 (virtual): qt_room_questions (0 rows) ---
+Catatan: Tabel ini kosong, mungkin tidak terpakai dalam alur saat ini.
+
+--- STORAGE BUCKETS ---
+  quiz-images  (public) — Gambar untuk soal image_question
+  quiz-audio   (public) — Audio untuk soal audio_question
+
+
+================================================================================
+BAGIAN 2: RLS (Row Level Security) YANG HARUS AKTIF
+================================================================================
+
+JANGAN UBAH RLS POLICIES BERIKUT:
+
+qt_rooms:          RLS ON  — Anyone can read/create/update (permissive)
+qt_quizzes:        RLS ON  — Anyone can read/create (permissive)
+qt_questions:      RLS ON  — Anyone can read/create (permissive)
+qt_players:        RLS ON  — Anyone can read/create/update (permissive)
+qt_answers:        RLS ON  — Anyone can read/create/update (permissive)
+qt_question_bank:  RLS ON  — INSERT/UPDATE: WITH CHECK (true)
+qt_quiz_templates: RLS ON  — INSERT/UPDATE: WITH CHECK (true)
+qt_session_results:RLS OFF — Disabled (agar bisa insert tanpa auth session)
+profiles:          RLS ON  — Public read, user can insert/update own
+user_quiz_logs:    RLS OFF — Disabled (agar tidak blokir insert)
+
+PENTING: Jika RLS diubah ke strict (misalnya owner_id = auth.uid()),
+         maka semua INSERT akan GAGAL dan quiz tidak bisa disimpan!
+
+
+================================================================================
+BAGIAN 3: REALTIME SUBSCRIPTIONS — JANGAN HAPUS
+================================================================================
+
+Tabel yang harus ada di supabase_realtime publication:
+  - qt_rooms     (untuk update status room ke semua client)
+  - qt_players   (untuk update player join/leave)
+  - qt_answers   (untuk update jawaban real-time)
+
+
+================================================================================
+BAGIAN 4: RINGKASAN PERUBAHAN KODE YANG SUDAH DILAKUKAN
+================================================================================
+
+[SESSION INI - 11 Sep 2026]
+
+1. FIX: Route /host/quiz/[quizId]/edit → 404 Error
+   - Masalah: Halaman edit quiz tidak ada
+   - Solusi: Membuat file app/host/quiz/[quizId]/edit/page.tsx
+
+2. FIX: Gameplay sinkronisasi player
+   - File: features/player-experience/routes/PlayerRoomRoute.tsx
+   - Masalah: Player harus refresh browser untuk lihat soal berikutnya
+   - Solusi: Menambahkan heartbeat polling (2 detik) dan visibilitychange listener
+
+3. FIX: Framer Motion crash (0 pts animasi)
+   - File: features/player-experience/components/AnswerReveal.tsx
+   - Masalah: Spring animation crash dengan multi-keyframe [0, 1.2, 1]
+   - Solusi: Ganti ke tween animation dengan keyframes
+
+4. FIX: PostgreSQL integer overflow (time_taken_ms)
+   - File: features/live-room/data/liveRoomRepository.ts
+   - Masalah: time_taken_ms overflow int32
+   - Solusi: Clamp nilai ke max 2147483647
+
+5. FIX: Duplicate key warning di DisplayRoute
+   - File: features/live-room/routes/DisplayRoute.tsx
+   - Masalah: Key kosong pada answerDistribution
+   - Solusi: Filter empty strings dan tambah unique key
+
+6. FIX: Dashboard UI — Menu settings, running quiz indicator
+   - File: features/host-dashboard/routes/HostDashboardRoute.tsx
+   - Perubahan: Tombol Run + Settings dropdown (Edit, Duplicate, Delete)
+   - Gradient indicator untuk quiz yang sedang running
+   - Tombol "Masuk" untuk re-join room yang sudah running
+
+7. FIX: Host room — Hapus tombol Display View di pojok kanan bawah
+   - File: features/live-room/routes/HostRoomRoute.tsx
+
+8. FIX: Next.js dev indicator overlay
+   - File: next.config.ts — devIndicators: false
+
+9. FIX: NewQuizRoute.tsx rusak karena bad merge
+   - Solusi: Reset ke versi clean (simple form: nama quiz → lanjut ke editor)
+
+10. FIX: Database — session results crash (owner_id tidak ada)
+    - File: features/session-results/data/sessionResultsRepository.ts
+    - Masalah: Kode insert owner_id tapi kolom tidak ada di tabel
+    - Solusi: Hapus owner_id dari insert, pakai host_id saja
+
+11. FIX: EditQuizRoute.tsx — Missing imports setelah bad merge
+    - Ditambahkan: CSVImportButton import + getAuthOwnerId helper
+
+
+================================================================================
+BAGIAN 5: FILE-FILE KODE PENTING — JANGAN HAPUS
+================================================================================
+
+[ROUTES / PAGES]
+app/page.tsx                                        → Landing page
+app/host/dashboard/page.tsx                         → Dashboard host
+app/host/new/page.tsx                               → Buat quiz baru
+app/host/quiz/[quizId]/edit/page.tsx                → Edit quiz (PENTING!)
+app/host/[roomCode]/page.tsx                        → Host room control
+app/host/[roomCode]/display/page.tsx                → Display screen (proyektor)
+app/play/page.tsx                                   → Player join page
+app/play/[roomCode]/page.tsx                        → Player game page
+app/login/page.tsx                                  → Login page
+app/register/page.tsx                               → Register page
+
+[FEATURES — CORE]
+features/quiz-authoring/routes/NewQuizRoute.tsx     → Form buat quiz baru
+features/quiz-authoring/routes/EditQuizRoute.tsx    → Editor soal quiz
+features/quiz-authoring/data/quizTemplateRepository.ts → CRUD template + bank soal
+features/quiz-authoring/components/QuestionEditor.tsx
+features/quiz-authoring/components/SortableQuestionCard.tsx
+features/quiz-authoring/components/CSVImportButton.tsx
+
+features/host-dashboard/routes/HostDashboardRoute.tsx → Dashboard dengan tabel quiz
+features/live-room/routes/HostRoomRoute.tsx          → Panel kontrol host saat quiz
+features/live-room/routes/DisplayRoute.tsx           → Layar display (proyektor)
+features/live-room/data/liveRoomRepository.ts        → Operasi room, quiz, player, answer
+
+features/player-experience/routes/PlayerRoomRoute.tsx → Halaman player saat main quiz
+features/player-experience/components/AnswerReveal.tsx → Animasi hasil jawaban
+
+features/session-results/data/sessionResultsRepository.ts → Simpan/baca hasil quiz
+
+[INTEGRATIONS]
+integrations/supabase/client.ts                     → Supabase client (browser + service)
+
+[SHARED]
+shared/hostIdentity.ts                              → Host ID management
+shared/domain/types.ts                              → Type definitions
+
+[CONFIG]
+.env                                                → Supabase URL + Keys (RAHASIA!)
+middleware.ts                                       → Auth middleware
+next.config.ts                                      → Next.js config (devIndicators: false)
+
+[DATABASE MIGRATIONS — REFERENSI SAJA, JANGAN JALANKAN ULANG]
+supabase/migrations/001_initial.sql                 → Tabel dasar (rooms, quizzes, dll)
+supabase/migrations/002_quiz_management.sql         → Question bank, templates, session results
+supabase/migrations/003_blur_column.sql             → is_image_blurred
+supabase/migrations/004_room_game_state.sql         → current_question_index, current_quiz_id
+supabase/migrations/005_auth_and_user_history.sql   → Auth, profiles, owner_id, user_quiz_logs
+supabase/migrations/006_strict_multi_user_isolation.sql → JANGAN JALANKAN! (bikin error)
+
+
+================================================================================
+BAGIAN 6: SQL FIX YANG SUDAH/HARUS DIJALANKAN DI SUPABASE
+================================================================================
+
+Jika database bermasalah (insert gagal, quiz tidak tersimpan), jalankan ini
+di Supabase Dashboard → SQL Editor:
+
+------- MULAI SQL -------
+
+-- Fix 1: Tambah owner_id ke session_results (jika belum ada)
+ALTER TABLE qt_session_results
+  ADD COLUMN IF NOT EXISTS owner_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+ALTER TABLE qt_session_results DISABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users read own session results" ON qt_session_results;
+DROP POLICY IF EXISTS "Users insert own session results" ON qt_session_results;
+
+-- Fix 2: Disable RLS user_quiz_logs
+DROP POLICY IF EXISTS "Users can read own quiz logs" ON user_quiz_logs;
+DROP POLICY IF EXISTS "Users can insert own quiz logs" ON user_quiz_logs;
+ALTER TABLE user_quiz_logs DISABLE ROW LEVEL SECURITY;
+
+-- Fix 3: Permissive policies templates & question bank
+DROP POLICY IF EXISTS "Users insert own quiz templates" ON qt_quiz_templates;
+DROP POLICY IF EXISTS "Users update own quiz templates" ON qt_quiz_templates;
+CREATE POLICY "Users insert own quiz templates" ON qt_quiz_templates FOR INSERT WITH CHECK (true);
+CREATE POLICY "Users update own quiz templates" ON qt_quiz_templates FOR UPDATE USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Users insert own question bank" ON qt_question_bank;
+DROP POLICY IF EXISTS "Users update own question bank" ON qt_question_bank;
+CREATE POLICY "Users insert own question bank" ON qt_question_bank FOR INSERT WITH CHECK (true);
+CREATE POLICY "Users update own question bank" ON qt_question_bank FOR UPDATE USING (true) WITH CHECK (true);
+
+-- Refresh cache
+NOTIFY pgrst, 'reload schema';
+
+------- SELESAI SQL -------
+
+
+================================================================================
+BAGIAN 7: PERINGATAN KERAS
+================================================================================
+
+⛔ JANGAN LAKUKAN:
+  - Menghapus tabel apapun di Supabase
+  - Mengubah RLS policy ke strict (owner_id = auth.uid()) tanpa testing
+  - Menjalankan migration 006_strict_multi_user_isolation.sql (AKAN BREAK!)
+  - Menghapus file .env atau mengubah Supabase keys
+  - Mengubah struktur kolom yang sudah ada
+  - Menghapus storage bucket quiz-images dan quiz-audio
+  - Menghapus Realtime publication dari qt_rooms, qt_players, qt_answers
+
+✅ BOLEH DILAKUKAN:
+  - Menambah fitur baru (tabel baru, kolom baru dengan ADD COLUMN IF NOT EXISTS)
+  - Menambah index baru
+  - Mengubah kode frontend (routes, components)
+  - Menambah migration baru (007_xxx.sql) untuk fitur baru
+  - Membersihkan data test (rooms status=lobby yang sudah lama)
+
+================================================================================
+                              AKHIR DOKUMEN
+================================================================================
