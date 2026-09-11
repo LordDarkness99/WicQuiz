@@ -34,6 +34,7 @@ import type { QuestionFormData } from "@/features/quiz-authoring";
 import type { QuestionType } from "@/shared/domain/types";
 import QuestionEditor from "@/features/quiz-authoring/components/QuestionEditor";
 import SortableQuestionCard from "@/features/quiz-authoring/components/SortableQuestionCard";
+import CSVImportButton from "@/features/quiz-authoring/components/CSVImportButton";
 
 function createEmptyQuestion(): QuestionFormData {
   return {
@@ -219,6 +220,20 @@ export default function EditQuizPage() {
     setQuestions((prev) => [...prev, createEmptyQuestion()]);
     setSelectedIndex(questions.length);
   };
+
+  const handleCsvImport = useCallback(
+    (imported: QuestionFormData[]) => {
+      setQuestions((prev) => {
+        const base =
+          prev.length === 1 && prev[0].question_text.trim() === "" ? [] : prev;
+        const merged = [...base, ...imported];
+        setSelectedIndex(base.length);
+        return merged;
+      });
+      triggerSave();
+    },
+    [triggerSave]
+  );
 
   const handleRunNow = async () => {
     setRunLoading(true);
@@ -418,7 +433,7 @@ export default function EditQuizPage() {
               </div>
             </SortableContext>
           </DndContext>
-          <div className="p-4 bg-surface-container-low border-t border-outline-variant/10">
+          <div className="p-4 bg-surface-container-low border-t border-outline-variant/10 space-y-3">
             <motion.button
               onClick={addQuestion}
               whileHover={{ scale: 1.05 }}
@@ -428,6 +443,7 @@ export default function EditQuizPage() {
               <span className="material-symbols-outlined">add_circle</span>
               Add Question
             </motion.button>
+            <CSVImportButton onImport={handleCsvImport} />
           </div>
         </aside>
 

@@ -26,6 +26,7 @@ import { saveQuizTemplate, markTemplateAsRun } from "@/features/quiz-authoring";
 import type { QuestionFormData } from "@/features/quiz-authoring";
 import QuestionEditor from "@/features/quiz-authoring/components/QuestionEditor";
 import SortableQuestionCard from "@/features/quiz-authoring/components/SortableQuestionCard";
+import CSVImportButton from "@/features/quiz-authoring/components/CSVImportButton";
 
 function createEmptyQuestion(): QuestionFormData {
   return {
@@ -81,6 +82,18 @@ export default function NewQuizPage() {
     setQuestions((prev) => [...prev, createEmptyQuestion()]);
     setSelectedIndex(questions.length);
   };
+
+  const handleCsvImport = useCallback((imported: QuestionFormData[]) => {
+    setQuestions((prev) => {
+      // Replace the initial untouched blank question, if present, instead
+      // of leaving an empty question mixed in with the imported ones.
+      const base =
+        prev.length === 1 && prev[0].question_text.trim() === "" ? [] : prev;
+      const merged = [...base, ...imported];
+      setSelectedIndex(base.length); // jump to the first newly imported question
+      return merged;
+    });
+  }, []);
 
   const validate = (): string | null => {
     if (!title.trim()) return "Give your quiz a title first.";
@@ -359,7 +372,7 @@ export default function NewQuizPage() {
             </SortableContext>
           </DndContext>
           {/* Add Question Button */}
-          <div className="p-4 bg-surface-container-low border-t border-outline-variant/10">
+          <div className="p-4 bg-surface-container-low border-t border-outline-variant/10 space-y-3">
             <motion.button
               onClick={addQuestion}
               whileHover={{ scale: 1.05 }}
@@ -369,6 +382,7 @@ export default function NewQuizPage() {
               <span className="material-symbols-outlined">add_circle</span>
               Add Question
             </motion.button>
+            <CSVImportButton onImport={handleCsvImport} />
           </div>
         </aside>
 
