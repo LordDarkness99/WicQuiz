@@ -1306,7 +1306,8 @@ export default function HostControlPanel() {
                 setRoom((prev) => (prev ? { ...prev, status: "lobby" } : prev));
                 broadcast("game_state_change", { state: "lobby" });
               }}
-              onNewQuiz={() => router.push("/host/dashboard")}
+              onBackToDashboard={() => router.push("/host/dashboard")}
+              onNewQuiz={() => router.push("/host/new")}
               onDownloadResults={() => {
                 const entries = leaderboard.length > 0 ? leaderboard : buildLeaderboard();
                 const lines = [

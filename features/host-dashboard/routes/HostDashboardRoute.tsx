@@ -269,14 +269,29 @@ export default function DashboardPage() {
           <span className="text-sm font-bold text-primary">Dashboard</span>
         </div>
         <div className="flex items-center gap-3">
-          {/* User info */}
+          {/* History link */}
+          <button
+            onClick={() => router.push("/host/history")}
+            title="Quiz History"
+            aria-label="Lihat riwayat quiz"
+            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl font-bold text-sm text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">history</span>
+            <span className="hidden sm:inline">History</span>
+          </button>
+          {/* User info -> profile */}
           {userEmail && (
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-surface-container rounded-xl border border-outline-variant/20">
+            <button
+              onClick={() => router.push("/host/profile")}
+              title="My Profile"
+              aria-label="Lihat profil saya"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-surface-container rounded-xl border border-outline-variant/20 hover:border-primary/30 hover:bg-surface-container-high transition-colors"
+            >
               <span className="material-symbols-outlined text-[16px] text-outline">account_circle</span>
               <span className="text-xs font-medium text-on-surface-variant truncate max-w-[140px]">
                 {userDisplayName || userEmail}
               </span>
-            </div>
+            </button>
           )}
           <motion.button
             onClick={() => router.push("/host/new")}

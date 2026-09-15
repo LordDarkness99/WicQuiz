@@ -14,6 +14,7 @@ interface EndGameProps {
   onPlayAgain?: () => void;
   onNewQuiz?: () => void;
   onDownloadResults?: () => void;
+  onBackToDashboard?: () => void;
 }
 
 function AnimatedScore({ target, duration = 800 }: { target: number; duration?: number }) {
@@ -130,6 +131,7 @@ export default function EndGame({
   onPlayAgain,
   onNewQuiz,
   onDownloadResults,
+  onBackToDashboard,
 }: EndGameProps) {
   const reduced = useReducedMotion();
   const sorted = [...players].sort((a, b) => b.score - a.score);
@@ -146,6 +148,20 @@ export default function EndGame({
       className="min-h-screen bg-[#021549] flex flex-col relative overflow-hidden"
     >
       <Confetti />
+
+      {/* Back to dashboard (host only) */}
+      {isHost && onBackToDashboard && (
+        <motion.button
+          initial={reduced ? undefined : { opacity: 0, x: -12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+          onClick={onBackToDashboard}
+          className="absolute top-6 left-6 z-30 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 text-[#FAFAF7] text-sm font-bold hover:bg-white/20 active:scale-95 transition-all backdrop-blur-sm"
+        >
+          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+          Dashboard
+        </motion.button>
+      )}
 
       {/* Game Over header */}
       <motion.div
@@ -299,6 +315,15 @@ export default function EndGame({
         {/* Host action buttons */}
         {isHost && (
           <div className="flex gap-3 mt-6 pt-4 border-t border-[#1B2B5E]/10">
+            {onBackToDashboard && (
+              <button
+                onClick={onBackToDashboard}
+                className="flex-1 py-3.5 rounded-xl border-2 border-[#1B2B5E] text-[#1B2B5E] font-bold text-sm hover:bg-[#1B2B5E]/5 active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+                Back to Dashboard
+              </button>
+            )}
             {onPlayAgain && (
               <button
                 onClick={onPlayAgain}
