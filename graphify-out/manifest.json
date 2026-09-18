@@ -1,0 +1,772 @@
+{
+  "C:\\1.ace.worktrees\\WicQuiz\\.ngodingpakeai\\config.json": {
+    "mtime": 1788231709.6937451,
+    "ast_hash": "68fc9d182d020358bab435c5f54db02a",
+    "semantic_hash": "68fc9d182d020358bab435c5f54db02a"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\.ngodingpakeai\\summaries.json": {
+    "mtime": 1788231703.9222567,
+    "ast_hash": "8d2a3f299386bcb3e385424b9595a888",
+    "semantic_hash": "8d2a3f299386bcb3e385424b9595a888"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\api\\generate-question\\route.ts": {
+    "mtime": 1787925406.568248,
+    "ast_hash": "adcf250293e48864c8fe7ade9d8a60ab",
+    "semantic_hash": "adcf250293e48864c8fe7ade9d8a60ab"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\auth\\callback\\route.ts": {
+    "mtime": 1788268534.4881299,
+    "ast_hash": "d9ddb68f9c462e5a784866270846fe3a",
+    "semantic_hash": "d9ddb68f9c462e5a784866270846fe3a"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\auth\\forgot-password\\page.tsx": {
+    "mtime": 1788268514.7113938,
+    "ast_hash": "8674fc51897dee92ef172c7218b32f68",
+    "semantic_hash": "8674fc51897dee92ef172c7218b32f68"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\auth\\login\\page.tsx": {
+    "mtime": 1788268478.0532646,
+    "ast_hash": "75cffa628734064e5f5e48dd3ac3ab6b",
+    "semantic_hash": "75cffa628734064e5f5e48dd3ac3ab6b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\auth\\register\\page.tsx": {
+    "mtime": 1788268493.2397141,
+    "ast_hash": "ec75664d7d111229d36013ec9bdad4dd",
+    "semantic_hash": "ec75664d7d111229d36013ec9bdad4dd"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\auth\\reset-password\\page.tsx": {
+    "mtime": 1788268528.6859808,
+    "ast_hash": "b005ff0bd275422cea7c80df621e6c65",
+    "semantic_hash": "b005ff0bd275422cea7c80df621e6c65"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\[roomCode]\\display\\page.tsx": {
+    "mtime": 1787925406.5730941,
+    "ast_hash": "6b78172170e2957aa30f425f92bf17e8",
+    "semantic_hash": "6b78172170e2957aa30f425f92bf17e8"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\[roomCode]\\leaderboard\\page.tsx": {
+    "mtime": 1787925406.5743268,
+    "ast_hash": "b0ad7090e945e313267879dc9bcefb84",
+    "semantic_hash": "b0ad7090e945e313267879dc9bcefb84"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\[roomCode]\\page.tsx": {
+    "mtime": 1787925406.5743268,
+    "ast_hash": "0be3a93dd77cf65b88f21737570e969c",
+    "semantic_hash": "0be3a93dd77cf65b88f21737570e969c"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\dashboard\\page.tsx": {
+    "mtime": 1787925406.5753295,
+    "ast_hash": "36b6b4e0cd93963d741644ba8117c9ab",
+    "semantic_hash": "36b6b4e0cd93963d741644ba8117c9ab"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\history\\page.tsx": {
+    "mtime": 1789564187.7744465,
+    "ast_hash": "d2209817f166863234e759fc899f0ff2",
+    "semantic_hash": "d2209817f166863234e759fc899f0ff2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\new\\page.tsx": {
+    "mtime": 1787925406.5763297,
+    "ast_hash": "ec764f633405cb317eeac6c55bad81ee",
+    "semantic_hash": "ec764f633405cb317eeac6c55bad81ee"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\profile\\page.tsx": {
+    "mtime": 1789564187.7778637,
+    "ast_hash": "ae112ea0721a58dcbd60d90f175e85e8",
+    "semantic_hash": "ae112ea0721a58dcbd60d90f175e85e8"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\quiz\\[quizId]\\edit\\page.tsx": {
+    "mtime": 1787925406.5785227,
+    "ast_hash": "f3be969db874e50a38ba9ad79b14efb9",
+    "semantic_hash": "f3be969db874e50a38ba9ad79b14efb9"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\host\\results\\[sessionId]\\page.tsx": {
+    "mtime": 1787925406.5808592,
+    "ast_hash": "dc0ce922075d4475b3f9dc58d5027fa4",
+    "semantic_hash": "dc0ce922075d4475b3f9dc58d5027fa4"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\layout.tsx": {
+    "mtime": 1788959014.5151892,
+    "ast_hash": "1244487988422f0c6d9d5fb1f16cc5c8",
+    "semantic_hash": "1244487988422f0c6d9d5fb1f16cc5c8"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\page.tsx": {
+    "mtime": 1787925406.5818632,
+    "ast_hash": "ffa0d4939d479741189a6b924f5ab682",
+    "semantic_hash": "ffa0d4939d479741189a6b924f5ab682"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\app\\play\\[roomCode]\\page.tsx": {
+    "mtime": 1787925406.5837002,
+    "ast_hash": "94ea03aa18420696ec6233c96f3227b2",
+    "semantic_hash": "94ea03aa18420696ec6233c96f3227b2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\eslint.config.mjs": {
+    "mtime": 1787925406.5975652,
+    "ast_hash": "6c4307ffa009658f5c97f5629094c0c2",
+    "semantic_hash": "6c4307ffa009658f5c97f5629094c0c2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\ai-question-generation\\index.ts": {
+    "mtime": 1787925406.5998871,
+    "ast_hash": "67ab2c8e531d5c9ef86331a75ec126a2",
+    "semantic_hash": "67ab2c8e531d5c9ef86331a75ec126a2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\ai-question-generation\\server\\anthropicQuestionGenerator.ts": {
+    "mtime": 1787925406.60089,
+    "ast_hash": "89a4ac0e19628124ec07f65a3b0d6f32",
+    "semantic_hash": "89a4ac0e19628124ec07f65a3b0d6f32"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\components\\AuthCard.tsx": {
+    "mtime": 1788268348.5857747,
+    "ast_hash": "2cc26b3ddd896ec77fd9c9e8eb2217fd",
+    "semantic_hash": "2cc26b3ddd896ec77fd9c9e8eb2217fd"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\components\\ForgotPasswordForm.tsx": {
+    "mtime": 1788268377.9424703,
+    "ast_hash": "843d3652718dfda2900dba52c738d509",
+    "semantic_hash": "843d3652718dfda2900dba52c738d509"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\components\\LoginForm.tsx": {
+    "mtime": 1788268357.0112336,
+    "ast_hash": "33bdaa367ec7bb554cb0437e75b2808f",
+    "semantic_hash": "33bdaa367ec7bb554cb0437e75b2808f"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\components\\RegisterForm.tsx": {
+    "mtime": 1788268372.2235982,
+    "ast_hash": "d70db42a5c99e98a39ca4de4ac81e0ab",
+    "semantic_hash": "d70db42a5c99e98a39ca4de4ac81e0ab"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\components\\ResetPasswordForm.tsx": {
+    "mtime": 1788268385.7173686,
+    "ast_hash": "254e3e29eb24d2dd948978f33e191d17",
+    "semantic_hash": "254e3e29eb24d2dd948978f33e191d17"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\data\\authRepository.ts": {
+    "mtime": 1789115780.4018648,
+    "ast_hash": "5dbffb5afb9485c79476430e5db0f368",
+    "semantic_hash": "5dbffb5afb9485c79476430e5db0f368"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\domain\\types.ts": {
+    "mtime": 1788268289.7563808,
+    "ast_hash": "161d9d84d95e37f61ed0569a85355a0d",
+    "semantic_hash": "161d9d84d95e37f61ed0569a85355a0d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\domain\\validation.ts": {
+    "mtime": 1788268313.6008625,
+    "ast_hash": "b0aa67895ad0265c15a6b082cfc4f61b",
+    "semantic_hash": "b0aa67895ad0265c15a6b082cfc4f61b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\index.ts": {
+    "mtime": 1788268454.2239716,
+    "ast_hash": "1e18e5a7c12e2f50de06731bc3ab1026",
+    "semantic_hash": "1e18e5a7c12e2f50de06731bc3ab1026"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\routes\\ForgotPasswordRoute.tsx": {
+    "mtime": 1788268424.8788233,
+    "ast_hash": "180664840cdddfade1e92c4027216ad4",
+    "semantic_hash": "180664840cdddfade1e92c4027216ad4"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\routes\\LoginRoute.tsx": {
+    "mtime": 1788268395.042766,
+    "ast_hash": "4bd24704c37ae2f1973d7a60808dd9b0",
+    "semantic_hash": "4bd24704c37ae2f1973d7a60808dd9b0"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\routes\\RegisterRoute.tsx": {
+    "mtime": 1788268415.840733,
+    "ast_hash": "ea0d72d79e6438bc6df6c24094d9c737",
+    "semantic_hash": "ea0d72d79e6438bc6df6c24094d9c737"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\auth\\routes\\ResetPasswordRoute.tsx": {
+    "mtime": 1788268445.9519734,
+    "ast_hash": "1d7dc095754b045268dc4d3e2e60352b",
+    "semantic_hash": "1d7dc095754b045268dc4d3e2e60352b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\history\\index.ts": {
+    "mtime": 1789564187.7809772,
+    "ast_hash": "4c2bbe00e55a052595161c59369e7142",
+    "semantic_hash": "4c2bbe00e55a052595161c59369e7142"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\history\\routes\\HistoryRoute.tsx": {
+    "mtime": 1789564187.7861624,
+    "ast_hash": "59496367f47de9587abc4ff0f317efcb",
+    "semantic_hash": "59496367f47de9587abc4ff0f317efcb"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\host-dashboard\\index.ts": {
+    "mtime": 1787925406.6022115,
+    "ast_hash": "b368b002e5268563bf06e356d981917a",
+    "semantic_hash": "b368b002e5268563bf06e356d981917a"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\host-dashboard\\routes\\HostDashboardRoute.tsx": {
+    "mtime": 1789564187.78895,
+    "ast_hash": "bb41e93947b2cc832a2a11be3ccef080",
+    "semantic_hash": "bb41e93947b2cc832a2a11be3ccef080"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\leaderboard\\__tests__\\leaderboard.test.ts": {
+    "mtime": 1787925406.6042829,
+    "ast_hash": "1d87492ae44b0afc6bc283fc555e1c88",
+    "semantic_hash": "1d87492ae44b0afc6bc283fc555e1c88"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\leaderboard\\components\\FinalReveal.tsx": {
+    "mtime": 1787925406.6067154,
+    "ast_hash": "f69d54f72c95bf4e676d3962b1b2254e",
+    "semantic_hash": "f69d54f72c95bf4e676d3962b1b2254e"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\leaderboard\\components\\HorseRace.tsx": {
+    "mtime": 1787925406.6073754,
+    "ast_hash": "4fd21dc5feb5c11d388a3dd1df72ffe0",
+    "semantic_hash": "4fd21dc5feb5c11d388a3dd1df72ffe0"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\leaderboard\\components\\RankedList.tsx": {
+    "mtime": 1787925406.6083014,
+    "ast_hash": "edd7e7c34898c3c2d788142a061bf320",
+    "semantic_hash": "edd7e7c34898c3c2d788142a061bf320"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\leaderboard\\domain\\leaderboard.ts": {
+    "mtime": 1787925406.6093042,
+    "ast_hash": "a1a041aad15e9ac5182eea324d5a4756",
+    "semantic_hash": "a1a041aad15e9ac5182eea324d5a4756"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\leaderboard\\domain\\suspense.ts": {
+    "mtime": 1787925406.6102526,
+    "ast_hash": "75e877e88838d661858b2471e7bd5440",
+    "semantic_hash": "75e877e88838d661858b2471e7bd5440"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\leaderboard\\index.ts": {
+    "mtime": 1787925406.6102526,
+    "ast_hash": "6a6b4d2929b9c9f73c24b3e68e540e8b",
+    "semantic_hash": "6a6b4d2929b9c9f73c24b3e68e540e8b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\application\\__tests__\\scoreAnswers.test.ts": {
+    "mtime": 1787925406.613339,
+    "ast_hash": "68cc1a4ed76f009e2b39d9d85fd04f66",
+    "semantic_hash": "68cc1a4ed76f009e2b39d9d85fd04f66"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\application\\scoreAnswers.ts": {
+    "mtime": 1789137396.155548,
+    "ast_hash": "1c714bc5f5fd0816b5c39ee0ca7c1b8f",
+    "semantic_hash": "1c714bc5f5fd0816b5c39ee0ca7c1b8f"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\components\\AnswerDistribution.tsx": {
+    "mtime": 1787925406.6152916,
+    "ast_hash": "60a506281b1bec304fceb77cc53627e9",
+    "semantic_hash": "60a506281b1bec304fceb77cc53627e9"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\components\\DisplayView.tsx": {
+    "mtime": 1787925406.6162944,
+    "ast_hash": "13f11e6077e116fbde62ff9d438c0aa2",
+    "semantic_hash": "13f11e6077e116fbde62ff9d438c0aa2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\components\\EndGame.tsx": {
+    "mtime": 1789564187.7939975,
+    "ast_hash": "49d23f111d4043e4f0b3832da0b46e38",
+    "semantic_hash": "49d23f111d4043e4f0b3832da0b46e38"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\components\\Lobby.tsx": {
+    "mtime": 1789134479.5863125,
+    "ast_hash": "1f9b7f2446ca08dd47f39015b364ec87",
+    "semantic_hash": "1f9b7f2446ca08dd47f39015b364ec87"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\components\\QuestionDisplay.tsx": {
+    "mtime": 1787925406.6181347,
+    "ast_hash": "e5bda157b3ee607146a95f50c311868b",
+    "semantic_hash": "e5bda157b3ee607146a95f50c311868b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\components\\SuspenseModal.tsx": {
+    "mtime": 1787925406.6202648,
+    "ast_hash": "fc6a6d3d0e97f23a491085cd063e1284",
+    "semantic_hash": "fc6a6d3d0e97f23a491085cd063e1284"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\data\\liveRoomRepository.ts": {
+    "mtime": 1789142450.2333667,
+    "ast_hash": "a18e7603f8b1287de8614222d66e03c9",
+    "semantic_hash": "a18e7603f8b1287de8614222d66e03c9"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\index.ts": {
+    "mtime": 1787925406.621265,
+    "ast_hash": "ff98ce3716e7cb2594eb776ab7dbb936",
+    "semantic_hash": "ff98ce3716e7cb2594eb776ab7dbb936"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\routes\\DisplayRoute.tsx": {
+    "mtime": 1789141502.4841974,
+    "ast_hash": "e7c5c9d279e7c73c7db52aae61191c47",
+    "semantic_hash": "e7c5c9d279e7c73c7db52aae61191c47"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\routes\\HostRoomRoute.tsx": {
+    "mtime": 1789564187.7980413,
+    "ast_hash": "02b9d14d181689c35add77b4ea9a205d",
+    "semantic_hash": "02b9d14d181689c35add77b4ea9a205d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\live-room\\routes\\LeaderboardRoute.tsx": {
+    "mtime": 1787925406.6258116,
+    "ast_hash": "91567cbb6b0fe053d9b60fd9d2a5b9a4",
+    "semantic_hash": "91567cbb6b0fe053d9b60fd9d2a5b9a4"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\media\\components\\AudioPlayer.tsx": {
+    "mtime": 1787925406.6268144,
+    "ast_hash": "709d484d33d8948c6b2a2bcede7e4a46",
+    "semantic_hash": "709d484d33d8948c6b2a2bcede7e4a46"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\media\\components\\AudioUpload.tsx": {
+    "mtime": 1787925406.6282706,
+    "ast_hash": "271c3e9d4b877c423fe31adb62c2a733",
+    "semantic_hash": "271c3e9d4b877c423fe31adb62c2a733"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\media\\components\\ImageUpload.tsx": {
+    "mtime": 1787925406.629151,
+    "ast_hash": "594c42bc32768089ba4c4df28c9aa8df",
+    "semantic_hash": "594c42bc32768089ba4c4df28c9aa8df"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\media\\components\\VideoPlayer.tsx": {
+    "mtime": 1787925406.629151,
+    "ast_hash": "8f047076e0fcfa226ed7a292bc5c6043",
+    "semantic_hash": "8f047076e0fcfa226ed7a292bc5c6043"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\media\\index.ts": {
+    "mtime": 1787925406.630154,
+    "ast_hash": "146e57d6a472cf534c77601c8a8b8a83",
+    "semantic_hash": "146e57d6a472cf534c77601c8a8b8a83"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\__tests__\\horses.test.ts": {
+    "mtime": 1787925406.6312656,
+    "ast_hash": "b85473c2bb57034cd0ac57ac7ad370da",
+    "semantic_hash": "b85473c2bb57034cd0ac57ac7ad370da"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\components\\AnswerButtons.tsx": {
+    "mtime": 1789141490.02722,
+    "ast_hash": "da37b5026e41f9ac7474c4ffbf636b3d",
+    "semantic_hash": "da37b5026e41f9ac7474c4ffbf636b3d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\components\\AnswerReveal.tsx": {
+    "mtime": 1789141481.8965836,
+    "ast_hash": "5cfccfb57199ca6c4e7e9cd9096c4e22",
+    "semantic_hash": "5cfccfb57199ca6c4e7e9cd9096c4e22"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\components\\WaitingScreen.tsx": {
+    "mtime": 1787925406.6353111,
+    "ast_hash": "08a49f124cb066bca6f34d8e603fbbe2",
+    "semantic_hash": "08a49f124cb066bca6f34d8e603fbbe2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\data\\playerRepository.ts": {
+    "mtime": 1789140179.3632274,
+    "ast_hash": "a5ba6277424261d674a9e41d736f49ed",
+    "semantic_hash": "a5ba6277424261d674a9e41d736f49ed"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\domain\\horses.ts": {
+    "mtime": 1787925406.6375608,
+    "ast_hash": "1f31a1827af94523accd614de4d59577",
+    "semantic_hash": "1f31a1827af94523accd614de4d59577"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\index.ts": {
+    "mtime": 1787925406.6385615,
+    "ast_hash": "e00b6ff67ef15c902bcb697f9eefb8b2",
+    "semantic_hash": "e00b6ff67ef15c902bcb697f9eefb8b2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\player-experience\\routes\\PlayerRoomRoute.tsx": {
+    "mtime": 1789140548.772356,
+    "ast_hash": "116715a2b689f2ba392c8f0197e98097",
+    "semantic_hash": "116715a2b689f2ba392c8f0197e98097"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\profile\\data\\profileRepository.ts": {
+    "mtime": 1789564187.804911,
+    "ast_hash": "71082b8b4a4fc8a50388caf35207132b",
+    "semantic_hash": "71082b8b4a4fc8a50388caf35207132b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\profile\\index.ts": {
+    "mtime": 1789564187.8089979,
+    "ast_hash": "7a1649320b32543419ddf11d3835365e",
+    "semantic_hash": "7a1649320b32543419ddf11d3835365e"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\profile\\routes\\ProfileRoute.tsx": {
+    "mtime": 1789564187.8119981,
+    "ast_hash": "11f33c7d54d1902812d0b8362d1afe8f",
+    "semantic_hash": "11f33c7d54d1902812d0b8362d1afe8f"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\components\\AIGenerateButton.tsx": {
+    "mtime": 1787925406.6406727,
+    "ast_hash": "6c1776b212b18fb178e58c8e560ff9e5",
+    "semantic_hash": "6c1776b212b18fb178e58c8e560ff9e5"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\components\\CSVImportButton.tsx": {
+    "mtime": 1789144260.5518155,
+    "ast_hash": "beaa01f890a0cc564bce2fb88cdb437c",
+    "semantic_hash": "beaa01f890a0cc564bce2fb88cdb437c"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\components\\QuestionEditor.tsx": {
+    "mtime": 1789137577.0245802,
+    "ast_hash": "df3179b0b801699ea32acaedaa0da4c5",
+    "semantic_hash": "df3179b0b801699ea32acaedaa0da4c5"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\components\\SortableQuestionCard.tsx": {
+    "mtime": 1787925406.6437647,
+    "ast_hash": "188eaa5691478b849b3e0a471f29c6bd",
+    "semantic_hash": "188eaa5691478b849b3e0a471f29c6bd"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\data\\quizTemplateRepository.ts": {
+    "mtime": 1789142441.223658,
+    "ast_hash": "0edb7298633cf387b9103642f78164e5",
+    "semantic_hash": "0edb7298633cf387b9103642f78164e5"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\domain\\__tests__\\csvImport.test.ts": {
+    "mtime": 1789144260.5538163,
+    "ast_hash": "60babd1746efa5cbfb83a190a1deb070",
+    "semantic_hash": "60babd1746efa5cbfb83a190a1deb070"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\domain\\csvImport.ts": {
+    "mtime": 1789144260.5548172,
+    "ast_hash": "838ea596cae8ddcff7ddd5a14e758916",
+    "semantic_hash": "838ea596cae8ddcff7ddd5a14e758916"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\domain\\types.ts": {
+    "mtime": 1787925406.6460266,
+    "ast_hash": "76f2ad658b0828dcb9fc592ae1ba1547",
+    "semantic_hash": "76f2ad658b0828dcb9fc592ae1ba1547"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\index.ts": {
+    "mtime": 1789144260.5560875,
+    "ast_hash": "75b61f86a33da29db0246be7f4d25072",
+    "semantic_hash": "75b61f86a33da29db0246be7f4d25072"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\routes\\EditQuizRoute.tsx": {
+    "mtime": 1789144527.49887,
+    "ast_hash": "5c8f2147f64ec82cf2d48e20f0df1306",
+    "semantic_hash": "5c8f2147f64ec82cf2d48e20f0df1306"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\quiz-authoring\\routes\\NewQuizRoute.tsx": {
+    "mtime": 1789144465.2158673,
+    "ast_hash": "923f01ba5e128e17ed8e61090838bd5c",
+    "semantic_hash": "923f01ba5e128e17ed8e61090838bd5c"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\realtime\\contracts.ts": {
+    "mtime": 1789140541.7525368,
+    "ast_hash": "39368b3200dee792b5b7460ad6011084",
+    "semantic_hash": "39368b3200dee792b5b7460ad6011084"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\realtime\\hooks.ts": {
+    "mtime": 1787925406.6513581,
+    "ast_hash": "88fca1ba803684fe5a04fc2b5c6d0687",
+    "semantic_hash": "88fca1ba803684fe5a04fc2b5c6d0687"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\realtime\\index.ts": {
+    "mtime": 1787925406.6513581,
+    "ast_hash": "168633d620691b7c63651e0af3de16e6",
+    "semantic_hash": "168633d620691b7c63651e0af3de16e6"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\scoring\\__tests__\\scoring.test.ts": {
+    "mtime": 1787925406.653602,
+    "ast_hash": "cc1938ac4d01a7c4d655fca8f0de38dc",
+    "semantic_hash": "cc1938ac4d01a7c4d655fca8f0de38dc"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\scoring\\domain\\scoring.ts": {
+    "mtime": 1789137566.6333127,
+    "ast_hash": "45ca8ffd2f8f9e71cbe2c8c839e64b81",
+    "semantic_hash": "45ca8ffd2f8f9e71cbe2c8c839e64b81"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\scoring\\index.ts": {
+    "mtime": 1787925406.6546147,
+    "ast_hash": "396f1fdb01979df4c69b8d40fcf0006a",
+    "semantic_hash": "396f1fdb01979df4c69b8d40fcf0006a"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\session-results\\__tests__\\sessionStats.test.ts": {
+    "mtime": 1787925406.6570346,
+    "ast_hash": "55b42043e1843c5ef1588ef4700fba40",
+    "semantic_hash": "55b42043e1843c5ef1588ef4700fba40"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\session-results\\application\\sessionStats.ts": {
+    "mtime": 1787925406.6582956,
+    "ast_hash": "37910d1696868bdf4bbd469da7c8ac97",
+    "semantic_hash": "37910d1696868bdf4bbd469da7c8ac97"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\session-results\\data\\sessionResultsRepository.ts": {
+    "mtime": 1789144868.9723299,
+    "ast_hash": "988130935286ea194a09583435048a94",
+    "semantic_hash": "988130935286ea194a09583435048a94"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\session-results\\index.ts": {
+    "mtime": 1787925406.6603103,
+    "ast_hash": "6ead8f58f5fab6e47376b50d630e1b8d",
+    "semantic_hash": "6ead8f58f5fab6e47376b50d630e1b8d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\features\\session-results\\routes\\SessionResultsRoute.tsx": {
+    "mtime": 1787925406.6614225,
+    "ast_hash": "60ad8a7e96ea30bc048eff8cba7978f9",
+    "semantic_hash": "60ad8a7e96ea30bc048eff8cba7978f9"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\integrations\\supabase\\__tests__\\client.test.ts": {
+    "mtime": 1787925406.6637025,
+    "ast_hash": "c29853e4523d76019a91d9e776b4529c",
+    "semantic_hash": "c29853e4523d76019a91d9e776b4529c"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\integrations\\supabase\\client.ts": {
+    "mtime": 1789115760.8094778,
+    "ast_hash": "3e3bc9e94bfc0d73c986e393fb1654d5",
+    "semantic_hash": "3e3bc9e94bfc0d73c986e393fb1654d5"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\integrations\\supabase\\middleware.ts": {
+    "mtime": 1788268257.5300667,
+    "ast_hash": "7f8150a5e8ac0595727b86f173b70ef5",
+    "semantic_hash": "7f8150a5e8ac0595727b86f173b70ef5"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\integrations\\supabase\\server.ts": {
+    "mtime": 1788268246.2088597,
+    "ast_hash": "626bc9c05fca6e25a5aa53f8a1323ba7",
+    "semantic_hash": "626bc9c05fca6e25a5aa53f8a1323ba7"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\integrations\\supabase\\storage.ts": {
+    "mtime": 1787925406.664703,
+    "ast_hash": "826d3b13e5e74293eba3a952bef17f03",
+    "semantic_hash": "826d3b13e5e74293eba3a952bef17f03"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\middleware.ts": {
+    "mtime": 1789131794.9465494,
+    "ast_hash": "9106e619413213a0a4b7d50284eacaf3",
+    "semantic_hash": "9106e619413213a0a4b7d50284eacaf3"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\next.config.ts": {
+    "mtime": 1789141510.4712846,
+    "ast_hash": "a0f76e763fe7309c4a3d20821919ab23",
+    "semantic_hash": "a0f76e763fe7309c4a3d20821919ab23"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\package.json": {
+    "mtime": 1787925406.6690772,
+    "ast_hash": "ecacad8d15e08fbeafc68bcd62ad4903",
+    "semantic_hash": "ecacad8d15e08fbeafc68bcd62ad4903"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\postcss.config.mjs": {
+    "mtime": 1787925406.6702685,
+    "ast_hash": "481fac0fdecd70e1821cc30b86030c1a",
+    "semantic_hash": "481fac0fdecd70e1821cc30b86030c1a"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\scripts\\check-boundaries.mjs": {
+    "mtime": 1787925406.6749034,
+    "ast_hash": "f69545494613e95df91d84fac0f2fbb9",
+    "semantic_hash": "f69545494613e95df91d84fac0f2fbb9"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\scripts\\diagnose-db.mjs": {
+    "mtime": 1789144778.812579,
+    "ast_hash": "87c4054104b246df9816953d8e46dc75",
+    "semantic_hash": "87c4054104b246df9816953d8e46dc75"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\scripts\\diagnose-db2.mjs": {
+    "mtime": 1789144826.2856839,
+    "ast_hash": "473cb7e7f581b73d47879725808da4be",
+    "semantic_hash": "473cb7e7f581b73d47879725808da4be"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\domain\\types.ts": {
+    "mtime": 1787925406.6763217,
+    "ast_hash": "0bb8d0c0b3322d99f0f2211a295c4e9a",
+    "semantic_hash": "0bb8d0c0b3322d99f0f2211a295c4e9a"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\hooks\\useReadabilityMode.tsx": {
+    "mtime": 1788959014.5162299,
+    "ast_hash": "801c63625ee22641fa50f2e150124e31",
+    "semantic_hash": "801c63625ee22641fa50f2e150124e31"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\hooks\\useReducedMotion.ts": {
+    "mtime": 1787925406.677322,
+    "ast_hash": "493100a9a2c2891b0d53f6e8033a69b1",
+    "semantic_hash": "493100a9a2c2891b0d53f6e8033a69b1"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\hostIdentity.ts": {
+    "mtime": 1789142396.7239325,
+    "ast_hash": "1c1f4cc78cdd274b763a7aa94b26bb61",
+    "semantic_hash": "1c1f4cc78cdd274b763a7aa94b26bb61"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\ui\\AnimatedContainer.tsx": {
+    "mtime": 1787925406.6797874,
+    "ast_hash": "8b902447351333a7a49ce5ed103ceed4",
+    "semantic_hash": "8b902447351333a7a49ce5ed103ceed4"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\ui\\Button.tsx": {
+    "mtime": 1787925406.6807904,
+    "ast_hash": "611a6dd8049ac3cff8cd477254c26331",
+    "semantic_hash": "611a6dd8049ac3cff8cd477254c26331"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\ui\\QRCodeDisplay.tsx": {
+    "mtime": 1787925406.6807904,
+    "ast_hash": "6829ec6b9ce1591eb6b7ad4ed41ad312",
+    "semantic_hash": "6829ec6b9ce1591eb6b7ad4ed41ad312"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\ui\\RacerAvatar.tsx": {
+    "mtime": 1787925406.6817904,
+    "ast_hash": "dee8043066f3cf197daf9f5d5a5649b5",
+    "semantic_hash": "dee8043066f3cf197daf9f5d5a5649b5"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\ui\\ReadabilityToggle.tsx": {
+    "mtime": 1788959014.5195224,
+    "ast_hash": "d24bcb96b7208e88e3402551570101d5",
+    "semantic_hash": "d24bcb96b7208e88e3402551570101d5"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\ui\\Skeleton.tsx": {
+    "mtime": 1787925406.6830359,
+    "ast_hash": "0ad90464d51712e5fb0bbe53c3954bdd",
+    "semantic_hash": "0ad90464d51712e5fb0bbe53c3954bdd"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\ui\\TimerBar.tsx": {
+    "mtime": 1787925406.6830359,
+    "ast_hash": "9e6c888dbc9ba8801eb7782e676b2d4d",
+    "semantic_hash": "9e6c888dbc9ba8801eb7782e676b2d4d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\shared\\utils\\cn.ts": {
+    "mtime": 1787925406.684036,
+    "ast_hash": "0be96a6e8295ad59bced866532c71d5d",
+    "semantic_hash": "0be96a6e8295ad59bced866532c71d5d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\supabase\\migrations\\001_initial.sql": {
+    "mtime": 1787925406.6915762,
+    "ast_hash": "c28542b132a330e2b4139a5964321f8b",
+    "semantic_hash": "c28542b132a330e2b4139a5964321f8b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\supabase\\migrations\\002_quiz_management.sql": {
+    "mtime": 1787925406.692576,
+    "ast_hash": "de454e06bf29d63c795b8fa2aa75c474",
+    "semantic_hash": "de454e06bf29d63c795b8fa2aa75c474"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\supabase\\migrations\\003_blur_column.sql": {
+    "mtime": 1787925406.6935768,
+    "ast_hash": "fb219575e5019126aa4fbad229e43f77",
+    "semantic_hash": "fb219575e5019126aa4fbad229e43f77"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\supabase\\migrations\\004_room_game_state.sql": {
+    "mtime": 1787925406.6935768,
+    "ast_hash": "4ab873bcd9be27c9e55b4a42ad143b04",
+    "semantic_hash": "4ab873bcd9be27c9e55b4a42ad143b04"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\supabase\\migrations\\005_auth_and_user_history.sql": {
+    "mtime": 1788318677.081776,
+    "ast_hash": "2b28fb9a61866296890fff9f25e12e13",
+    "semantic_hash": "2b28fb9a61866296890fff9f25e12e13"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\supabase\\migrations\\006_strict_multi_user_isolation.sql": {
+    "mtime": 1789142469.920518,
+    "ast_hash": "e59f354a949abfc4a23d257f62d898c8",
+    "semantic_hash": "e59f354a949abfc4a23d257f62d898c8"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\tsconfig.json": {
+    "mtime": 1787925406.6949818,
+    "ast_hash": "ab575e944f15d39a5486cf9fca385c5e",
+    "semantic_hash": "ab575e944f15d39a5486cf9fca385c5e"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\vitest.config.ts": {
+    "mtime": 1787925406.6959822,
+    "ast_hash": "84e7a3004d867e8ffa2ee1fc5742afb6",
+    "semantic_hash": "84e7a3004d867e8ffa2ee1fc5742afb6"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\.claude\\skills\\ngodingpakeai\\SKILL.md": {
+    "mtime": 1788231596.400274,
+    "ast_hash": "2f347be271b135a37a463bb97f135e7b",
+    "semantic_hash": "2f347be271b135a37a463bb97f135e7b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\.github\\workflows\\ci.yml": {
+    "mtime": 1787925406.5645404,
+    "ast_hash": "ac181bbc741d6ab2b52b6eb860a70a2d",
+    "semantic_hash": "ac181bbc741d6ab2b52b6eb860a70a2d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\AGENTS.md": {
+    "mtime": 1788231596.4051945,
+    "ast_hash": "71d87eb3612b7fae1d70124e5f42a7c4",
+    "semantic_hash": "71d87eb3612b7fae1d70124e5f42a7c4"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\CLAUDE.md": {
+    "mtime": 1787925406.5660458,
+    "ast_hash": "771faa62feb60b7de901a397aebb29b0",
+    "semantic_hash": "771faa62feb60b7de901a397aebb29b0"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\PANDUAN_DATABASE_DAN_KODE.txt": {
+    "mtime": 1789146355.8799767,
+    "ast_hash": "62ecab771047de907a4e2d72adaaf918",
+    "semantic_hash": "62ecab771047de907a4e2d72adaaf918"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\README.md": {
+    "mtime": 1787925406.5672452,
+    "ast_hash": "e1671797c52e15f763380b45e841ec32",
+    "semantic_hash": "e1671797c52e15f763380b45e841ec32"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\adrs\\0001-domain-first-structure.md": {
+    "mtime": 1787925406.5858479,
+    "ast_hash": "7289c4ca0ae3103d61359bb8483f57c8",
+    "semantic_hash": "7289c4ca0ae3103d61359bb8483f57c8"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\architecture\\boundaries.md": {
+    "mtime": 1787925406.5868506,
+    "ast_hash": "8da9a28f418b66c1f153dc21a5101571",
+    "semantic_hash": "8da9a28f418b66c1f153dc21a5101571"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\architecture\\project-structure.md": {
+    "mtime": 1787925406.587851,
+    "ast_hash": "86fda20d0aa9269dfbead738f0dc4f66",
+    "semantic_hash": "86fda20d0aa9269dfbead738f0dc4f66"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\contracts\\data-model.md": {
+    "mtime": 1787925406.589091,
+    "ast_hash": "02489d68ee65b7f63ba70d05193496f7",
+    "semantic_hash": "02489d68ee65b7f63ba70d05193496f7"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\contracts\\realtime-events.md": {
+    "mtime": 1787925406.589091,
+    "ast_hash": "2061cc3825eb9c4a9336fb329b3ac5c0",
+    "semantic_hash": "2061cc3825eb9c4a9336fb329b3ac5c0"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\contracts\\scoring.md": {
+    "mtime": 1787925406.5900946,
+    "ast_hash": "d5e938a0e49bfb9cdc2fc448c7ae7bd2",
+    "semantic_hash": "d5e938a0e49bfb9cdc2fc448c7ae7bd2"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\design\\stitch-refs\\screen1.html": {
+    "mtime": 1787925406.5922146,
+    "ast_hash": "faaf642eba18b463e73b15662f822b11",
+    "semantic_hash": "faaf642eba18b463e73b15662f822b11"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\design\\stitch-refs\\screen2.html": {
+    "mtime": 1787925406.5922146,
+    "ast_hash": "c9f3a2bd45317efc08364d06ec6d6c4e",
+    "semantic_hash": "c9f3a2bd45317efc08364d06ec6d6c4e"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\design\\stitch-refs\\screen3.html": {
+    "mtime": 1787925406.59425,
+    "ast_hash": "803ad649102327ec582d36456335d3fb",
+    "semantic_hash": "803ad649102327ec582d36456335d3fb"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\design\\stitch-refs\\screen4.html": {
+    "mtime": 1787925406.5952525,
+    "ast_hash": "8a49b40169018b5aa3fc2bb9baf3e10d",
+    "semantic_hash": "8a49b40169018b5aa3fc2bb9baf3e10d"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\design\\stitch-refs\\screen5.html": {
+    "mtime": 1787925406.5952525,
+    "ast_hash": "7e26625bb7383e01f067424a49b12450",
+    "semantic_hash": "7e26625bb7383e01f067424a49b12450"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\design\\stitch-refs\\screen6.html": {
+    "mtime": 1787925406.5962527,
+    "ast_hash": "144da3ad2dd02967479186d3336d4583",
+    "semantic_hash": "144da3ad2dd02967479186d3336d4583"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\docs\\design\\stitch-refs\\screen7.html": {
+    "mtime": 1787925406.5975652,
+    "ast_hash": "bacfa95bf46f191fb80a977a441d450b",
+    "semantic_hash": "bacfa95bf46f191fb80a977a441d450b"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\public\\file.svg": {
+    "mtime": 1787925406.671271,
+    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
+    "semantic_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\public\\globe.svg": {
+    "mtime": 1787925406.6722715,
+    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
+    "semantic_hash": "2aaafa6a49b6563925fe440891e32717"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\public\\next.svg": {
+    "mtime": 1787925406.6729007,
+    "ast_hash": "8e061864f388b47f33a1c3780831193e",
+    "semantic_hash": "8e061864f388b47f33a1c3780831193e"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\public\\vercel.svg": {
+    "mtime": 1787925406.6729007,
+    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
+    "semantic_hash": "c0af2f507b369b085b35ef4bbe3bcf1e"
+  },
+  "C:\\1.ace.worktrees\\WicQuiz\\public\\window.svg": {
+    "mtime": 1787925406.673903,
+    "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": "a2760511c65806022ad20adf74370ff3"
+  }
+}
