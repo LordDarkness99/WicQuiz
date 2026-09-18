@@ -34,9 +34,6 @@ export default function AnswerButtons({
   isRevealed,
   correctAnswer,
 }: AnswerButtonsProps) {
-  const [sliderValue, setSliderValue] = useState(
-    question.slider_min ?? 0
-  );
   const [typeInValue, setTypeInValue] = useState("");
   const reduced = useReducedMotion();
 
@@ -44,9 +41,7 @@ export default function AnswerButtons({
 
   if (
     question.type === "multiple_choice" ||
-    question.type === "image_question" ||
-    question.type === "video_question" ||
-    question.type === "audio_question"
+    question.type === "image_question"
   ) {
     const options = question.options ?? [];
     return (
@@ -195,64 +190,6 @@ export default function AnswerButtons({
     );
   }
 
-  if (question.type === "slider") {
-    const min = question.slider_min ?? 0;
-    const max = question.slider_max ?? 100;
-
-    return (
-      <div className="w-full space-y-3">
-        <div
-          className={`flex flex-col items-center gap-6 w-full ${
-            disabled && !isLockedIn ? "opacity-50 pointer-events-none" : ""
-          } ${isLockedIn ? "pointer-events-none" : ""}`}
-        >
-          <div className="text-5xl font-bold text-navy">
-            {isLockedIn ? lockedAnswer : sliderValue}
-          </div>
-          {/* Slider with pulsing drag hint */}
-          <div className="relative w-full">
-            <input
-              type="range"
-              min={min}
-              max={max}
-              value={isLockedIn ? Number(lockedAnswer) : sliderValue}
-              onChange={(e) => setSliderValue(Number(e.target.value))}
-              disabled={disabled || isLockedIn}
-              className="w-full h-3 rounded-full appearance-none bg-cream-dark accent-coral cursor-pointer"
-            />
-            {/* Pulsing dot hint — only shows if user hasn't moved slider yet */}
-            {!isLockedIn && sliderValue === min && (
-              <div
-                className="absolute top-1/2 -translate-y-1/2 pointer-events-none"
-                style={{ left: "0%" }}
-              >
-                <span className="relative flex h-5 w-5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-coral opacity-75" />
-                  <span className="relative inline-flex rounded-full h-5 w-5 bg-coral" />
-                </span>
-              </div>
-            )}
-          </div>
-          <div className="flex justify-between w-full text-sm text-ink/50 font-medium">
-            <span>{min}</span>
-            <span className="text-ink/30 text-xs">← drag to your answer →</span>
-            <span>{max}</span>
-          </div>
-          {!isLockedIn && (
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="w-full rounded-xl p-6 min-h-[80px] bg-coral text-white font-bold text-xl shadow-md active:shadow-sm transition-all"
-              onClick={() => onAnswer(String(sliderValue))}
-              disabled={disabled}
-            >
-              Submit
-            </motion.button>
-          )}
-        </div>
-        {isLockedIn && !isRevealed && <LockedInLabel lockedAnswer={lockedAnswer!} />}
-      </div>
-    );
-  }
 
   if (question.type === "type_in") {
     return (

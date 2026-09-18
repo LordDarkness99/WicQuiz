@@ -78,18 +78,4 @@ describe("scoreAnswers", () => {
     // (15000 - 7500) remaining => grace-adjusted 567
     expect(updates[0]).toEqual({ id: "a1", is_correct: true, points_earned: 567 });
   });
-
-  it("marks a close slider answer correct when above half points", () => {
-    const { updates } = scoreAnswers(
-      makeQuestion({
-        type: "slider",
-        correct_answer: "50",
-        slider_min: 0,
-        slider_max: 100,
-      }),
-      [makeAnswer({ answer_value: "50", time_taken_ms: 0 })]
-    );
-    expect(updates[0].is_correct).toBe(true);
-    expect(updates[0].points_earned).toBe(1000);
-  });
 });

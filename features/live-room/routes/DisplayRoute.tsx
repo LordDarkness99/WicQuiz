@@ -170,9 +170,7 @@ export default function DisplayScreen() {
       if (
         options &&
         (question.type === "multiple_choice" ||
-          question.type === "image_question" ||
-          question.type === "video_question" ||
-          question.type === "audio_question")
+          question.type === "image_question")
       ) {
         // Count per option text (answer_value stores the full option text)
         const counts: Record<string, number> = {};
@@ -308,9 +306,7 @@ export default function DisplayScreen() {
     if (
       opt &&
       (currentQuestion.type === "multiple_choice" ||
-        currentQuestion.type === "image_question" ||
-        currentQuestion.type === "video_question" ||
-        currentQuestion.type === "audio_question")
+        currentQuestion.type === "image_question")
     ) {
       const idx = parseInt(correctAnswer);
       if (!isNaN(idx) && opt[idx]) return opt[idx];

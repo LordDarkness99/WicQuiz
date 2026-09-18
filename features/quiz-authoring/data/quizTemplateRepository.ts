@@ -60,9 +60,7 @@ function questionFormToRow(hostId: string, q: QuestionFormData, ownerId?: string
     options:
       q.type === "multiple_choice" ||
       q.type === "image_question" ||
-      q.type === "true_false" ||
-      q.type === "video_question" ||
-      q.type === "audio_question"
+      q.type === "true_false"
         ? q.options
         : null,
     correct_answer: q.correct_answer?.trim() || "N/A",
@@ -71,15 +69,13 @@ function questionFormToRow(hostId: string, q: QuestionFormData, ownerId?: string
     image_url: q.image_url || null,
     is_joker: q.is_joker,
     is_image_blurred: q.is_image_blurred ?? false,
-    slider_min: q.type === "slider" ? q.slider_min : null,
-    slider_max: q.type === "slider" ? q.slider_max : null,
-    slider_tolerance: q.type === "slider" ? (q.slider_tolerance ?? null) : null,
-    video_url: q.type === "video_question" ? q.video_url || null : null,
-    video_start_seconds:
-      q.type === "video_question" ? q.video_start_seconds : null,
-    video_end_seconds:
-      q.type === "video_question" ? q.video_end_seconds : null,
-    audio_url: q.type === "audio_question" ? q.audio_url || null : null,
+    slider_min: null,
+    slider_max: null,
+    slider_tolerance: null,
+    video_url: null,
+    video_start_seconds: null,
+    video_end_seconds: null,
+    audio_url: null,
   };
 }
 

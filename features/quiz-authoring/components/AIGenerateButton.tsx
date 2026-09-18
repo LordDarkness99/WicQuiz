@@ -34,24 +34,37 @@ export default function AIGenerateButton({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic, questionType }),
       });
-      if (!res.ok) throw new Error("Failed to generate question");
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to generate question");
+      }
       onGenerate(data);
       setExpanded(false);
       setTopic("");
-    } catch {
-      setError("Could not generate question. Check your API key.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not generate question. Check your API key."
+      );
     } finally {
       setLoading(false);
     }
   }
+
+  const placeholderText =
+    questionType === "type_in"
+      ? "Topik (opsional): misal Ibu Kota, Tokoh Sejarah, Nama Planet..."
+      : questionType === "true_false"
+      ? "Topik (opsional): misal Mitos Sains, Fakta Hewan, Geografi..."
+      : "Topik (opsional): misal Sejarah 90an, Film, Pop Culture...";
 
   if (!expanded) {
     return (
       <button
         type="button"
         onClick={() => setExpanded(true)}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105"
+        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 shadow-sm"
         style={{ backgroundColor: "#8594CD", color: "white" }}
       >
         <span className="text-base">✨</span>
@@ -61,13 +74,13 @@ export default function AIGenerateButton({
   }
 
   return (
-    <div className="flex items-center gap-3 flex-wrap">
+    <div className="flex items-center gap-3 flex-wrap w-full bg-surface-container-lowest/60 p-3 rounded-2xl border border-outline-variant/10 shadow-sm">
       <input
         type="text"
         value={topic}
         onChange={(e) => setTopic(e.target.value)}
-        placeholder="Topic (optional): e.g. Geography, 90s movies, GSFS..."
-        className="flex-1 min-w-[200px] bg-surface-container-low border-none rounded-xl px-4 py-2 text-sm font-bold text-primary placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
+        placeholder={placeholderText}
+        className="flex-1 min-w-[220px] bg-surface-container-low border-none rounded-xl px-4 py-2 text-sm font-bold text-primary placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
         disabled={loading}
         onKeyDown={(e) => {
           if (e.key === "Enter") handleGenerate();
@@ -77,7 +90,7 @@ export default function AIGenerateButton({
         type="button"
         onClick={handleGenerate}
         disabled={loading}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100"
+        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 shrink-0"
         style={{ backgroundColor: "#8594CD" }}
       >
         {loading ? (
@@ -98,12 +111,13 @@ export default function AIGenerateButton({
           setExpanded(false);
           setError("");
         }}
-        className="text-outline hover:text-primary text-sm font-bold transition-colors"
+        className="text-outline hover:text-primary text-sm font-bold transition-colors px-2"
       >
         Cancel
       </button>
       {error && (
-        <span className="text-sm font-bold w-full" style={{ color: "#E07A5F" }}>
+        <span className="text-xs font-bold w-full mt-1 text-red-500 flex items-center gap-1">
+          <span className="material-symbols-outlined text-sm">error</span>
           {error}
         </span>
       )}

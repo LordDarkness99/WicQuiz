@@ -52,12 +52,6 @@ function createEmptyQuestion(): QuestionFormData {
     time_limit: 15,
     image_url: "",
     is_joker: false,
-    slider_min: 0,
-    slider_max: 100,
-    video_url: "",
-    video_start_seconds: 0,
-    video_end_seconds: null,
-    audio_url: "",
   };
 }
 
@@ -71,13 +65,6 @@ function bankItemToFormData(item: QuestionBankItem): QuestionFormData {
     image_url: item.image_url || "",
     is_joker: item.is_joker,
     is_image_blurred: item.is_image_blurred ?? false,
-    slider_min: item.slider_min ?? 0,
-    slider_max: item.slider_max ?? 100,
-    slider_tolerance: item.slider_tolerance ?? undefined,
-    video_url: item.video_url || "",
-    video_start_seconds: item.video_start_seconds ?? 0,
-    video_end_seconds: item.video_end_seconds ?? null,
-    audio_url: item.audio_url || "",
   };
 }
 
@@ -160,9 +147,7 @@ export default function EditQuizPage() {
         options:
           q.type === "multiple_choice" ||
           q.type === "image_question" ||
-          q.type === "true_false" ||
-          q.type === "video_question" ||
-          q.type === "audio_question"
+          q.type === "true_false"
             ? q.options
             : null,
         correct_answer: q.correct_answer.trim(),
@@ -171,18 +156,6 @@ export default function EditQuizPage() {
         image_url: q.image_url || null,
         is_joker: q.is_joker,
         is_image_blurred: q.is_image_blurred ?? false,
-        slider_min: q.type === "slider" ? q.slider_min : null,
-        slider_max: q.type === "slider" ? q.slider_max : null,
-        slider_tolerance:
-          q.type === "slider" ? (q.slider_tolerance ?? null) : null,
-        video_url:
-          q.type === "video_question" ? q.video_url || null : null,
-        video_start_seconds:
-          q.type === "video_question" ? q.video_start_seconds : null,
-        video_end_seconds:
-          q.type === "video_question" ? q.video_end_seconds : null,
-        audio_url:
-          q.type === "audio_question" ? q.audio_url || null : null,
       }));
 
       // Insert the NEW rows first. Only once that (and the template pointer
@@ -318,12 +291,6 @@ export default function EditQuizPage() {
         image_url: q.image_url,
         is_joker: q.is_joker,
         is_image_blurred: q.is_image_blurred ?? false,
-        slider_min: q.slider_min,
-        slider_max: q.slider_max,
-        video_url: q.video_url,
-        video_start_seconds: q.video_start_seconds,
-        video_end_seconds: q.video_end_seconds,
-        audio_url: q.audio_url,
       }));
 
       await insertRoomQuestions(questionRows);

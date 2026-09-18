@@ -1,2 +1,2 @@
-export * from "./server/anthropicQuestionGenerator";
-export * from "./server/anthropicAnswerChecker";
+export * from "./server/geminiQuestionGenerator";
+export * from "./server/geminiAnswerChecker";

@@ -1,6 +1,5 @@
 import {
   scoreStandardQuestion,
-  calculateSliderPoints,
   applyJokerMultiplier,
   calculateTypeInPoints,
 } from "@/features/scoring";
@@ -41,9 +40,7 @@ export function scoreAnswers(
     switch (question.type) {
       case "multiple_choice":
       case "true_false":
-      case "image_question":
-      case "video_question":
-      case "audio_question": {
+      case "image_question": {
         const result = scoreStandardQuestion(
           answer.answer_value,
           question.correct_answer,
@@ -55,24 +52,6 @@ export function scoreAnswers(
         );
         points = result.points;
         isCorrect = result.isCorrect;
-        break;
-      }
-      case "slider": {
-        const playerVal = parseFloat(answer.answer_value);
-        const correctVal = parseFloat(question.correct_answer);
-        if (!isNaN(playerVal) && !isNaN(correctVal)) {
-          points = calculateSliderPoints(
-            playerVal,
-            correctVal,
-            question.slider_min ?? 0,
-            question.slider_max ?? 100,
-            timeRemainingMs,
-            timeLimitMs,
-            question.points_base
-          );
-          points = applyJokerMultiplier(points, question.is_joker);
-          isCorrect = points > question.points_base * 0.5;
-        }
         break;
       }
       case "type_in": {

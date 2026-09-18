@@ -894,22 +894,6 @@ export default function PlayPage() {
                 </h2>
               </div>
 
-              {/* Media indicator for video/audio */}
-              {currentQuestion.type === "video_question" && (
-                <div className="bg-primary/10 rounded-2xl px-5 py-3 text-center">
-                  <span className="text-lg font-bold text-primary">
-                    📺 Watch the screen...
-                  </span>
-                </div>
-              )}
-              {currentQuestion.type === "audio_question" && (
-                <div className="bg-tertiary-fixed/20 rounded-2xl px-5 py-3 text-center">
-                  <span className="text-lg font-bold text-tertiary-fixed-dim">
-                    🎵 Listen carefully...
-                  </span>
-                </div>
-              )}
-
               {/* Answer buttons — hidden until image is ready */}
               <div className={`mt-auto pb-2 ${waitingForImage ? 'opacity-0 pointer-events-none' : ''}`}>
                 <AnswerButtons

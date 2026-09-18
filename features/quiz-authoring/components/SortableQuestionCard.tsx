@@ -10,10 +10,7 @@ const questionTypeIcons: Record<QuestionType, string> = {
   multiple_choice: "quiz",
   true_false: "check_circle",
   image_question: "image",
-  slider: "linear_scale",
   type_in: "keyboard",
-  video_question: "videocam",
-  audio_question: "music_note",
 };
 
 function GripVertical() {

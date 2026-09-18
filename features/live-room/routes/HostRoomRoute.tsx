@@ -57,8 +57,6 @@ import AnimatedContainer from "@/shared/ui/AnimatedContainer";
 import AnswerDistribution from "@/features/live-room/components/AnswerDistribution";
 import Lobby from "@/features/live-room/components/Lobby";
 import SuspenseModal from "@/features/live-room/components/SuspenseModal";
-import { VideoPlayer } from "@/features/media";
-import { AudioPlayer } from "@/features/media";
 import EndGame from "@/features/live-room/components/EndGame";
 import TimerBar from "@/shared/ui/TimerBar";
 import DisplayView from "@/features/live-room/components/DisplayView";
@@ -131,6 +129,44 @@ export default function HostControlPanel() {
     onBroadcast("finish_game_request", () => { void finishGameRef.current(); });
     onBroadcast("reveal_answer_request", () => { void revealAnswerRef.current(); });
   }, [onBroadcast]);
+
+  // Host Keyboard Shortcuts: Space / Enter to advance host flow smoothly
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      const activeTag = document.activeElement?.tagName.toLowerCase();
+      if (activeTag === "input" || activeTag === "textarea") return;
+
+      if (e.code === "Space" || e.code === "Enter") {
+        if (gameState === "question_start") {
+          e.preventDefault();
+          setTimerRunning(false);
+          setGameState("question_end");
+          broadcast("game_state_change", {
+            state: "question_end",
+            current_question_index: currentQuestionIndexRef.current,
+          });
+        } else if (gameState === "question_end") {
+          e.preventDefault();
+          if (scoringComplete && !answerRevealed) {
+            void revealAnswerRef.current();
+          } else if (answerRevealed) {
+            showLeaderboardRef.current();
+          }
+        } else if (gameState === "leaderboard") {
+          e.preventDefault();
+          const isLast = currentQuestionIndexRef.current >= questionsRef.current.length - 1;
+          if (isLast) {
+            void finishGameRef.current();
+          } else {
+            nextQuestionRef.current();
+          }
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [gameState, scoringComplete, answerRevealed, broadcast]);
 
   // Timer
   const handleTimerTick = useCallback(
@@ -298,12 +334,6 @@ export default function HostControlPanel() {
       image_url: question.image_url,
       is_joker: question.is_joker,
       is_image_blurred: question.is_image_blurred ?? false,
-      slider_min: question.slider_min,
-      slider_max: question.slider_max,
-      video_url: question.video_url,
-      video_start_seconds: question.video_start_seconds,
-      video_end_seconds: question.video_end_seconds,
-      audio_url: question.audio_url,
     };
 
     broadcast("question_reveal", {
@@ -626,9 +656,7 @@ export default function HostControlPanel() {
 
     if (
       currentQuestion.type === "multiple_choice" ||
-      currentQuestion.type === "image_question" ||
-      currentQuestion.type === "video_question" ||
-      currentQuestion.type === "audio_question"
+      currentQuestion.type === "image_question"
     ) {
       (currentQuestion.options || []).forEach((opt) => {
         counts[opt] = 0;
@@ -941,26 +969,6 @@ export default function HostControlPanel() {
                     </div>
                   )}
 
-                  {/* Video player */}
-                  {currentQuestion.type === "video_question" &&
-                    currentQuestion.video_url && (
-                      <div className="mt-8">
-                        <VideoPlayer
-                          videoUrl={currentQuestion.video_url}
-                          startSeconds={currentQuestion.video_start_seconds}
-                          endSeconds={currentQuestion.video_end_seconds}
-                        />
-                      </div>
-                    )}
-
-                  {/* Audio player */}
-                  {currentQuestion.type === "audio_question" &&
-                    currentQuestion.audio_url && (
-                      <div className="mt-8">
-                        <AudioPlayer audioUrl={currentQuestion.audio_url} />
-                      </div>
-                    )}
-
                   {/* Live stats panel */}
                   {gameState === "question_end" && (
                     <motion.div
@@ -1010,7 +1018,7 @@ export default function HostControlPanel() {
                                 {(() => {
                                   const correct = currentAnswers.filter(a => {
                                     const opt = currentQuestion.options;
-                                    if (opt && (currentQuestion.type === "multiple_choice" || currentQuestion.type === "image_question" || currentQuestion.type === "video_question" || currentQuestion.type === "audio_question")) {
+                                    if (opt && (currentQuestion.type === "multiple_choice" || currentQuestion.type === "image_question")) {
                                       const idx = parseInt(currentQuestion.correct_answer);
                                       return !isNaN(idx) ? a.answer_value === opt[idx] : a.answer_value.toLowerCase() === currentQuestion.correct_answer.toLowerCase();
                                     }
@@ -1026,7 +1034,7 @@ export default function HostControlPanel() {
                                 {(() => {
                                   const correct = currentAnswers.filter(a => {
                                     const opt = currentQuestion.options;
-                                    if (opt && (currentQuestion.type === "multiple_choice" || currentQuestion.type === "image_question" || currentQuestion.type === "video_question" || currentQuestion.type === "audio_question")) {
+                                    if (opt && (currentQuestion.type === "multiple_choice" || currentQuestion.type === "image_question")) {
                                       const idx = parseInt(currentQuestion.correct_answer);
                                       return !isNaN(idx) ? a.answer_value === opt[idx] : a.answer_value.toLowerCase() === currentQuestion.correct_answer.toLowerCase();
                                     }
@@ -1044,7 +1052,7 @@ export default function HostControlPanel() {
                             <p className="text-2xl font-black text-emerald-700">
                               {(() => {
                                 const opt = currentQuestion.options;
-                                if (opt && (currentQuestion.type === "multiple_choice" || currentQuestion.type === "image_question" || currentQuestion.type === "video_question" || currentQuestion.type === "audio_question")) {
+                                if (opt && (currentQuestion.type === "multiple_choice" || currentQuestion.type === "image_question")) {
                                   const idx = parseInt(currentQuestion.correct_answer);
                                   if (!isNaN(idx) && opt[idx]) return opt[idx];
                                 }

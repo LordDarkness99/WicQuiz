@@ -5,7 +5,7 @@ describe("parseQuestionsCsv", () => {
   it("parses the bundled template with zero errors", () => {
     const { questions, errors } = parseQuestionsCsv(CSV_TEMPLATE);
     expect(errors).toEqual([]);
-    expect(questions).toHaveLength(4);
+    expect(questions).toHaveLength(3);
     expect(questions[0]).toMatchObject({
       type: "multiple_choice",
       question_text: "What is the capital of France?",
@@ -19,12 +19,6 @@ describe("parseQuestionsCsv", () => {
       correct_answer: "False",
     });
     expect(questions[2]).toMatchObject({
-      type: "slider",
-      slider_min: 1950,
-      slider_max: 2020,
-      slider_tolerance: 2,
-    });
-    expect(questions[3]).toMatchObject({
       type: "type_in",
       correct_answer: "Jupiter",
       is_joker: true,
@@ -68,6 +62,16 @@ describe("parseQuestionsCsv", () => {
     expect(errors[0].message).toContain("Missing required column");
   });
 
+  it("rejects unsupported types like slider, video, and audio", () => {
+    const csv = [
+      "type,question_text,correct_answer",
+      "slider,What year?,1998",
+    ].join("\n");
+    const { questions, errors } = parseQuestionsCsv(csv);
+    expect(questions).toHaveLength(0);
+    expect(errors[0].message).toContain("unsupported");
+  });
+
   it("rejects an unknown question type", () => {
     const csv = [
       "type,question_text,correct_answer",
@@ -75,7 +79,7 @@ describe("parseQuestionsCsv", () => {
     ].join("\n");
     const { questions, errors } = parseQuestionsCsv(csv);
     expect(questions).toHaveLength(0);
-    expect(errors[0].message).toContain("Unknown");
+    expect(errors[0].message).toContain("unsupported");
   });
 
   it("handles quoted fields containing commas", () => {

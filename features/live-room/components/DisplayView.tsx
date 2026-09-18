@@ -71,9 +71,7 @@ export default function DisplayView({
     if (
       currentQuestion.options &&
       (currentQuestion.type === 'multiple_choice' ||
-        currentQuestion.type === 'image_question' ||
-        currentQuestion.type === 'video_question' ||
-        currentQuestion.type === 'audio_question')
+        currentQuestion.type === 'image_question')
     ) {
       const counts: Record<string, number> = {};
       currentQuestion.options.forEach((label) => { counts[label] = 0; });
@@ -111,13 +109,10 @@ export default function DisplayView({
         },
       ];
     } else {
-      // slider / type_in: correct vs wrong
-      const correctCount = currentAnswers.filter((a) => {
-        if (currentQuestion.type === 'type_in') {
-          return a.answer_value.toLowerCase().trim() === currentQuestion.correct_answer.toLowerCase().trim();
-        }
-        return a.answer_value === currentQuestion.correct_answer;
-      }).length;
+      // type_in: correct vs wrong
+      const correctCount = currentAnswers.filter((a) =>
+        a.answer_value.toLowerCase().trim() === currentQuestion.correct_answer.toLowerCase().trim()
+      ).length;
       return [
         {
           label: 'Correct',
@@ -142,9 +137,7 @@ export default function DisplayView({
     if (
       opt &&
       (currentQuestion.type === 'multiple_choice' ||
-        currentQuestion.type === 'image_question' ||
-        currentQuestion.type === 'video_question' ||
-        currentQuestion.type === 'audio_question')
+        currentQuestion.type === 'image_question')
     ) {
       const idx = parseInt(currentQuestion.correct_answer);
       if (!isNaN(idx) && opt[idx]) return opt[idx];

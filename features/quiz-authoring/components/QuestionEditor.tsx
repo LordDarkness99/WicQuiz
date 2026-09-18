@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { QuestionFormData } from "../domain/types";
 import type { QuestionType } from "@/shared/domain/types";
 import { ImageUpload } from "@/features/media";
-import { AudioUpload } from "@/features/media";
-import { AudioPlayer } from "@/features/media";
-import { extractVideoId } from "@/features/media";
 import AIGenerateButton from "./AIGenerateButton";
 import { toast } from "sonner";
 
@@ -21,10 +18,7 @@ const typeTabs: { type: QuestionType; label: string; icon: string }[] = [
   { type: "multiple_choice", label: "MC", icon: "list" },
   { type: "true_false", label: "T-F", icon: "check_circle" },
   { type: "image_question", label: "Image", icon: "image" },
-  { type: "slider", label: "Slider", icon: "linear_scale" },
   { type: "type_in", label: "Type-in", icon: "keyboard" },
-  { type: "video_question", label: "Video", icon: "videocam" },
-  { type: "audio_question", label: "Audio", icon: "music_note" },
 ];
 
 const answerColors = [
@@ -54,9 +48,6 @@ export default function QuestionEditor({
       toast.error(`Pertanyaan #${index + 1} belum diisi.`);
       return;
     }
-    // Edits already sync live to the quiz via onChange; this button exists
-    // to give the host explicit, visible confirmation that the question is
-    // in good shape before moving on.
     setJustSaved(true);
     toast.success(`Pertanyaan #${index + 1} tersimpan.`);
     setTimeout(() => setJustSaved(false), 1500);
@@ -73,20 +64,12 @@ export default function QuestionEditor({
     if (type === "true_false") {
       defaults.correct_answer = "True";
       defaults.options = ["True", "False"];
-    }
-    if (
-      type === "multiple_choice" ||
-      type === "image_question" ||
-      type === "video_question" ||
-      type === "audio_question"
-    ) {
+    } else if (type === "multiple_choice" || type === "image_question") {
       defaults.options =
         question.options.length >= 4 ? question.options : ["", "", "", ""];
-    }
-    if (type === "slider") {
-      defaults.slider_min = question.slider_min ?? 0;
-      defaults.slider_max = question.slider_max ?? 100;
-      defaults.correct_answer = "50";
+    } else if (type === "type_in") {
+      defaults.options = [];
+      defaults.correct_answer = "";
     }
     update(defaults);
   }
@@ -109,27 +92,26 @@ export default function QuestionEditor({
     if (question.type === "true_false") {
       update({
         question_text: data.question,
-        correct_answer: data.correctAnswer === "true" ? "True" : "False",
+        correct_answer:
+          data.correctAnswer?.toLowerCase() === "true" ? "True" : "False",
         options: ["True", "False"],
+      });
+    } else if (question.type === "type_in") {
+      update({
+        question_text: data.question,
+        correct_answer: data.correctAnswer || "",
+        options: [],
       });
     } else {
       update({
         question_text: data.question,
         options: data.options ?? question.options,
-        correct_answer: data.options?.[data.correctIndex ?? 0] ?? question.correct_answer,
+        correct_answer:
+          data.options?.[data.correctIndex ?? 0] ?? question.correct_answer,
       });
     }
     setAiSuccess(true);
   }
-
-  const sliderPercent = useMemo(() => {
-    if (question.type !== "slider") return 0;
-    const min = question.slider_min ?? 0;
-    const max = question.slider_max ?? 100;
-    const val = parseFloat(question.correct_answer) || 0;
-    if (max <= min) return 0;
-    return Math.min(100, Math.max(0, ((val - min) / (max - min)) * 100));
-  }, [question.type, question.slider_min, question.slider_max, question.correct_answer]);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -150,14 +132,15 @@ export default function QuestionEditor({
           {typeTabs.map((tab) => (
             <button
               key={tab.type}
+              type="button"
               onClick={() => switchType(tab.type)}
-              className={`flex-1 py-3 rounded-xl text-sm flex items-center justify-center gap-2 transition-all ${
+              className={`flex-1 py-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all ${
                 question.type === tab.type
-                  ? "bg-surface-container-lowest shadow-sm text-primary font-bold"
-                  : "text-outline font-semibold hover:bg-surface-container"
+                  ? "bg-surface-container-lowest text-primary shadow-sm ring-1 ring-outline-variant/10"
+                  : "text-outline hover:text-primary hover:bg-surface-container-lowest/50"
               }`}
             >
-              <span className="material-symbols-outlined text-lg">
+              <span className="material-symbols-outlined text-base">
                 {tab.icon}
               </span>
               {tab.label}
@@ -166,21 +149,26 @@ export default function QuestionEditor({
         </div>
       </section>
 
-      {/* Question Input Canvas */}
+      {/* Main Question Card */}
       <div className="space-y-6">
-        {(question.type === "multiple_choice" || question.type === "true_false") && (
+        {/* AI Generate Button (Supported for multiple_choice, true_false, and type_in) */}
+        {(question.type === "multiple_choice" ||
+          question.type === "true_false" ||
+          question.type === "type_in") && (
           <div className="flex items-center gap-3">
             <AIGenerateButton
               onGenerate={handleAIGenerate}
               questionType={question.type}
             />
             {aiSuccess && (
-              <span className="text-sm font-bold text-secondary animate-pulse">
+              <span className="text-sm font-bold text-secondary animate-pulse flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm">check</span>
                 Question generated! Review and edit as needed.
               </span>
             )}
           </div>
         )}
+
         <div className="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)]">
           <textarea
             className="w-full border-none focus:ring-0 focus:outline-none p-0 text-2xl font-bold text-primary placeholder:text-surface-container-highest resize-none bg-transparent"
@@ -190,7 +178,7 @@ export default function QuestionEditor({
             onChange={(e) => update({ question_text: e.target.value })}
           />
 
-          {/* Image Upload Area */}
+          {/* Image Upload Area (Manual upload/URL only — no AI button for image) */}
           {question.type === "image_question" ? (
             <div className="mt-6">
               <ImageUpload
@@ -253,7 +241,7 @@ export default function QuestionEditor({
                 src={question.image_url}
                 alt="Blur preview"
                 className="w-full h-full object-cover"
-                style={{ filter: 'blur(12px)' }}
+                style={{ filter: "blur(12px)" }}
               />
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="bg-black/50 text-white text-xs font-bold px-3 py-1.5 rounded-lg">
@@ -266,446 +254,131 @@ export default function QuestionEditor({
 
         {/* MC / Image Answer Grid */}
         {(question.type === "multiple_choice" ||
-          question.type === "image_question" ||
-          question.type === "video_question" ||
-          question.type === "audio_question") && (
+          question.type === "image_question") && (
           <>
-          {!question.correct_answer.trim() && question.question_text.trim() && (
-            <p className="text-amber-600 text-xs font-bold flex items-center gap-1.5 mb-1">
-              <span className="material-symbols-outlined text-sm">warning</span>
-              Select the correct answer below
-            </p>
-          )}
-          <div className="grid grid-cols-2 gap-4">
-            {question.options.slice(0, 4).map((opt, i) => {
-              const isCorrect = question.correct_answer === opt && opt !== "";
-              return (
-                <div
-                  key={i}
-                  className={`p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 ${
-                    isCorrect
-                      ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500"
-                      : "bg-surface-container-lowest border-transparent focus-within:border-primary-fixed hover:border-outline-variant/30"
-                  }`}
-                >
+            {!question.correct_answer.trim() && question.question_text.trim() && (
+              <p className="text-amber-600 text-xs font-bold flex items-center gap-1.5 mb-1">
+                <span className="material-symbols-outlined text-sm">warning</span>
+                Select the correct answer below
+              </p>
+            )}
+            <div className="grid grid-cols-2 gap-4">
+              {question.options.slice(0, 4).map((opt, i) => {
+                const isCorrect = question.correct_answer === opt && opt !== "";
+                return (
                   <div
-                    className={`w-10 h-10 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0 cursor-pointer`}
-                    onClick={() => {
-                      if (opt.trim()) update({ correct_answer: opt });
-                    }}
-                    title="Click to mark as correct answer"
+                    key={i}
+                    className={`p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 ${
+                      isCorrect
+                        ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500"
+                        : "bg-surface-container-lowest border-transparent focus-within:border-primary-fixed hover:border-outline-variant/30"
+                    }`}
                   >
-                    {answerLabels[i]}
-                  </div>
-                  <input
-                    className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-primary bg-transparent placeholder:text-outline"
-                    type="text"
-                    value={opt}
-                    onChange={(e) => {
-                      const oldVal = opt;
-                      const newVal = e.target.value;
-                      updateOption(i, newVal);
-                      if (oldVal !== "" && question.correct_answer === oldVal) {
-                        update({
-                          correct_answer: newVal,
-                          options: question.options.map((o, j) =>
-                            j === i ? newVal : o
-                          ),
-                        });
-                      }
-                    }}
-                    placeholder="Add answer..."
-                  />
-                  <label className="relative flex items-center gap-2 cursor-pointer select-none">
-                    <input
-                      className="peer sr-only"
-                      name={`correct-${index}`}
-                      type="radio"
-                      checked={isCorrect}
-                      onChange={() => {
-                        if (opt.trim()) update({ correct_answer: opt });
-                      }}
-                    />
                     <div
-                      className={`w-7 h-7 rounded-full border-2 transition-all flex items-center justify-center ${
-                        isCorrect
-                          ? "border-emerald-500 bg-emerald-500 shadow-sm"
-                          : "border-outline-variant hover:border-emerald-400 bg-white"
-                      }`}
+                      className={`w-10 h-10 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0 cursor-pointer`}
                       onClick={() => {
                         if (opt.trim()) update({ correct_answer: opt });
                       }}
+                      title="Click to mark as correct answer"
                     >
-                      <span
-                        className={`material-symbols-outlined text-[16px] text-white transition-transform ${
-                          isCorrect ? "scale-100" : "scale-0"
-                        }`}
-                        style={{ fontVariationSettings: "'wght' 700" }}
-                      >
-                        check
-                      </span>
+                      {answerLabels[i]}
                     </div>
-                    {isCorrect && (
-                      <span className="text-[11px] font-black text-emerald-700 whitespace-nowrap flex items-center gap-1">
+                    <input
+                      className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-primary bg-transparent placeholder:text-outline"
+                      type="text"
+                      value={opt}
+                      onChange={(e) => {
+                        const oldVal = opt;
+                        const newVal = e.target.value;
+                        updateOption(i, newVal);
+                        if (oldVal !== "" && question.correct_answer === oldVal) {
+                          update({
+                            correct_answer: newVal,
+                            options: question.options.map((o, j) =>
+                              j === i ? newVal : o
+                            ),
+                          });
+                        }
+                      }}
+                      placeholder="Add answer..."
+                    />
+                    <label className="relative flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="radio"
+                        name={`correct-${index}`}
+                        checked={isCorrect}
+                        onChange={() => {
+                          if (opt.trim()) update({ correct_answer: opt });
+                        }}
+                        disabled={!opt.trim()}
+                        className="w-5 h-5 text-emerald-600 border-outline focus:ring-emerald-500 cursor-pointer disabled:opacity-30"
+                      />
+                      <span className="text-xs font-bold text-outline group-hover:text-primary transition-colors">
                         Correct
                       </span>
-                    )}
-                  </label>
-                </div>
-              );
-            })}
-          </div>
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
           </>
         )}
 
-        {/* True / False */}
+        {/* True / False Options */}
         {question.type === "true_false" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <label className="text-[10px] font-black uppercase tracking-widest text-on-primary-container">
-                Select Correct Answer
-              </label>
-              <span className="text-[10px] text-outline font-bold">
-                Toggle to mark correct
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              {/* TRUE */}
-              <button
-                type="button"
-                onClick={() =>
-                  update({
-                    correct_answer: "True",
-                    options: ["True", "False"],
-                  })
-                }
-                className={`group relative flex flex-col items-center justify-center p-12 rounded-xl transition-all ${
-                  question.correct_answer === "True"
-                    ? "bg-secondary-container/10 border-2 border-secondary-container scale-[1.02] shadow-[0px_12px_24px_rgba(174,47,52,0.1)]"
-                    : "bg-surface-container-low border-2 border-transparent hover:border-outline-variant hover:bg-surface-container-high"
-                }`}
-              >
-                {question.correct_answer === "True" && (
-                  <div className="absolute top-4 right-4 h-8 w-8 rounded-full bg-secondary-container text-white flex items-center justify-center shadow-lg">
-                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check</span>
-                  </div>
-                )}
-                <div
-                  className={`h-20 w-20 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110 ${
-                    question.correct_answer === "True"
-                      ? "bg-secondary-container/20"
-                      : "bg-surface-container-highest"
+          <div className="grid grid-cols-2 gap-4">
+            {["True", "False"].map((val) => {
+              const isCorrect =
+                question.correct_answer.toLowerCase() === val.toLowerCase();
+              return (
+                <button
+                  key={val}
+                  type="button"
+                  onClick={() => update({ correct_answer: val })}
+                  className={`p-6 rounded-xl font-black text-lg flex items-center justify-between transition-all border-2 ${
+                    isCorrect
+                      ? val === "True"
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md ring-2 ring-emerald-500/20"
+                        : "border-red-500 bg-red-50 text-red-700 shadow-md ring-2 ring-red-500/20"
+                      : "bg-surface-container-lowest border-transparent text-primary hover:border-outline-variant/30"
                   }`}
                 >
-                  <span
-                    className={`material-symbols-outlined text-4xl ${
-                      question.correct_answer === "True"
-                        ? "text-secondary"
-                        : "text-outline"
-                    }`}
-                  >
-                    done_all
-                  </span>
-                </div>
-                <span
-                  className={`text-xl font-black tracking-tight ${
-                    question.correct_answer === "True"
-                      ? "text-on-secondary-container"
-                      : "text-on-surface-variant opacity-60"
-                  }`}
-                >
-                  TRUE
-                </span>
-              </button>
-
-              {/* FALSE */}
-              <button
-                type="button"
-                onClick={() =>
-                  update({
-                    correct_answer: "False",
-                    options: ["True", "False"],
-                  })
-                }
-                className={`group relative flex flex-col items-center justify-center p-12 rounded-xl transition-all ${
-                  question.correct_answer === "False"
-                    ? "bg-secondary-container/10 border-2 border-secondary-container scale-[1.02] shadow-[0px_12px_24px_rgba(174,47,52,0.1)]"
-                    : "bg-surface-container-low border-2 border-transparent hover:border-outline-variant hover:bg-surface-container-high"
-                }`}
-              >
-                {question.correct_answer === "False" && (
-                  <div className="absolute top-4 right-4 h-8 w-8 rounded-full bg-secondary-container text-white flex items-center justify-center shadow-lg">
-                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>check</span>
-                  </div>
-                )}
-                <div
-                  className={`h-20 w-20 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110 ${
-                    question.correct_answer === "False"
-                      ? "bg-secondary-container/20"
-                      : "bg-surface-container-highest"
-                  }`}
-                >
-                  <span
-                    className={`material-symbols-outlined text-4xl ${
-                      question.correct_answer === "False"
-                        ? "text-secondary"
-                        : "text-outline"
-                    }`}
-                  >
-                    close
-                  </span>
-                </div>
-                <span
-                  className={`text-xl font-black tracking-tight ${
-                    question.correct_answer === "False"
-                      ? "text-on-secondary-container"
-                      : "text-on-surface-variant opacity-60"
-                  }`}
-                >
-                  FALSE
-                </span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Slider Configuration */}
-        {question.type === "slider" && (
-          <div className="space-y-8 p-8 bg-surface-container-low rounded-3xl relative overflow-hidden">
-            <div className="absolute -right-12 -top-12 w-48 h-48 bg-tertiary-fixed-dim/10 rounded-full blur-3xl" />
-            <div className="flex justify-between items-end relative z-10">
-              <h4 className="text-sm font-bold text-primary flex items-center gap-2">
-                <span className="material-symbols-outlined text-amber">
-                  tune
-                </span>
-                Slider Parameters
-              </h4>
-            </div>
-
-            {/* Config Grid */}
-            <div className="grid grid-cols-3 gap-6 relative z-10">
-              <div className="bg-surface-container-lowest p-5 rounded-2xl shadow-sm space-y-2 border border-outline-variant/5">
-                <span className="text-[10px] font-bold text-outline uppercase tracking-wider">
-                  Min Value
-                </span>
-                <input
-                  className="block w-full text-xl font-extrabold text-primary border-none p-0 focus:ring-0 focus:outline-none bg-transparent"
-                  type="number"
-                  value={question.slider_min}
-                  onChange={(e) =>
-                    update({ slider_min: Number(e.target.value) })
-                  }
-                />
-              </div>
-              <div className="bg-surface-container-lowest p-5 rounded-2xl shadow-sm space-y-2 border border-outline-variant/5">
-                <span className="text-[10px] font-bold text-outline uppercase tracking-wider">
-                  Max Value
-                </span>
-                <input
-                  className="block w-full text-xl font-extrabold text-primary border-none p-0 focus:ring-0 focus:outline-none bg-transparent"
-                  type="number"
-                  value={question.slider_max}
-                  onChange={(e) =>
-                    update({ slider_max: Number(e.target.value) })
-                  }
-                />
-              </div>
-              <div className="bg-secondary-container/10 p-5 rounded-2xl shadow-sm space-y-2 ring-1 ring-secondary-container/20">
-                <span className="text-[10px] font-bold text-secondary uppercase tracking-wider">
-                  Correct Answer
-                </span>
-                <input
-                  className="block w-full text-xl font-extrabold text-secondary border-none p-0 focus:ring-0 focus:outline-none bg-transparent"
-                  type="number"
-                  value={question.correct_answer}
-                  onChange={(e) => update({ correct_answer: e.target.value })}
-                />
-              </div>
-            </div>
-
-            {/* Tolerance */}
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="bg-surface-container-lowest p-4 rounded-2xl shadow-sm border border-outline-variant/5 flex items-center gap-3 flex-1">
-                <span className="material-symbols-outlined text-outline text-sm">
-                  target
-                </span>
-                <div className="flex-1">
-                  <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
-                    Tolerance (±)
-                  </span>
-                  <input
-                    className="block w-full text-lg font-bold text-primary border-none p-0 focus:ring-0 focus:outline-none bg-transparent"
-                    type="number"
-                    min={0}
-                    placeholder="0"
-                    value={question.slider_tolerance ?? ""}
-                    onChange={(e) =>
-                      update({ slider_tolerance: e.target.value ? Number(e.target.value) : undefined })
-                    }
-                  />
-                </div>
-                <span className="text-xs text-outline/60">Accept answers within ±{question.slider_tolerance ?? 0}</span>
-              </div>
-            </div>
-
-            {/* Slider Preview */}
-            <div className="py-12 px-4 space-y-8 relative z-10">
-              <div className="relative h-4 bg-surface-container-highest rounded-full w-full">
-                <div
-                  className="absolute h-full bg-primary-container rounded-full opacity-10"
-                  style={{ width: `${sliderPercent}%` }}
-                />
-                {/* Correct marker */}
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 flex flex-col items-center"
-                  style={{ left: `${sliderPercent}%` }}
-                >
-                  <div className="absolute -top-14 bg-secondary-container text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
-                    Goal: {question.correct_answer}
-                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-secondary-container rotate-45" />
-                  </div>
-                  <div className="w-6 h-6 bg-white border-4 border-secondary-container rounded-full shadow-lg" />
-                </div>
-                <div className="absolute -bottom-8 left-0 text-[10px] font-bold text-outline">
-                  {question.slider_min}
-                </div>
-                <div className="absolute -bottom-8 right-0 text-[10px] font-bold text-outline">
-                  {question.slider_max}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Video Question */}
-        {question.type === "video_question" && (
-          <div className="space-y-6">
-            <div className="bg-surface-container-lowest p-8 rounded-xl shadow-sm space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-on-primary-container">
-                YouTube URL
-              </label>
-              <input
-                type="text"
-                value={question.video_url}
-                onChange={(e) => update({ video_url: e.target.value })}
-                placeholder="Paste YouTube URL"
-                className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-lg font-bold text-primary placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
-              />
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-outline">
-                    Start at (seconds)
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={question.video_start_seconds}
-                    onChange={(e) =>
-                      update({ video_start_seconds: Number(e.target.value) || 0 })
-                    }
-                    className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 font-bold text-primary focus:ring-2 focus:ring-primary-container focus:outline-none"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-outline">
-                    End at (seconds)
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={question.video_end_seconds ?? ""}
-                    onChange={(e) =>
-                      update({
-                        video_end_seconds: e.target.value
-                          ? Number(e.target.value)
-                          : null,
-                      })
-                    }
-                    placeholder="Full video"
-                    className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 font-bold text-primary placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Thumbnail preview */}
-              {question.video_url && extractVideoId(question.video_url) && (
-                <div className="mt-2 rounded-xl overflow-hidden aspect-video max-w-sm">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://img.youtube.com/vi/${extractVideoId(question.video_url)}/hqdefault.jpg`}
-                    alt="Video thumbnail"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
-              <p className="text-xs text-outline font-medium">
-                Tip: Use timestamp links from YouTube (right-click → Copy video
-                URL at current time) to get exact seconds
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Audio Question */}
-        {question.type === "audio_question" && (
-          <div className="space-y-6">
-            <div className="bg-surface-container-lowest p-8 rounded-xl shadow-sm space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-on-primary-container">
-                Audio File
-              </label>
-              {question.audio_url ? (
-                <div className="space-y-4">
-                  <AudioPlayer audioUrl={question.audio_url} />
-                  <button
-                    type="button"
-                    onClick={() => update({ audio_url: "" })}
-                    className="flex items-center gap-2 text-sm font-bold text-outline hover:text-primary transition-colors"
-                  >
-                    <span className="material-symbols-outlined text-lg">
-                      delete
+                  <span className="flex items-center gap-3">
+                    <span
+                      className={`material-symbols-outlined text-2xl ${
+                        val === "True" ? "text-emerald-500" : "text-red-500"
+                      }`}
+                    >
+                      {val === "True" ? "check_circle" : "cancel"}
                     </span>
-                    Remove audio
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <AudioUpload
-                    onUpload={(url) => update({ audio_url: url })}
-                  />
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-px bg-outline-variant/30" />
-                    <span className="text-xs font-bold text-outline">OR</span>
-                    <div className="flex-1 h-px bg-outline-variant/30" />
-                  </div>
-                  <input
-                    type="text"
-                    value={question.audio_url}
-                    onChange={(e) => update({ audio_url: e.target.value })}
-                    placeholder="Paste audio URL (MP3, SoundCloud, etc.)"
-                    className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 font-bold text-primary placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
-                  />
-                </div>
-              )}
-            </div>
+                    {val}
+                  </span>
+                  {isCorrect && (
+                    <span className="text-xs font-bold uppercase tracking-wider bg-white/80 px-2.5 py-1 rounded-full shadow-sm">
+                      Correct Answer
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
 
-        {/* Type-in */}
+        {/* Type-in Question */}
         {question.type === "type_in" && (
           <div className="bg-surface-container-lowest p-8 rounded-xl shadow-sm space-y-4">
             <label className="text-[10px] font-black uppercase tracking-widest text-on-primary-container">
-              Correct Answer
+              Correct Answer (Short Answer / Isian Singkat)
             </label>
             <input
               type="text"
               value={question.correct_answer}
               onChange={(e) => update({ correct_answer: e.target.value })}
-              placeholder="The answer players must type"
+              placeholder="The answer players must type (e.g. Jupiter, Paris, 1945)"
               className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-lg font-bold text-primary placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
             />
             <p className="text-xs text-outline font-medium">
-              Matching is case-insensitive.
+              Matching is case-insensitive. AI grading fallback also helps catch minor typos.
             </p>
           </div>
         )}
@@ -755,7 +428,12 @@ export default function QuestionEditor({
         <div className="flex items-center gap-4 bg-tertiary-fixed-dim/10 border-2 border-tertiary-fixed-dim/20 p-4 rounded-2xl">
           <div className="flex flex-col">
             <span className="text-sm font-black text-on-tertiary-container flex items-center gap-1">
-              <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+              <span
+                className="material-symbols-outlined text-[18px]"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                star
+              </span>
               JOKER ROUND
             </span>
             <span className="text-[10px] font-medium text-on-tertiary-fixed-variant">
@@ -789,7 +467,9 @@ export default function QuestionEditor({
           <button
             onClick={handleSaveQuestion}
             className={`px-10 py-3 rounded-xl text-sm font-bold shadow-[0px_20px_40px_rgba(27,43,94,0.15)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 ${
-              justSaved ? "bg-tertiary-fixed-dim text-white" : "bg-primary text-on-primary"
+              justSaved
+                ? "bg-tertiary-fixed-dim text-white"
+                : "bg-primary text-on-primary"
             }`}
           >
             {justSaved ? "Tersimpan" : "Save Question"}

@@ -29,30 +29,6 @@ export function applyJokerMultiplier(
 }
 
 /**
- * Calculate points for a slider question based on proximity.
- * The closest answer gets full points; others are scaled by how close they are.
- */
-export function calculateSliderPoints(
-  playerAnswer: number,
-  correctAnswer: number,
-  sliderMin: number,
-  sliderMax: number,
-  timeRemainingMs: number,
-  timeLimitMs: number,
-  pointsBase: number = 1000
-): number {
-  const range = sliderMax - sliderMin;
-  if (range === 0) return pointsBase;
-
-  const distance = Math.abs(playerAnswer - correctAnswer);
-  const proximity = Math.max(0, 1 - distance / range);
-
-  // Apply proximity and time decay
-  const timeRatio = Math.min(timeRemainingMs / timeLimitMs, 1);
-  return Math.round(pointsBase * proximity * timeRatio);
-}
-
-/**
  * Calculate points for a type_in question.
  * Exact match (case-insensitive) gets full time-decay points.
  * Host can override via manual marking.

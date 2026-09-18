@@ -6,10 +6,7 @@ export type QuestionType =
   | "multiple_choice"
   | "true_false"
   | "image_question"
-  | "slider"
-  | "type_in"
-  | "video_question"
-  | "audio_question";
+  | "type_in";
 
 export type RoomStatus = "lobby" | "active" | "finished";
 
@@ -50,13 +47,6 @@ export interface Question {
   image_url: string | null;
   is_joker: boolean;
   is_image_blurred?: boolean;
-  slider_min?: number;
-  slider_max?: number;
-  slider_tolerance?: number;
-  video_url?: string;
-  video_start_seconds?: number;
-  video_end_seconds?: number;
-  audio_url?: string;
 }
 
 export interface Player {

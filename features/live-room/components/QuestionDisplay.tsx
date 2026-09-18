@@ -118,31 +118,6 @@ export default function QuestionDisplay({
         </div>
       )}
 
-      {/* Slider */}
-      {question.type === "slider" && (
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.4 }}
-          className="bg-white/10 backdrop-blur rounded-2xl p-8 max-w-2xl mx-auto text-center"
-        >
-          <p className="text-cream/70 text-lg mb-4 font-medium">
-            Slide to answer
-          </p>
-          <div className="flex items-center justify-between gap-6">
-            <span className="text-3xl font-bold text-white">
-              {question.slider_min ?? 0}
-            </span>
-            <div className="flex-1 h-3 bg-white/20 rounded-full relative">
-              <div className="absolute inset-y-0 left-0 w-1/2 bg-amber rounded-full" />
-            </div>
-            <span className="text-3xl font-bold text-white">
-              {question.slider_max ?? 100}
-            </span>
-          </div>
-        </motion.div>
-      )}
-
       {/* Type-in */}
       {question.type === "type_in" && (
         <motion.div

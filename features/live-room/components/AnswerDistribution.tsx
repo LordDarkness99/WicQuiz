@@ -22,6 +22,7 @@ const optionLabels = ["A", "B", "C", "D", "E", "F"];
 export default function AnswerDistribution({
   answers,
   correctAnswer,
+  questionType,
   totalPlayers,
   revealed,
   playerNames,
@@ -81,7 +82,10 @@ export default function AnswerDistribution({
                       {isCorrect ? "check_circle" : "cancel"}
                     </span>
                   )}
-                  {optionLabels[idx]}: {answer.answer_value}
+                  {questionType === "multiple_choice" || questionType === "image_question"
+                    ? `${optionLabels[idx] ?? idx + 1}: `
+                    : ""}
+                  {answer.answer_value}
                 </span>
                 <span className="bg-surface-container-highest px-3 py-1 rounded-full text-xs">
                   {answer.count} {answer.count === 1 ? "Vote" : "Votes"}
