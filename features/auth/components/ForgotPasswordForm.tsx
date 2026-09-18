@@ -36,10 +36,10 @@ export function ForgotPasswordForm() {
       }
 
       setSubmitted(true);
-      toast.success("Link reset password telah dikirim ke email kamu.");
+      toast.success("Password reset link has been sent to your email.");
     } catch {
-      setServerError("Gagal mengirim link reset. Silakan coba lagi.");
-      toast.error("Terjadi kendala saat mengirim email.");
+      setServerError("Failed to send reset link. Please try again.");
+      toast.error("An error occurred while sending the email.");
     } finally {
       setLoading(false);
     }
@@ -51,15 +51,14 @@ export function ForgotPasswordForm() {
         <div className="w-16 h-16 bg-primary-fixed rounded-2xl flex items-center justify-center mx-auto text-primary text-3xl">
           ✉️
         </div>
-        <h3 className="text-xl font-bold text-primary">Periksa Email Kamu</h3>
+        <h3 className="text-xl font-bold text-primary">Check Your Email</h3>
         <p className="text-on-surface-variant text-sm leading-relaxed">
-          Kami telah mengirimkan instruksi dan tautan pemulihan kata sandi ke{" "}
-          <strong className="text-primary font-bold">{email}</strong>.
+          We have sent password recovery instructions to <strong className="text-primary font-bold">{email}</strong>.
         </p>
         <div className="pt-4">
           <Link href="/auth/login">
             <Button variant="primary" size="md" className="w-full">
-              Kembali ke Halaman Login
+              Back to Login
             </Button>
           </Link>
         </div>
@@ -81,14 +80,14 @@ export function ForgotPasswordForm() {
           htmlFor="forgot-email"
           className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
         >
-          Email Terdaftar
+          Registered Email
         </label>
         <input
           id="forgot-email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="nama@email.com"
+          placeholder="name@example.com"
           autoComplete="email"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -110,12 +109,12 @@ export function ForgotPasswordForm() {
         disabled={loading}
       >
         {loading ? (
-          <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2">
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Mengirim Link...
+            Sending link...
           </span>
         ) : (
-          "Kirim Tautan Pemulihan"
+          "Send Recovery Link"
         )}
       </Button>
     </form>

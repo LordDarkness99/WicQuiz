@@ -13,10 +13,10 @@
   --color-periwinkle: #8594CD;
 
   /* MD3 Design System tokens (from stitch refs) */
-  --color-primary: #021549;
-  --color-primary-container: #1b2b5e;
+  --color-primary: #1C2D42;
+  --color-primary-container: #2E5339;
   --color-on-primary: #ffffff;
-  --color-on-primary-container: #8594cd;
+  --color-on-primary-container: #ffffff;
   --color-secondary: #ae2f34;
   --color-secondary-container: #ff6b6b;
   --color-on-secondary-container: #6d0010;
@@ -38,10 +38,10 @@
   --color-on-surface-variant: #45464f;
   --color-outline: #757680;
   --color-outline-variant: #c6c5d1;
-  --color-primary-fixed: #dce1ff;
-  --color-primary-fixed-dim: #b6c4ff;
-  --color-on-primary-fixed: #04174a;
-  --color-on-primary-fixed-variant: #354478;
+  --color-primary-fixed: #B88B4A;
+  --color-primary-fixed-dim: #d9cfa8;
+  --color-on-primary-fixed: #1C2D42;
+  --color-on-primary-fixed-variant: #2E5339;
   --color-secondary-fixed: #ffdad8;
   --color-secondary-fixed-dim: #ffb3b0;
   --color-error: #ba1a1a;

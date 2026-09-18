@@ -50,12 +50,12 @@ export function RegisterForm() {
         return;
       }
 
-      toast.success("Pendaftaran berhasil! Akun kamu siap digunakan 🐎");
+      toast.success("Registration successful! Your account is ready to use.");
       router.push("/host/dashboard");
       router.refresh();
     } catch {
-      setServerError("Terjadi kendala koneksi. Silakan coba lagi.");
-      toast.error("Gagal terhubung ke server.");
+      setServerError("Connection issue. Please try again.");
+      toast.error("Failed to connect to server.");
       setLoading(false);
     }
   };
@@ -74,14 +74,14 @@ export function RegisterForm() {
           htmlFor="reg-name"
           className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
         >
-          Nama Lengkap / Display Name
+          Full Name / Display Name
         </label>
         <input
           id="reg-name"
           type="text"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
-          placeholder="Contoh: Sarah Connor"
+          placeholder="e.g., Sarah Connor"
           autoComplete="name"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -109,7 +109,7 @@ export function RegisterForm() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="nama@email.com"
+          placeholder="name@example.com"
           autoComplete="email"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -135,7 +135,7 @@ export function RegisterForm() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Minimal 6 karakter"
+          placeholder="Minimum 6 characters"
           autoComplete="new-password"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -156,14 +156,14 @@ export function RegisterForm() {
           htmlFor="reg-confirm"
           className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
         >
-          Konfirmasi Password
+          Confirm Password
         </label>
         <input
           id="reg-confirm"
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Ulangi password"
+          placeholder="Repeat password"
           autoComplete="new-password"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -187,12 +187,12 @@ export function RegisterForm() {
         disabled={loading}
       >
         {loading ? (
-          <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2">
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Mendaftarkan Akun...
+            Creating account...
           </span>
         ) : (
-          "Daftar Akun Sekarang"
+          "Create Account Now"
         )}
       </Button>
     </form>

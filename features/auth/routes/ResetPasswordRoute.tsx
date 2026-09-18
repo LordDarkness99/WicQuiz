@@ -7,16 +7,16 @@ import { ResetPasswordForm } from "../components/ResetPasswordForm";
 export function ResetPasswordRoute() {
   return (
     <AuthCard
-      title="Atur Ulang Kata Sandi"
-      subtitle="Silakan masukkan kata sandi baru untuk akun WicQuiz kamu."
-      badgeText="Kata Sandi Baru"
+      title="Reset Password"
+      subtitle="Please enter a new password for your WicQuiz account."
+      badgeText="New Password"
       footerContent={
         <p>
           <Link
             href="/auth/login"
             className="font-bold text-primary hover:text-secondary-container transition-colors"
           >
-            Batal dan Kembali ke Login
+            Cancel and return to Login
           </Link>
         </p>
       }

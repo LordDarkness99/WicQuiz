@@ -34,7 +34,7 @@ export async function registerWithEmail(
     }
 
     if (!authData.user) {
-      return { user: null, error: "Registrasi gagal. Silakan coba lagi." };
+      return { user: null, error: "Registration failed. Please try again." };
     }
 
     // Explicit fallback insert to profiles to ensure table consistency
@@ -62,7 +62,7 @@ export async function registerWithEmail(
   } catch (err) {
     return {
       user: null,
-      error: err instanceof Error ? err.message : "Terjadi kesalahan pada server.",
+      error: err instanceof Error ? err.message : "An unexpected server error occurred.",
     };
   }
 }
@@ -84,7 +84,7 @@ export async function loginWithEmail(
     }
 
     if (!authData.user) {
-      return { user: null, error: "Login gagal. Periksa kembali email dan password." };
+      return { user: null, error: "Login failed. Please check your email and password." };
     }
 
     return {
@@ -100,7 +100,7 @@ export async function loginWithEmail(
   } catch (err) {
     return {
       user: null,
-      error: err instanceof Error ? err.message : "Terjadi kesalahan saat login.",
+      error: err instanceof Error ? err.message : "An unexpected error occurred during login.",
     };
   }
 }
@@ -116,7 +116,7 @@ export async function logoutUser(): Promise<{ error: string | null }> {
     resetBrowserClient();
     return { error: null };
   } catch (err) {
-    return { error: err instanceof Error ? err.message : "Gagal logout." };
+    return { error: err instanceof Error ? err.message : "Failed to log out." };
   }
 }
 
@@ -141,12 +141,12 @@ export async function sendPasswordResetEmail(
 
     if (error) return { error: mapAuthError(error.message) };
     return { error: null };
-  } catch (err) {
+    } catch (err) {
     return {
       error:
         err instanceof Error
           ? err.message
-          : "Gagal mengirimkan email reset password.",
+          : "Failed to send password reset email.",
     };
   }
 }
@@ -164,10 +164,10 @@ export async function updatePassword(
 
     if (error) return { error: mapAuthError(error.message) };
     return { error: null };
-  } catch (err) {
+    } catch (err) {
     return {
       error:
-        err instanceof Error ? err.message : "Gagal memperbarui password.",
+        err instanceof Error ? err.message : "Failed to update password.",
     };
   }
 }
@@ -200,19 +200,19 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 function mapAuthError(message: string): string {
   const lower = message.toLowerCase();
   if (lower.includes("invalid login credentials")) {
-    return "Email atau password yang kamu masukkan salah.";
+    return "The email or password you entered is incorrect.";
   }
   if (lower.includes("user already registered") || lower.includes("already registered")) {
-    return "Email sudah terdaftar. Silakan login atau gunakan email lain.";
+    return "Email is already registered. Please sign in or use a different email.";
   }
   if (lower.includes("password should be at least")) {
-    return "Password minimal harus 6 karakter.";
+    return "Password must be at least 6 characters.";
   }
   if (lower.includes("rate limit") || lower.includes("too many requests")) {
-    return "Terlalu banyak permintaan. Silakan tunggu beberapa saat.";
+    return "Too many requests. Please wait a while.";
   }
   if (lower.includes("email not confirmed")) {
-    return "Email belum dikonfirmasi. Periksa kotak masuk email kamu.";
+    return "Email not confirmed. Check your email inbox.";
   }
   return message;
 }

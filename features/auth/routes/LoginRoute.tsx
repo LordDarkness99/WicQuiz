@@ -11,17 +11,17 @@ export function LoginRoute() {
 
   return (
     <AuthCard
-      title="Selamat Datang Kembali"
-      subtitle="Masuk ke akun WicQuiz untuk membuat kuis, membuka room host, dan melihat riwayat skor."
-      badgeText="Masuk Akun"
+      title="Welcome Back"
+      subtitle="Sign in to your WicQuiz account to create quizzes, open a host room, and view score history."
+      badgeText="Sign In"
       footerContent={
         <p>
-          Belum punya akun WicQuiz?{" "}
+          Do not have a WicQuiz account?{" "}
           <Link
             href="/auth/register"
             className="font-bold text-primary hover:text-secondary-container transition-colors"
           >
-            Daftar sekarang
+            Sign up now
           </Link>
         </p>
       }

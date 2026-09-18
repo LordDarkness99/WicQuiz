@@ -41,13 +41,13 @@ export function LoginForm({ returnTo }: LoginFormProps) {
         return;
       }
 
-      toast.success("Login berhasil! Selamat datang kembali 🏇");
+      toast.success("Login successful! Welcome back.");
       const safePath = sanitizeReturnTo(returnTo);
       router.push(safePath);
       router.refresh();
     } catch {
-      setServerError("Terjadi kendala koneksi. Silakan coba lagi.");
-      toast.error("Gagal terhubung ke server.");
+      setServerError("Connection issue. Please try again.");
+      toast.error("Failed to connect to server.");
       setLoading(false);
     }
   };
@@ -73,7 +73,7 @@ export function LoginForm({ returnTo }: LoginFormProps) {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="nama@email.com"
+          placeholder="name@example.com"
           autoComplete="email"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -99,7 +99,7 @@ export function LoginForm({ returnTo }: LoginFormProps) {
             href="/auth/forgot-password"
             className="text-xs font-bold text-secondary hover:underline transition-colors"
           >
-            Lupa password?
+            Forgot password?
           </Link>
         </div>
         <input
@@ -131,12 +131,12 @@ export function LoginForm({ returnTo }: LoginFormProps) {
         disabled={loading}
       >
         {loading ? (
-          <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2">
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Memproses...
+            Processing...
           </span>
         ) : (
-          "Masuk ke WicQuiz"
+          "Sign in to WicQuiz"
         )}
       </Button>
     </form>

@@ -7,17 +7,17 @@ import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
 export function ForgotPasswordRoute() {
   return (
     <AuthCard
-      title="Lupa Kata Sandi?"
-      subtitle="Masukkan alamat email akun kamu. Kami akan mengirimkan tautan untuk mengatur ulang kata sandi."
-      badgeText="Pemulihan Akun"
+      title="Forgot Password?"
+      subtitle="Enter your account email. We'll send a link to reset your password."
+      badgeText="Account Recovery"
       footerContent={
         <p>
-          Ingat kata sandi?{" "}
+          Remembered your password?{" "}
           <Link
             href="/auth/login"
             className="font-bold text-primary hover:text-secondary-container transition-colors"
           >
-            Kembali ke Login
+            Back to Login
           </Link>
         </p>
       }

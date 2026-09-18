@@ -40,11 +40,11 @@ export function ResetPasswordForm() {
         return;
       }
 
-      toast.success("Password baru berhasil disimpan! Silakan masuk kembali.");
+      toast.success("New password saved successfully! Please sign in again.");
       router.push("/auth/login");
     } catch {
-      setServerError("Gagal memperbarui password. Silakan coba lagi.");
-      toast.error("Terjadi kendala saat reset password.");
+      setServerError("Failed to update password. Please try again.");
+      toast.error("An error occurred while resetting password.");
       setLoading(false);
     }
   };
@@ -63,14 +63,14 @@ export function ResetPasswordForm() {
           htmlFor="new-password"
           className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
         >
-          Password Baru
+          New Password
         </label>
         <input
           id="new-password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Minimal 6 karakter"
+          placeholder="Minimum 6 characters"
           autoComplete="new-password"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -91,14 +91,14 @@ export function ResetPasswordForm() {
           htmlFor="new-confirm-password"
           className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
         >
-          Konfirmasi Password Baru
+          Confirm New Password
         </label>
         <input
           id="new-confirm-password"
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Ulangi password baru"
+          placeholder="Repeat new password"
           autoComplete="new-password"
           disabled={loading}
           className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
@@ -124,10 +124,10 @@ export function ResetPasswordForm() {
         {loading ? (
           <span className="inline-flex items-center gap-2">
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Menyimpan Password...
+            Saving password...
           </span>
         ) : (
-          "Simpan Password Baru"
+          "Save New Password"
         )}
       </Button>
     </form>

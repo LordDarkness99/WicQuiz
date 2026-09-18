@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 interface AuthCardProps {
   title: string;
@@ -28,7 +29,13 @@ export function AuthCard({
         className="mb-8 text-center"
       >
         <Link href="/" className="inline-flex items-center gap-2 group">
-          <span className="text-3xl">🐎</span>
+          <Image
+            src="/ikon.png"
+            alt="WicQuiz logo"
+            width={40}
+            height={40}
+            className="rounded-md"
+          />
           <span className="text-2xl font-black text-primary tracking-tight group-hover:text-secondary-container transition-colors">
             WicQuiz
           </span>
