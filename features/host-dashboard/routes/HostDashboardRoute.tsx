@@ -23,12 +23,14 @@ import {
 } from "@/features/session-results";
 import { QuizCardSkeleton, StatCardSkeleton } from "@/shared/ui/Skeleton";
 import { getCurrentUser, logoutUser } from "@/features/auth";
+import { getProfile } from "@/features/profile";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [hostId, setHostId] = useState("");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
+  const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(null);
   const [templates, setTemplates] = useState<QuizTemplate[]>([]);
   const [sessions, setSessions] = useState<SessionResult[]>([]);
   const [activeRooms, setActiveRooms] = useState<ActiveRoomInfo[]>([]);
@@ -64,6 +66,8 @@ export default function DashboardPage() {
         if (currentUser) {
           setUserEmail(currentUser.email);
           setUserDisplayName(currentUser.displayName || null);
+          const profile = await getProfile(currentUser.id);
+          setUserAvatarUrl(profile?.avatar_url ?? null);
         }
       } catch {
         // Silently handle - empty state will show
@@ -302,7 +306,21 @@ export default function DashboardPage() {
               aria-label="Lihat profil saya"
               className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-surface-container rounded-xl border border-outline-variant/20 hover:border-primary/30 hover:bg-surface-container-high transition-colors"
             >
-              <span className="material-symbols-outlined text-[16px] text-outline">account_circle</span>
+                <span className="w-6 h-6 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                  {userAvatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={userAvatarUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      onError={() => setUserAvatarUrl(null)}
+                    />
+                  ) : (
+                    <span className="material-symbols-outlined text-[16px] text-outline">
+                      account_circle
+                    </span>
+                  )}
+                </span>
               <span className="text-xs font-medium text-on-surface-variant truncate max-w-[140px]">
                 {userDisplayName || userEmail}
               </span>
