@@ -70,7 +70,17 @@ export default function AnswerDistribution({
                     : ""
                 }`}
               >
-                <span>
+                <span className="flex items-center gap-1.5">
+                  {revealed && (
+                    <span
+                      className={`material-symbols-outlined text-[16px] ${
+                        isCorrect ? "text-emerald-600" : "text-red-500"
+                      }`}
+                      aria-label={isCorrect ? "Correct" : "Incorrect"}
+                    >
+                      {isCorrect ? "check_circle" : "cancel"}
+                    </span>
+                  )}
                   {optionLabels[idx]}: {answer.answer_value}
                 </span>
                 <span className="bg-surface-container-highest px-3 py-1 rounded-full text-xs">
@@ -90,7 +100,7 @@ export default function AnswerDistribution({
                     revealed
                       ? isCorrect
                         ? "bg-emerald-500"
-                        : "bg-red-400"
+                        : "bg-red-400 [background-image:repeating-linear-gradient(135deg,rgba(0,0,0,0.12)_0,rgba(0,0,0,0.12)_6px,transparent_6px,transparent_12px)]"
                       : isTop
                       ? "bg-primary"
                       : "bg-primary/40"

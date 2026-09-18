@@ -119,81 +119,120 @@ export default function EditQuizPage() {
     load();
   }, [quizId]);
 
-  // Debounced auto-save
+  // Debounced auto-save. Guarded so overlapping triggers (fast typing,
+  // switching questions quickly) never run two saves at once, and ordered
+  // insert-then-delete so a failed insert can never leave the quiz empty.
+  const savingRef = useRef(false);
+  const pendingSaveRef = useRef(false);
+
   const triggerSave = useCallback(() => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = setTimeout(async () => {
-      setSaving(true);
-      try {
-        const hostId = getHostId();
-        const ownerId = await getAuthOwnerId();
-        const validQuestions = questions.filter(
-          (q) => q.question_text.trim().length > 0
-        );
-
-        if (validQuestions.length === 0) {
-          setSaving(false);
-          return;
-        }
-
-        // Delete old bank questions for this template, insert new ones
-        const { template } = await loadQuizTemplate(quizId);
-        const oldIds = template.question_ids || [];
-        if (oldIds.length > 0) {
-          await deleteBankQuestions(oldIds);
-        }
-
-        const rows = validQuestions.map((q) => ({
-          host_id: hostId,
-          owner_id: ownerId,
-          type: q.type,
-          question_text: q.question_text.trim(),
-          options:
-            q.type === "multiple_choice" ||
-            q.type === "image_question" ||
-            q.type === "true_false" ||
-            q.type === "video_question" ||
-            q.type === "audio_question"
-              ? q.options
-              : null,
-          correct_answer: q.correct_answer.trim(),
-          time_limit: q.time_limit,
-          points_base: 1000,
-          image_url: q.image_url || null,
-          is_joker: q.is_joker,
-          is_image_blurred: q.is_image_blurred ?? false,
-          slider_min: q.type === "slider" ? q.slider_min : null,
-          slider_max: q.type === "slider" ? q.slider_max : null,
-          slider_tolerance:
-            q.type === "slider" ? (q.slider_tolerance ?? null) : null,
-          video_url:
-            q.type === "video_question" ? q.video_url || null : null,
-          video_start_seconds:
-            q.type === "video_question" ? q.video_start_seconds : null,
-          video_end_seconds:
-            q.type === "video_question" ? q.video_end_seconds : null,
-          audio_url:
-            q.type === "audio_question" ? q.audio_url || null : null,
-        }));
-
-        const newIds = await insertBankQuestions(rows);
-
-        const order: Record<string, number> = {};
-        newIds.forEach((id: string, idx: number) => {
-          order[id] = idx;
-        });
-
-        await updateTemplateQuestions(quizId, title.trim(), newIds, order);
-
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 2000);
-      } catch {
-        // Silent fail for auto-save
-      } finally {
-        setSaving(false);
-      }
+    saveTimerRef.current = setTimeout(() => {
+      void runSave();
     }, 500);
   }, [questions, title, quizId]);
+
+  const runSave = useCallback(async () => {
+    if (savingRef.current) {
+      // A save is already in flight — remember to run again once it's done
+      // so we never drop the latest edits.
+      pendingSaveRef.current = true;
+      return;
+    }
+    savingRef.current = true;
+    setSaving(true);
+    try {
+      const hostId = getHostId();
+      const ownerId = await getAuthOwnerId();
+      const validQuestions = questions.filter(
+        (q) => q.question_text.trim().length > 0
+      );
+
+      if (validQuestions.length === 0) {
+        return;
+      }
+
+      const rows = validQuestions.map((q) => ({
+        host_id: hostId,
+        owner_id: ownerId,
+        type: q.type,
+        question_text: q.question_text.trim(),
+        options:
+          q.type === "multiple_choice" ||
+          q.type === "image_question" ||
+          q.type === "true_false" ||
+          q.type === "video_question" ||
+          q.type === "audio_question"
+            ? q.options
+            : null,
+        correct_answer: q.correct_answer.trim(),
+        time_limit: q.time_limit,
+        points_base: 1000,
+        image_url: q.image_url || null,
+        is_joker: q.is_joker,
+        is_image_blurred: q.is_image_blurred ?? false,
+        slider_min: q.type === "slider" ? q.slider_min : null,
+        slider_max: q.type === "slider" ? q.slider_max : null,
+        slider_tolerance:
+          q.type === "slider" ? (q.slider_tolerance ?? null) : null,
+        video_url:
+          q.type === "video_question" ? q.video_url || null : null,
+        video_start_seconds:
+          q.type === "video_question" ? q.video_start_seconds : null,
+        video_end_seconds:
+          q.type === "video_question" ? q.video_end_seconds : null,
+        audio_url:
+          q.type === "audio_question" ? q.audio_url || null : null,
+      }));
+
+      // Insert the NEW rows first. Only once that (and the template pointer
+      // update) has succeeded do we delete the old bank rows — this way a
+      // failed insert never leaves the quiz with zero questions.
+      const newIds = await insertBankQuestions(rows);
+
+      const order: Record<string, number> = {};
+      newIds.forEach((id: string, idx: number) => {
+        order[id] = idx;
+      });
+
+      const { template: currentTemplate } = await loadQuizTemplate(quizId);
+      const oldIds = currentTemplate.question_ids || [];
+
+      await updateTemplateQuestions(quizId, title.trim(), newIds, order);
+
+      if (oldIds.length > 0) {
+        await deleteBankQuestions(oldIds);
+      }
+
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 2000);
+    } catch (err) {
+      toast.error(
+        err instanceof Error
+          ? `Gagal menyimpan otomatis: ${err.message}`
+          : "Gagal menyimpan otomatis. Perubahan Anda mungkin belum tersimpan — coba lagi."
+      );
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
+      if (pendingSaveRef.current) {
+        pendingSaveRef.current = false;
+        void runSave();
+      }
+    }
+  }, [questions, title, quizId]);
+
+  // If the user navigates away while a debounced save is still pending,
+  // flush it immediately instead of losing the last edit.
+  useEffect(() => {
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+        void runSave();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quizId]);
 
   const handleQuestionChange = useCallback(
     (index: number, updated: QuestionFormData) => {
@@ -247,8 +286,13 @@ export default function EditQuizPage() {
   const handleRunNow = async () => {
     setRunLoading(true);
     try {
-      // Save first
-      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+      // Flush any pending debounced save so "Run Now" always uses the
+      // latest edits instead of a stale snapshot from the database.
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+        saveTimerRef.current = null;
+      }
+      await runSave();
 
       const hostId = getHostId();
       const { questions: bankQuestions } = await loadQuizTemplate(quizId);

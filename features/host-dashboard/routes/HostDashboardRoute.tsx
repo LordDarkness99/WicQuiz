@@ -75,6 +75,21 @@ export default function DashboardPage() {
     load();
   }, []);
 
+  // Keep the "N pemain masuk" count on active-room cards fresh without
+  // requiring a manual page refresh — poll while the host is on this page.
+  useEffect(() => {
+    if (!hostId) return;
+    const interval = setInterval(async () => {
+      try {
+        const rooms = await getActiveRoomsForHost(hostId);
+        setActiveRooms(rooms);
+      } catch {
+        // Ignore transient polling errors; next tick will retry.
+      }
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [hostId]);
+
   const handleLogout = useCallback(async () => {
     setLoggingOut(true);
     try {

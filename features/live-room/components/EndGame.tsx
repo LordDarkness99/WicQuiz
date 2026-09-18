@@ -345,7 +345,7 @@ export default function EndGame({
                 onClick={onDownloadResults}
                 className="py-3.5 px-5 rounded-xl text-[#1B2B5E]/60 font-bold text-sm hover:text-[#1B2B5E] hover:bg-[#1B2B5E]/5 transition-all"
               >
-                Download Results
+                Download PDF
               </button>
             )}
           </div>

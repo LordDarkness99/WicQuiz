@@ -220,9 +220,10 @@ export async function updatePlayerScore(
   await supabase.from("qt_players").update({ score }).eq("id", playerId);
 }
 
-/** Mark a room finished. */
+/** Mark a room finished. Throws if the update fails so callers can react instead of silently hanging. */
 export async function setRoomFinished(roomId: string): Promise<void> {
-  await supabase.from("qt_rooms").update({ status: "finished" }).eq("id", roomId);
+  const { error } = await supabase.from("qt_rooms").update({ status: "finished" }).eq("id", roomId);
+  if (error) throw new Error(error.message || "Gagal menghentikan quiz.");
 }
 
 /** Delete all answers for the given questions (play-again reset). */
@@ -293,7 +294,8 @@ export async function insertRoomQuestions(
 
 /** Mark a room finished (alias for setRoomFinished, used when host stops from lobby). */
 export async function stopRoom(roomId: string): Promise<void> {
-  await supabase.from("qt_rooms").update({ status: "finished" }).eq("id", roomId);
+  const { error } = await supabase.from("qt_rooms").update({ status: "finished" }).eq("id", roomId);
+  if (error) throw new Error(error.message || "Gagal menghentikan quiz.");
 }
 
 /** Get player count for a room. */

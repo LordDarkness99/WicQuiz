@@ -8,6 +8,7 @@ import { AudioUpload } from "@/features/media";
 import { AudioPlayer } from "@/features/media";
 import { extractVideoId } from "@/features/media";
 import AIGenerateButton from "./AIGenerateButton";
+import { toast } from "sonner";
 
 interface QuestionEditorProps {
   question: QuestionFormData;
@@ -41,8 +42,24 @@ export default function QuestionEditor({
   onRemove,
   index,
 }: QuestionEditorProps) {
+  const [justSaved, setJustSaved] = useState(false);
+
   function update(partial: Partial<QuestionFormData>) {
     onChange({ ...question, ...partial });
+  }
+
+  function handleSaveQuestion() {
+    const text = question.question_text.trim();
+    if (!text) {
+      toast.error(`Pertanyaan #${index + 1} belum diisi.`);
+      return;
+    }
+    // Edits already sync live to the quiz via onChange; this button exists
+    // to give the host explicit, visible confirmation that the question is
+    // in good shape before moving on.
+    setJustSaved(true);
+    toast.success(`Pertanyaan #${index + 1} tersimpan.`);
+    setTimeout(() => setJustSaved(false), 1500);
   }
 
   function updateOption(optionIndex: number, value: string) {
@@ -762,15 +779,20 @@ export default function QuestionEditor({
         <div className="flex items-center gap-4">
           <button
             onClick={onRemove}
-            className="flex items-center gap-2 px-4 py-2 text-outline hover:text-on-surface font-bold text-sm transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-error hover:text-white hover:bg-error rounded-xl font-bold text-sm transition-colors"
           >
             <span className="material-symbols-outlined">delete</span>
             Delete
           </button>
         </div>
         <div className="flex items-center gap-4">
-          <button className="px-10 py-3 rounded-xl bg-primary text-on-primary text-sm font-bold shadow-[0px_20px_40px_rgba(27,43,94,0.15)] hover:scale-105 transition-all flex items-center gap-2">
-            Save Question
+          <button
+            onClick={handleSaveQuestion}
+            className={`px-10 py-3 rounded-xl text-sm font-bold shadow-[0px_20px_40px_rgba(27,43,94,0.15)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 ${
+              justSaved ? "bg-tertiary-fixed-dim text-white" : "bg-primary text-on-primary"
+            }`}
+          >
+            {justSaved ? "Tersimpan" : "Save Question"}
             <span className="material-symbols-outlined text-lg">
               check_circle
             </span>

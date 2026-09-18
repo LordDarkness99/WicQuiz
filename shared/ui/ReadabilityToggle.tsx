@@ -33,8 +33,16 @@ const BG_OPTIONS: { value: BgTheme; label: string; swatch: string }[] = [
  * theme. Placed once in the root layout so it's available on every page.
  */
 export default function ReadabilityToggle() {
-  const { settings, setFontMode, setFontSize, setBgTheme, reset, isCustomized } =
-    useReadabilityMode();
+  const {
+    settings,
+    setFontMode,
+    setFontSize,
+    setBgTheme,
+    setColorMode,
+    setSpeakText,
+    reset,
+    isCustomized,
+  } = useReadabilityMode();
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -154,6 +162,46 @@ export default function ReadabilityToggle() {
           >
             Reset to default
           </button>
+
+          <fieldset className="mt-4 mb-4">
+            <legend className="mb-2 text-xs font-bold uppercase tracking-wide text-navy/60">
+              Other
+            </legend>
+            <div className="flex flex-col gap-1.5">
+              <button
+                type="button"
+                aria-pressed={settings.colorMode === "colorblind"}
+                onClick={() =>
+                  setColorMode(settings.colorMode === "colorblind" ? "default" : "colorblind")
+                }
+                className={`flex items-center justify-between rounded-lg border-2 px-3 py-2 text-left text-sm font-semibold transition-colors cursor-pointer ${
+                  settings.colorMode === "colorblind"
+                    ? "border-navy bg-navy text-white"
+                    : "border-navy/15 text-navy hover:border-navy/40"
+                }`}
+              >
+                Colorblind-friendly mode
+                <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
+                  palette
+                </span>
+              </button>
+              <button
+                type="button"
+                aria-pressed={settings.speakText}
+                onClick={() => setSpeakText(!settings.speakText)}
+                className={`flex items-center justify-between rounded-lg border-2 px-3 py-2 text-left text-sm font-semibold transition-colors cursor-pointer ${
+                  settings.speakText
+                    ? "border-navy bg-navy text-white"
+                    : "border-navy/15 text-navy hover:border-navy/40"
+                }`}
+              >
+                Read questions aloud
+                <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
+                  volume_up
+                </span>
+              </button>
+            </div>
+          </fieldset>
         </div>
       )}
 

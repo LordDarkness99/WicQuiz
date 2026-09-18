@@ -22,6 +22,7 @@ interface LobbyProps {
   displayUrl?: string;
   onBackToDashboard?: () => void;
   onStopQuiz?: () => void;
+  stoppingQuiz?: boolean;
 }
 
 export default function Lobby({
@@ -35,6 +36,7 @@ export default function Lobby({
   displayUrl,
   onBackToDashboard,
   onStopQuiz,
+  stoppingQuiz = false,
 }: LobbyProps) {
   const reduced = useReducedMotion();
   const [countPulse, setCountPulse] = useState(false);
@@ -91,17 +93,6 @@ export default function Lobby({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {displayUrl && (
-            <a
-              href={displayUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-on-primary text-sm font-bold hover:opacity-90 transition-opacity"
-            >
-              <span className="material-symbols-outlined text-sm">tv</span>
-              Open Display Screen
-            </a>
-          )}
           <motion.div
             animate={
               !reduced && countPulse
@@ -126,13 +117,15 @@ export default function Lobby({
                   <span className="text-xs text-error font-bold">Yakin stop?</span>
                   <button
                     onClick={() => { onStopQuiz(); setConfirmStop(false); }}
-                    className="px-3 py-1.5 rounded-lg bg-error text-white text-xs font-bold hover:opacity-90 transition-opacity"
+                    disabled={stoppingQuiz}
+                    className="px-3 py-1.5 rounded-lg bg-error text-white text-xs font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
                   >
-                    Ya, Stop
+                    {stoppingQuiz ? "Menghentikan..." : "Ya, Stop"}
                   </button>
                   <button
                     onClick={() => setConfirmStop(false)}
-                    className="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors"
+                    disabled={stoppingQuiz}
+                    className="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors disabled:opacity-50"
                   >
                     Batal
                   </button>
@@ -140,11 +133,12 @@ export default function Lobby({
               ) : (
                 <button
                   onClick={() => setConfirmStop(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-error/30 text-error text-sm font-bold hover:bg-error/10 transition-colors"
+                  disabled={stoppingQuiz}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-error/30 text-error text-sm font-bold hover:bg-error/10 transition-colors disabled:opacity-50"
                   title="Hentikan quiz dan kembali ke dashboard"
                 >
                   <span className="material-symbols-outlined text-[16px]">stop_circle</span>
-                  Stop Quiz
+                  {stoppingQuiz ? "Menghentikan..." : "Stop Quiz"}
                 </button>
               )}
             </>
@@ -270,13 +264,18 @@ export default function Lobby({
                   </button>
                   <button
                     type="button"
+                    disabled={stoppingQuiz}
                     onClick={() => {
                       setConfirmStop(false);
                       onStopQuiz?.();
                     }}
-                    className="flex-1 py-3 px-4 rounded-xl bg-error text-white text-sm font-extrabold shadow-[0_6px_20px_rgba(186,26,26,0.25)] hover:bg-error/90 transition-all flex items-center justify-center gap-2"
+                    className="flex-1 py-3 px-4 rounded-xl bg-error text-white text-sm font-extrabold shadow-[0_6px_20px_rgba(186,26,26,0.25)] hover:bg-error/90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                   >
-                    <span className="material-symbols-outlined text-[18px]">stop</span>
+                    {stoppingQuiz ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <span className="material-symbols-outlined text-[18px]">stop</span>
+                    )}
                     Ya, Hentikan
                   </button>
                 </div>

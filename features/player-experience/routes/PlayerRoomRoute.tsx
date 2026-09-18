@@ -31,6 +31,8 @@ import TimerBar from "@/shared/ui/TimerBar";
 import AnswerButtons from "@/features/player-experience/components/AnswerButtons";
 import WaitingScreen from "@/features/player-experience/components/WaitingScreen";
 import AnswerReveal from "@/features/player-experience/components/AnswerReveal";
+import SpeakButton from "@/shared/ui/SpeakButton";
+import { useReadabilityMode } from "@/shared/hooks/useReadabilityMode";
 
 // ─── Types ───────────────────────────────────────────────────────
 
@@ -87,6 +89,7 @@ export default function PlayPage() {
   const params = useParams();
   const router = useRouter();
   const roomCode = (params.roomCode as string).toUpperCase();
+  const accessibility = useReadabilityMode();
 
   // Room
   const [roomId, setRoomId] = useState<string | null>(null);
@@ -881,8 +884,13 @@ export default function PlayPage() {
                     />
                   </div>
                 )}
-                <h2 className="text-xl font-bold text-navy leading-snug">
-                  {currentQuestion.question_text}
+                <h2 className="text-xl font-bold text-navy leading-snug flex items-start gap-2">
+                  <span className="flex-1">{currentQuestion.question_text}</span>
+                  <SpeakButton
+                    text={currentQuestion.question_text}
+                    autoSpeak={accessibility.settings.speakText}
+                    className="shrink-0 w-8 h-8 bg-navy/10 text-navy hover:bg-navy/20"
+                  />
                 </h2>
               </div>
 
@@ -1303,6 +1311,17 @@ export default function PlayPage() {
               <p className="text-sm text-outline/60 mt-4 text-center">
                 You can close this tab now.
               </p>
+
+              <motion.button
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1 }}
+                onClick={() => router.push("/")}
+                className="flex items-center gap-2 mt-2 px-6 py-3 rounded-xl bg-navy text-white font-bold text-sm shadow-md hover:scale-[1.02] active:scale-95 transition-all"
+              >
+                <span className="material-symbols-outlined text-[18px]">logout</span>
+                Keluar
+              </motion.button>
             </AnimatedContainer>
           )}
         </AnimatePresence>

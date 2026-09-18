@@ -40,6 +40,7 @@ import {
   useTimer,
 } from "@/features/realtime";
 import { scoreAnswers } from "@/features/live-room/application/scoreAnswers";
+import { calculateTypeInPoints, applyJokerMultiplier } from "@/features/scoring";
 import { isInSuspensePhase, rankLeaderboard } from "@/features/leaderboard";
 import type {
   Room,
@@ -62,6 +63,7 @@ import EndGame from "@/features/live-room/components/EndGame";
 import TimerBar from "@/shared/ui/TimerBar";
 import DisplayView from "@/features/live-room/components/DisplayView";
 import RacerAvatar from "@/shared/ui/RacerAvatar";
+import { downloadResultsAsPdf } from "@/shared/utils/exportResultsPdf";
 
 export default function HostControlPanel() {
   const params = useParams();
@@ -97,6 +99,7 @@ export default function HostControlPanel() {
   const [hostImageLoaded, setHostImageLoaded] = useState(false);
   const [hostBlurAmount, setHostBlurAmount] = useState(0);
   const [autoAdvanceSeconds, setAutoAdvanceSeconds] = useState<number | null>(null);
+  const [stoppingQuiz, setStoppingQuiz] = useState(false);
   const scoredResultsRef = useRef<Record<string, { isCorrect: boolean; pointsEarned: number }>>({});
 
   // Refs to avoid stale closures
@@ -347,6 +350,59 @@ export default function HostControlPanel() {
         currentQuestion!,
         answersToScore
       );
+
+      // AI-assisted grading for type_in ("essay") answers: a strict string
+      // match already ran above, but that unfairly rejects typos, minor
+      // wording differences, etc. Ask Claude to re-check the answers it
+      // marked wrong, and upgrade them if they should reasonably count.
+      if (currentQuestion!.type === "type_in") {
+        const wrongAnswers = answersToScore.filter((a) => {
+          const u = updates.find((up) => up.id === a.id);
+          return u && !u.is_correct && a.answer_value?.trim();
+        });
+
+        if (wrongAnswers.length > 0) {
+          await Promise.all(
+            wrongAnswers.map(async (a) => {
+              try {
+                const res = await fetch("/api/check-answer", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    questionText: currentQuestion!.question_text,
+                    correctAnswer: currentQuestion!.correct_answer,
+                    playerAnswer: a.answer_value,
+                  }),
+                });
+                if (!res.ok) return;
+                const { isCorrect } = await res.json();
+                if (!isCorrect) return;
+
+                const timeTakenMs = a.time_taken_ms || 0;
+                const timeLimitMs = currentQuestion!.time_limit * 1000;
+                const timeRemainingMs = Math.max(0, timeLimitMs - timeTakenMs);
+                const result = calculateTypeInPoints(
+                  a.answer_value,
+                  a.answer_value, // force a match now that AI has confirmed it's correct
+                  timeRemainingMs,
+                  timeLimitMs,
+                  currentQuestion!.points_base
+                );
+                const points = applyJokerMultiplier(result.points, currentQuestion!.is_joker);
+
+                const u = updates.find((up) => up.id === a.id);
+                if (u) {
+                  u.is_correct = true;
+                  u.points_earned = points;
+                }
+                playerPointsMap[a.player_id] = (playerPointsMap[a.player_id] || 0) + points;
+              } catch {
+                // Best-effort: if the AI check fails, keep the strict-match result.
+              }
+            })
+          );
+        }
+      }
 
       // Build playerResults directly in memory from scored updates
       const playerResults: Record<string, { isCorrect: boolean; pointsEarned: number }> = {};
@@ -694,10 +750,22 @@ export default function HostControlPanel() {
     };
 
     const handleStopQuiz = async () => {
-      if (room) {
-        await setRoomFinished(room.id);
+      if (stoppingQuiz) return;
+      setStoppingQuiz(true);
+      try {
+        if (room) {
+          await setRoomFinished(room.id);
+          // Let any already-connected players know immediately instead of
+          // waiting for their next poll cycle.
+          broadcast("game_state_change", { state: "finished" });
+        }
+        router.push("/host/dashboard");
+      } catch (err) {
+        toast.error(
+          err instanceof Error ? err.message : "Gagal menghentikan quiz. Coba lagi."
+        );
+        setStoppingQuiz(false);
       }
-      router.push("/host/dashboard");
     };
 
     return (
@@ -715,6 +783,7 @@ export default function HostControlPanel() {
         displayUrl={displayUrl}
         onBackToDashboard={handleBackToDashboard}
         onStopQuiz={handleStopQuiz}
+        stoppingQuiz={stoppingQuiz}
       />
     );
   }
@@ -797,16 +866,6 @@ export default function HostControlPanel() {
           )}
 
         <div className="flex items-center gap-4">
-          <a
-            href={displayUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-primary border border-primary/10 hover:bg-surface-container-low transition-colors"
-            title="Open this on the projector/TV"
-          >
-            <span className="material-symbols-outlined text-sm">tv</span>
-            Display
-          </a>
           {gameState === "question_start" && (
             <button
               onClick={() => {
@@ -1310,25 +1369,7 @@ export default function HostControlPanel() {
               onNewQuiz={() => router.push("/host/new")}
               onDownloadResults={() => {
                 const entries = leaderboard.length > 0 ? leaderboard : buildLeaderboard();
-                const lines = [
-                  `${quiz.title} — Final Results`,
-                  `${"=".repeat(40)}`,
-                  "",
-                  ...entries.map(
-                    (e, i) =>
-                      `${i + 1}. ${e.player_name} — ${e.score.toLocaleString()} pts`
-                  ),
-                  "",
-                  `Total players: ${entries.length}`,
-                  `Total questions: ${questions.length}`,
-                ];
-                const blob = new Blob([lines.join("\n")], { type: "text/plain" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = `${quiz.title.replace(/\s+/g, "_")}_results.txt`;
-                a.click();
-                URL.revokeObjectURL(url);
+                downloadResultsAsPdf(quiz.title, entries, questions.length);
               }}
             />
           </motion.main>

@@ -359,3 +359,28 @@ html[data-bg-theme="contrast"] a {
     opacity: 0;
   }
 }
+
+/* --- Colorblind-friendly mode -------------------------------------------
+   Rather than trying to approximate specific color-vision deficiencies
+   with filters (unreliable across browsers), reinforce color-only signals
+   with borders/patterns and stronger outlines wherever red/green (correct
+   vs. incorrect) is the only differentiator. */
+html[data-color-mode="colorblind"] .bg-emerald-500,
+html[data-color-mode="colorblind"] .bg-emerald-600 {
+  outline: 3px solid #0a5c2b;
+  outline-offset: -3px;
+}
+
+html[data-color-mode="colorblind"] .bg-red-400,
+html[data-color-mode="colorblind"] .bg-red-500,
+html[data-color-mode="colorblind"] .bg-error {
+  outline: 3px dashed #4a0000;
+  outline-offset: -3px;
+}
+
+html[data-color-mode="colorblind"] .text-error,
+html[data-color-mode="colorblind"] [class*="text-emerald"] {
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
