@@ -75,7 +75,7 @@ export default function SortableQuestionCard({
         isDragging ? "shadow-lg scale-[1.02]" : ""
       } ${
         isSelected
-          ? "bg-surface-container-lowest shadow-sm border-l-4 border-primary"
+          ? "bg-surface-container-lowest shadow-sm border-l-4 border-[#B88B4A]"
           : q.is_joker
           ? "hover:bg-surface-container relative overflow-hidden"
           : "hover:bg-surface-container"
@@ -96,7 +96,7 @@ export default function SortableQuestionCard({
       )}
       <div
         className={`text-[10px] font-bold mt-1 ${
-          isSelected ? "text-primary/40" : "text-outline"
+          isSelected ? "text-[#B88B4A]" : "text-outline"
         }`}
       >
         {String(idx + 1).padStart(2, "0")}
@@ -105,7 +105,7 @@ export default function SortableQuestionCard({
         <div
           className={`text-sm line-clamp-1 ${
             isSelected
-              ? "font-bold text-primary-container"
+              ? "font-bold text-on-surface"
               : "font-semibold text-on-surface-variant"
           }`}
         >

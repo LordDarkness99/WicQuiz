@@ -26,7 +26,7 @@ export type AccessibilitySettings = {
 const DEFAULT_SETTINGS: AccessibilitySettings = {
   fontMode: "default",
   fontSize: "default",
-  bgTheme: "default",
+  bgTheme: "soft",
   colorMode: "default",
   speakText: false,
 };
@@ -52,6 +52,16 @@ function readStoredSettings(): AccessibilitySettings {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_SETTINGS;
     const parsed = JSON.parse(raw);
+    // If previously saved with legacy "default" theme and not yet migrated to soft, default to soft
+    if (parsed && parsed.bgTheme === "default" && !parsed._migratedToSoft) {
+      parsed.bgTheme = "soft";
+      parsed._migratedToSoft = true;
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...DEFAULT_SETTINGS, ...parsed }));
+      } catch {
+        // ignore
+      }
+    }
     return { ...DEFAULT_SETTINGS, ...parsed };
   } catch {
     return DEFAULT_SETTINGS;

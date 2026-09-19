@@ -76,21 +76,21 @@ export default function HistoryRoute() {
   return (
     <div className="min-h-screen bg-surface text-on-surface">
       {/* Header */}
-      <header className="bg-surface-bright border-b border-primary/10 px-8 py-4 flex items-center gap-4 sticky top-0 z-50">
+      <header className="bg-surface-bright border-b border-outline-variant/30 px-6 sm:px-8 py-4 flex items-center gap-4 sticky top-0 z-50">
         <button
           onClick={() => router.push("/host/dashboard")}
-          className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors"
+          className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
         >
           <span className="material-symbols-outlined text-[20px]">arrow_back</span>
           Dashboard
         </button>
-        <div className="h-8 w-px bg-outline-variant/30" />
-        <span className="text-sm font-bold text-primary">Quiz History</span>
+        <div className="h-6 w-px bg-outline-variant/40" />
+        <span className="text-sm font-extrabold text-on-surface">Quiz History</span>
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-8">
         {/* Tabs */}
-        <div className="flex items-center gap-2 mb-6 bg-surface-container-lowest border border-outline-variant/15 rounded-2xl p-1.5 w-fit">
+        <div className="flex items-center gap-2 mb-6 bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-1.5 w-fit shadow-xs">
           {([
             { id: "played" as const, label: "Played", icon: "sports_esports", count: sessions.length },
             { id: "created" as const, label: "Created", icon: "quiz", count: templates.length },
@@ -98,17 +98,17 @@ export default function HistoryRoute() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                 tab === t.id
-                  ? "bg-primary text-on-primary shadow-sm"
-                  : "text-on-surface-variant hover:bg-surface-container"
+                  ? "bg-[#B88B4A] text-[#0D1722] shadow-sm font-extrabold"
+                  : "text-on-surface-variant hover:bg-surface-container hover:text-on-surface"
               }`}
             >
               <span className="material-symbols-outlined text-[18px]">{t.icon}</span>
               {t.label}
               <span
-                className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
-                  tab === t.id ? "bg-white/20" : "bg-surface-container-high"
+                className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
+                  tab === t.id ? "bg-[#0D1722]/15 text-[#0D1722]" : "bg-surface-container-high text-on-surface-variant"
                 }`}
               >
                 {t.count}
@@ -129,7 +129,7 @@ export default function HistoryRoute() {
             placeholder={
               tab === "played" ? "Search played quizzes..." : "Search created quizzes..."
             }
-            className="w-full pl-11 pr-4 py-3 rounded-xl border border-outline-variant/25 bg-surface-container-lowest text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="w-full pl-11 pr-4 py-3 rounded-xl border border-outline-variant/30 bg-surface-container-lowest text-sm font-medium text-on-surface placeholder:text-outline/70 focus:outline-none focus:ring-2 focus:ring-[#B88B4A]/40 focus:border-[#B88B4A] transition-all"
           />
         </div>
 
@@ -168,13 +168,13 @@ export default function HistoryRoute() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: Math.min(i * 0.03, 0.3) }}
                         onClick={() => router.push(`/host/results/${s.id}`)}
-                        className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-4 cursor-pointer hover:shadow-md hover:border-primary/20 transition-all flex items-center justify-between gap-4"
+                        className="tactical-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-5 cursor-pointer hover:shadow-md hover:border-[#B88B4A]/50 transition-all flex items-center justify-between gap-4"
                       >
                         <div className="min-w-0">
-                          <h4 className="font-bold text-primary text-sm truncate">
+                          <h4 className="font-extrabold text-on-surface text-base truncate mb-1">
                             {s.title}
                           </h4>
-                          <div className="flex items-center gap-3 mt-1 text-xs text-outline">
+                          <div className="flex items-center gap-3 text-xs text-on-surface-variant font-medium">
                             <span>{formatDate(s.finished_at || s.created_at)}</span>
                             <span>•</span>
                             <span>{s.player_count} players</span>
@@ -183,14 +183,14 @@ export default function HistoryRoute() {
                           </div>
                         </div>
                         {winner && (
-                          <div className="flex items-center gap-1 flex-shrink-0">
+                          <div className="flex items-center gap-1.5 flex-shrink-0 bg-[#B88B4A]/10 border border-[#B88B4A]/30 px-3 py-1.5 rounded-xl">
                             <span
-                              className="material-symbols-outlined text-[16px] text-tertiary-fixed-dim"
+                              className="material-symbols-outlined text-[16px] text-[#B88B4A]"
                               style={{ fontVariationSettings: "'FILL' 1" }}
                             >
                               emoji_events
                             </span>
-                            <span className="text-xs font-bold text-tertiary-fixed-dim truncate max-w-[120px]">
+                            <span className="text-xs font-bold text-[#B88B4A] truncate max-w-[130px]">
                               {winner}
                             </span>
                           </div>
@@ -222,13 +222,13 @@ export default function HistoryRoute() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: Math.min(i * 0.03, 0.3) }}
                       onClick={() => router.push(`/host/quiz/${t.id}/edit`)}
-                      className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-4 cursor-pointer hover:shadow-md hover:border-primary/20 transition-all flex items-center justify-between gap-4"
+                      className="tactical-card bg-surface-container-lowest rounded-2xl border border-outline-variant/30 p-5 cursor-pointer hover:shadow-md hover:border-[#B88B4A]/50 transition-all flex items-center justify-between gap-4"
                     >
                       <div className="min-w-0">
-                        <h4 className="font-bold text-primary text-sm truncate">
+                        <h4 className="font-extrabold text-on-surface text-base truncate mb-1">
                           {t.title}
                         </h4>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-outline">
+                        <div className="flex items-center gap-3 text-xs text-on-surface-variant font-medium">
                           <span>{t.question_ids.length} questions</span>
                           <span>•</span>
                           <span>Run {t.times_run} time{t.times_run === 1 ? "" : "s"}</span>
@@ -237,7 +237,7 @@ export default function HistoryRoute() {
                         </div>
                       </div>
                       {t.is_draft && (
-                        <span className="flex-shrink-0 text-[10px] font-black uppercase tracking-wider text-outline bg-surface-container px-2 py-1 rounded-full">
+                        <span className="flex-shrink-0 text-[10px] font-black uppercase tracking-wider text-on-surface-variant bg-surface-container-high px-2.5 py-1 rounded-full border border-outline-variant/20">
                           Draft
                         </span>
                       )}
@@ -263,12 +263,12 @@ function EmptyState({
   subtitle: string;
 }) {
   return (
-    <div className="bg-surface-container-lowest rounded-xl border-2 border-dashed border-outline-variant/30 p-12 text-center">
-      <span className="material-symbols-outlined text-[48px] text-outline/30 mb-3 block">
+    <div className="bg-surface-container-lowest rounded-2xl border-2 border-dashed border-outline-variant/30 p-12 text-center">
+      <span className="material-symbols-outlined text-[48px] text-outline/40 mb-3 block">
         {icon}
       </span>
-      <h3 className="text-lg font-bold text-primary mb-1">{title}</h3>
-      <p className="text-sm text-outline">{subtitle}</p>
+      <h3 className="text-lg font-bold text-on-surface mb-1">{title}</h3>
+      <p className="text-sm text-on-surface-variant">{subtitle}</p>
     </div>
   );
 }

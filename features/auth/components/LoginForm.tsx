@@ -64,9 +64,9 @@ export function LoginForm({ returnTo }: LoginFormProps) {
       <div>
         <label
           htmlFor="login-email"
-          className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
+          className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5"
         >
-          Email
+          Email Address
         </label>
         <input
           id="login-email"
@@ -76,10 +76,10 @@ export function LoginForm({ returnTo }: LoginFormProps) {
           placeholder="name@example.com"
           autoComplete="email"
           disabled={loading}
-          className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3 rounded-xl border bg-[#0A121B] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none transition-all ${
             errors.email
               ? "border-error focus:border-error"
-              : "border-outline-variant/60 focus:border-primary"
+              : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
           }`}
         />
         {errors.email && (
@@ -91,13 +91,13 @@ export function LoginForm({ returnTo }: LoginFormProps) {
         <div className="flex justify-between items-center mb-1.5">
           <label
             htmlFor="login-password"
-            className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant"
+            className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8]"
           >
             Password
           </label>
           <Link
             href="/auth/forgot-password"
-            className="text-xs font-bold text-secondary hover:underline transition-colors"
+            className="text-xs font-semibold text-[#D4A76A] hover:text-[#B88B4A] hover:underline transition-colors"
           >
             Forgot password?
           </Link>
@@ -110,10 +110,10 @@ export function LoginForm({ returnTo }: LoginFormProps) {
           placeholder="••••••••"
           autoComplete="current-password"
           disabled={loading}
-          className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3 rounded-xl border bg-[#0A121B] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none transition-all ${
             errors.password
               ? "border-error focus:border-error"
-              : "border-outline-variant/60 focus:border-primary"
+              : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
           }`}
         />
         {errors.password && (
@@ -124,16 +124,16 @@ export function LoginForm({ returnTo }: LoginFormProps) {
       </div>
 
       <Button
-        variant="coral"
+        variant="primary"
         size="lg"
         type="submit"
-        className="w-full mt-2"
+        className="w-full mt-4"
         disabled={loading}
       >
         {loading ? (
-            <span className="inline-flex items-center gap-2">
+          <span className="inline-flex items-center gap-2">
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            Processing...
+            Signing in...
           </span>
         ) : (
           "Sign in to WicQuiz"

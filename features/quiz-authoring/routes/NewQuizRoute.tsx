@@ -36,51 +36,51 @@ export default function NewQuizPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-6">
-      {/* Background decorative blobs */}
+    <div className="min-h-screen bg-[#0D1722] text-[#F8FAFC] flex items-center justify-center p-6 tactical-grid relative overflow-hidden">
+      {/* Background ambient lighting */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-container/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#2E5339]/20 blur-[120px] rounded-full" />
+        <div className="absolute bottom-10 right-10 w-[350px] h-[250px] bg-[#B88B4A]/10 blur-[100px] rounded-full" />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-lg"
+        className="w-full max-w-lg relative z-10"
       >
         {/* Header */}
         <div className="mb-8 text-center">
           <button
             onClick={() => router.push("/host/dashboard")}
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-outline hover:text-primary transition-colors mb-6"
+            className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#94A3B8] hover:text-[#F8FAFC] transition-colors mb-6"
           >
             <span className="material-symbols-outlined text-[18px]">arrow_back</span>
             Kembali ke Dashboard
           </button>
-          <div className="w-16 h-16 bg-secondary-container/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-[#1C2D42] border border-[#B88B4A]/30 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#B88B4A]">
             <span
-              className="material-symbols-outlined text-[32px] text-secondary-container"
+              className="material-symbols-outlined text-[32px]"
               style={{ fontVariationSettings: "'FILL' 1" }}
             >
               quiz
             </span>
           </div>
-          <h1 className="text-3xl font-black text-primary tracking-tight">
+          <h1 className="text-3xl font-black text-[#F8FAFC] tracking-tight">
             Buat Quiz Baru
           </h1>
-          <p className="text-on-surface-variant mt-2 text-sm">
+          <p className="text-[#94A3B8] mt-2 text-sm">
             Beri nama dulu, lalu tambahkan pertanyaanmu di editor.
           </p>
         </div>
 
         {/* Card */}
-        <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant/10 shadow-[0px_20px_60px_rgba(27,43,94,0.06)] p-8">
+        <div className="tactical-card rounded-3xl border border-[#283E58]/60 bg-[#121F2E] p-8 sm:p-10 shadow-2xl">
           <form onSubmit={handleCreate} className="space-y-6">
             <div>
               <label
                 htmlFor="quiz-title"
-                className="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+                className="block text-[11px] font-mono font-bold uppercase tracking-widest text-[#94A3B8] mb-2"
               >
                 Nama Quiz
               </label>
@@ -92,15 +92,15 @@ export default function NewQuizPage() {
                   setTitle(e.target.value);
                   if (error) setError(null);
                 }}
-                placeholder="contoh: Kuis Sejarah Indonesia 2024"
+                placeholder="contoh: Kuis Sejarah & Sains 2026"
                 autoFocus
                 autoComplete="off"
                 maxLength={120}
                 disabled={creating}
-                className={`w-full px-4 py-3.5 rounded-xl border bg-surface text-on-surface text-lg font-semibold placeholder:text-on-surface-variant/30 focus:outline-none transition-colors ${
+                className={`w-full px-4 py-3.5 rounded-xl border bg-[#0A121B] text-[#F8FAFC] text-base font-semibold placeholder:text-[#64748B] focus:outline-none transition-all ${
                   error
                     ? "border-error focus:border-error"
-                    : "border-outline-variant/40 focus:border-primary"
+                    : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
                 }`}
               />
               <AnimatePresence>
@@ -116,20 +116,20 @@ export default function NewQuizPage() {
                   </motion.p>
                 )}
               </AnimatePresence>
-              <p className="mt-1.5 text-xs text-outline">
+              <p className="mt-1.5 text-xs text-[#64748B] font-mono">
                 {title.length}/120 karakter
               </p>
             </div>
 
             {/* Tips */}
-            <div className="bg-surface-container rounded-xl p-4 flex items-start gap-3">
+            <div className="bg-[#142232] border border-[#283E58]/60 rounded-xl p-4 flex items-start gap-3">
               <span
-                className="material-symbols-outlined text-primary text-[18px] mt-0.5"
+                className="material-symbols-outlined text-[#B88B4A] text-[20px] mt-0.5"
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
                 lightbulb
               </span>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
+              <p className="text-xs text-[#94A3B8] leading-relaxed">
                 Kamu bisa mengubah nama quiz kapan saja di editor. Setelah memberi nama, quiz akan langsung tersimpan sebagai draft dan kamu bisa mulai menambahkan pertanyaan.
               </p>
             </div>
@@ -139,17 +139,17 @@ export default function NewQuizPage() {
               disabled={creating || !title.trim()}
               whileHover={{ scale: creating ? 1 : 1.02 }}
               whileTap={{ scale: creating ? 1 : 0.97 }}
-              className="w-full py-4 rounded-xl bg-secondary-container text-white font-extrabold text-base shadow-[0px_10px_30px_rgba(174,47,52,0.2)] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-xl bg-[#B88B4A] text-[#0D1722] hover:bg-[#D4A76A] font-black text-sm shadow-[0_4px_20px_rgba(184,139,74,0.3)] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
             >
               {creating ? (
                 <>
-                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-[#0D1722]/30 border-t-[#0D1722] rounded-full animate-spin" />
                   Membuat Quiz...
                 </>
               ) : (
                 <>
                   <span
-                    className="material-symbols-outlined text-[20px]"
+                    className="material-symbols-outlined text-[18px]"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     edit_note
@@ -162,7 +162,7 @@ export default function NewQuizPage() {
         </div>
 
         {/* Footer hint */}
-        <p className="text-center text-xs text-outline mt-6">
+        <p className="text-center text-xs text-[#64748B] mt-6 font-mono">
           Quiz tersimpan otomatis saat kamu mengedit pertanyaan.
         </p>
       </motion.div>

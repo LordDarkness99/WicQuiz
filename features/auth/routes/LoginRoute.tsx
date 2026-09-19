@@ -19,7 +19,7 @@ export function LoginRoute() {
           Do not have a WicQuiz account?{" "}
           <Link
             href="/auth/register"
-            className="font-bold text-primary hover:text-secondary-container transition-colors"
+            className="font-bold text-[#D4A76A] hover:text-[#B88B4A] hover:underline transition-colors"
           >
             Sign up now
           </Link>

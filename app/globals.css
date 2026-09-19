@@ -1,60 +1,76 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Core brand tokens */
-  --color-cream: #FAFAF7;
-  --color-navy: #1B2B5E;
-  --color-coral: #FF6B6B;
-  --color-amber: #F59E0B;
-  --color-ink: #1A1A1A;
-  --color-navy-light: #2A3F7E;
-  --color-coral-light: #FF8A8A;
-  --color-cream-dark: #F0F0EB;
+  /* Core brand tokens - Updated to Futuristic Obsidian, Forest & Imperial Gold */
+  --color-cream: #0D1722;
+  --color-navy: #1C2D42;
+  --color-coral: #B88B4A;
+  --color-amber: #B88B4A;
+  --color-ink: #F8FAFC;
+  --color-navy-light: #283E58;
+  --color-coral-light: #D4A76A;
+  --color-cream-dark: #142232;
   --color-periwinkle: #8594CD;
 
-  /* MD3 Design System tokens (from stitch refs) */
+  /* Tactical 3-Color Signature Tokens */
+  --color-obsidian: #1C2D42;
+  --color-forest: #2E5339;
+  --color-forest-light: #3D6E4C;
+  --color-forest-dark: #1E3726;
+  --color-gold: #B88B4A;
+  --color-gold-light: #D4A76A;
+  --color-gold-dark: #8E6832;
+
+  /* MD3 Design System tokens mapped to futuristic palette */
   --color-primary: #1C2D42;
   --color-primary-container: #2E5339;
   --color-on-primary: #ffffff;
-  --color-on-primary-container: #ffffff;
-  --color-secondary: #ae2f34;
-  --color-secondary-container: #ff6b6b;
-  --color-on-secondary-container: #6d0010;
-  --color-tertiary-fixed-dim: #ffb95f;
-  --color-tertiary-fixed: #ffddb8;
-  --color-tertiary-container: #442800;
-  --color-on-tertiary-fixed: #2a1700;
-  --color-on-tertiary-fixed-variant: #653e00;
-  --color-on-tertiary-container: #d18500;
-  --color-surface: #f9f9f6;
-  --color-surface-bright: #f9f9f6;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f4f4f1;
-  --color-surface-container: #eeeeeb;
-  --color-surface-container-high: #e8e8e5;
-  --color-surface-container-highest: #e2e3e0;
-  --color-surface-dim: #dadad7;
-  --color-on-surface: #1a1c1b;
-  --color-on-surface-variant: #45464f;
-  --color-outline: #757680;
-  --color-outline-variant: #c6c5d1;
+  --color-on-primary-container: #e6f5ea;
+  --color-secondary: #B88B4A;
+  --color-secondary-container: #B88B4A;
+  --color-on-secondary-container: #0D1722;
+  --color-tertiary-fixed-dim: #B88B4A;
+  --color-tertiary-fixed: #D4A76A;
+  --color-tertiary-container: #2E5339;
+  --color-on-tertiary-fixed: #0D1722;
+  --color-on-tertiary-fixed-variant: #D4A76A;
+  --color-on-tertiary-container: #ffffff;
+
+  /* Surfaces: Deep Midnight & Obsidian Slate */
+  --color-surface: #0D1722;
+  --color-surface-bright: #142232;
+  --color-surface-container-lowest: #121F2E;
+  --color-surface-container-low: #15273B;
+  --color-surface-container: #1C2D42;
+  --color-surface-container-high: #243952;
+  --color-surface-container-highest: #2D4663;
+  --color-surface-dim: #09111A;
+  --color-on-surface: #F8FAFC;
+  --color-on-surface-variant: #94A3B8;
+  --color-outline: #64748B;
+  --color-outline-variant: #283E58;
+
   --color-primary-fixed: #B88B4A;
-  --color-primary-fixed-dim: #d9cfa8;
-  --color-on-primary-fixed: #1C2D42;
-  --color-on-primary-fixed-variant: #2E5339;
-  --color-secondary-fixed: #ffdad8;
-  --color-secondary-fixed-dim: #ffb3b0;
-  --color-error: #ba1a1a;
-  --color-error-container: #ffdad6;
-  --color-inverse-surface: #2f312f;
+  --color-primary-fixed-dim: #99723A;
+  --color-on-primary-fixed: #0D1722;
+  --color-on-primary-fixed-variant: #F8FAFC;
+  --color-secondary-fixed: #D4A76A;
+  --color-secondary-fixed-dim: #B88B4A;
+  --color-error: #EF4444;
+  --color-error-container: #7F1D1D;
+  --color-inverse-surface: #F8FAFC;
 
   --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
 body {
-  background: var(--color-cream);
-  color: var(--color-ink);
+  background-color: #0D1722;
+  color: #F8FAFC;
   font-family: var(--font-sans);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(46, 83, 57, 0.22) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(184, 139, 74, 0.08) 0%, transparent 40%);
+  background-attachment: fixed;
 }
 
 /* ==========================================================================
@@ -91,35 +107,40 @@ body {
 
 /* --- Font mode ------------------------------------------------------- */
 
+/* --- 1. Font Mode (Typography) --------------------------------------- */
+
 /* "readable": Atkinson Hyperlegible, designed by the Braille Institute for
    maximum letter distinction, with gentle extra spacing. */
 html[data-font-mode="readable"] {
-  --font-sans: var(--font-readability), "Atkinson Hyperlegible Fallback",
-    system-ui, sans-serif;
+  --font-sans: var(--font-readability), "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
 }
 
+html[data-font-mode="readable"],
 html[data-font-mode="readable"] body,
-html[data-font-mode="readable"] body :not(.material-symbols-outlined),
-html[data-font-mode="dyslexic"] body,
-html[data-font-mode="dyslexic"] body :not(.material-symbols-outlined) {
+html[data-font-mode="readable"] body *:not([class*="material-symbols"]) {
   font-family: var(--font-sans) !important;
 }
 
 html[data-font-mode="readable"] body {
-  letter-spacing: 0.04em;
-  word-spacing: 0.12em;
+  letter-spacing: 0.035em;
+  word-spacing: 0.1em;
   line-height: 1.7;
 }
 
-/* "dyslexic": OpenDyslexic, with the wider spacing dyslexia-accessibility
-   guidance generally recommends alongside it. */
+/* "dyslexic": OpenDyslexic, with wider spacing and heavy-bottomed shapes. */
 html[data-font-mode="dyslexic"] {
-  --font-sans: "OpenDyslexic", system-ui, sans-serif;
+  --font-sans: "OpenDyslexic", "Comic Sans MS", "Trebuchet MS", cursive, sans-serif;
+}
+
+html[data-font-mode="dyslexic"],
+html[data-font-mode="dyslexic"] body,
+html[data-font-mode="dyslexic"] body *:not([class*="material-symbols"]) {
+  font-family: var(--font-sans) !important;
 }
 
 html[data-font-mode="dyslexic"] body {
-  letter-spacing: 0.02em;
-  word-spacing: 0.16em;
+  letter-spacing: 0.04em;
+  word-spacing: 0.14em;
   line-height: 1.8;
 }
 
@@ -150,10 +171,11 @@ html[data-font-mode="dyslexic"] a {
   text-underline-offset: 3px;
 }
 
-/* Material Symbols must never inherit the reading fonts above, or the
-   icon glyphs render as literal text (e.g. "visibility"). */
+/* Material Symbols must never inherit the reading fonts above */
 html[data-font-mode="readable"] .material-symbols-outlined,
-html[data-font-mode="dyslexic"] .material-symbols-outlined {
+html[data-font-mode="dyslexic"] .material-symbols-outlined,
+html[data-font-mode="readable"] [class*="material-symbols"],
+html[data-font-mode="dyslexic"] [class*="material-symbols"] {
   font-family: "Material Symbols Outlined" !important;
   display: inline-flex;
   align-items: center;
@@ -164,127 +186,408 @@ html[data-font-mode="dyslexic"] .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
-html[data-font-mode="readable"] .material-symbols-outlined + *,
-html[data-font-mode="dyslexic"] .material-symbols-outlined + * {
-  vertical-align: middle;
-}
+/* --- 2. Text Size ------------------------------------------------------ */
 
-/* --- Text size --------------------------------------------------------- */
-
-html[data-font-size="default"] body {
+html[data-font-size="default"] {
   font-size: 100%;
 }
 
 html[data-font-size="large"] {
-  font-size: 115%;
+  font-size: 125% !important;
+}
+
+html[data-font-size="large"] body {
+  font-size: 1.15rem !important;
+}
+
+html[data-font-size="large"] p,
+html[data-font-size="large"] span:not([class*="material-symbols"]),
+html[data-font-size="large"] a,
+html[data-font-size="large"] button:not(.readability-trigger),
+html[data-font-size="large"] input,
+html[data-font-size="large"] label {
+  font-size: 1.12em !important;
 }
 
 html[data-font-size="xlarge"] {
-  font-size: 130%;
+  font-size: 150% !important;
 }
 
-/* --- Background theme --------------------------------------------------- */
+html[data-font-size="xlarge"] body {
+  font-size: 1.35rem !important;
+}
 
-html[data-bg-theme="soft"] body {
-  background: var(--color-cream-dark);
+html[data-font-size="xlarge"] p,
+html[data-font-size="xlarge"] span:not([class*="material-symbols"]),
+html[data-font-size="xlarge"] a,
+html[data-font-size="xlarge"] button:not(.readability-trigger),
+html[data-font-size="xlarge"] input,
+html[data-font-size="xlarge"] label {
+  font-size: 1.25em !important;
+}
+
+:root {
+  --app-bg: #0D1722;
+  --app-card: #121F2E;
+  --app-card-muted: #162536;
+  --app-card-border: rgba(184, 139, 74, 0.2);
+  --app-text: #F8FAFC;
+  --app-text-muted: #94A3B8;
+  --app-gold: #B88B4A;
+  --app-forest: #2E5339;
 }
 
 html[data-bg-theme="soft"] {
-  --color-surface: #f0f0eb;
-  --color-surface-bright: #fafaf7;
-  --color-surface-container-lowest: #fafaf7;
-  --color-surface-container-low: #f0f0eb;
-  --color-surface-container: #e9e9e3;
-  --color-surface-container-high: #e2e2dc;
-  --color-surface-container-highest: #d9d9d2;
-  --color-on-surface: #1a1a1a;
-  --color-on-surface-variant: #3f4148;
-}
-
-html[data-bg-theme="soft"] .bg-white,
-html[data-bg-theme="soft"] [class*="bg-surface"] {
-  background-color: var(--color-cream) !important;
-}
-
-/* Dark: a soft off-black, not pure black, to keep large white text blocks
-   from vibrating/glaring for light-sensitive readers. */
-html[data-bg-theme="dark"] body {
-  background: #16181d;
-  color: #f2f2f0;
+  --app-bg: #F5F2EB !important;
+  --app-card: #FFFFFF !important;
+  --app-card-muted: #EFECE4 !important;
+  --app-card-border: #D6D0C4 !important;
+  --app-text: #1A1A1A !important;
+  --app-text-muted: #525966 !important;
+  --app-gold: #8E6832 !important;
+  --app-forest: #24422D !important;
+  --color-on-surface: #1A1A1A;
+  --color-on-surface-variant: #525966;
+  --color-surface: #F5F2EB;
+  --color-surface-bright: #EFEFE9;
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container-low: #F8F6F0;
+  --color-surface-container: #EFECE4;
+  --color-surface-container-high: #E6E2D8;
+  --color-surface-container-highest: #DDD8CC;
+  --color-outline: #737985;
+  --color-outline-variant: #D6D0C4;
 }
 
 html[data-bg-theme="dark"] {
-  --color-surface: #16181d;
-  --color-surface-bright: #21242b;
-  --color-surface-container-lowest: #21242b;
-  --color-surface-container-low: #252931;
-  --color-surface-container: #2b3039;
-  --color-surface-container-high: #333944;
-  --color-surface-container-highest: #3c424e;
-  --color-on-surface: #f2f2f0;
-  --color-on-surface-variant: #d0d3dc;
-  --color-outline: #b9bdc9;
-  --color-outline-variant: #626875;
-}
-
-html[data-bg-theme="dark"] [class*="bg-surface"],
-html[data-bg-theme="dark"] .bg-white,
-html[data-bg-theme="dark"] [class*="bg-cream"] {
-  background-color: #21242b !important;
-  color: #f2f2f0;
-}
-
-html[data-bg-theme="dark"] [class*="text-primary"],
-html[data-bg-theme="dark"] [class*="text-navy"],
-html[data-bg-theme="dark"] [class*="text-ink"],
-html[data-bg-theme="dark"] [class*="text-on-surface"] {
-  color: #dfe3ff !important;
-}
-
-/* High contrast: pure black/white with underlined links, meeting a WCAG
-   AAA-style contrast target for low-vision readers. */
-html[data-bg-theme="contrast"] body {
-  background: #000000;
-  color: #ffffff;
+  --app-bg: #16181D !important;
+  --app-card: #21242B !important;
+  --app-card-muted: #282D37 !important;
+  --app-card-border: #333944 !important;
+  --app-text: #F2F2F0 !important;
+  --app-text-muted: #A0A5B5 !important;
+  --app-gold: #D4A76A !important;
+  --app-forest: #3D6E4C !important;
 }
 
 html[data-bg-theme="contrast"] {
-  --color-surface: #000000;
-  --color-surface-bright: #000000;
-  --color-surface-container-lowest: #000000;
-  --color-surface-container-low: #000000;
-  --color-surface-container: #000000;
-  --color-surface-container-high: #000000;
-  --color-surface-container-highest: #000000;
-  --color-on-surface: #ffffff;
-  --color-on-surface-variant: #ffffff;
-  --color-outline: #ffffff;
-  --color-outline-variant: #ffffff;
-  --color-primary: #ffffff;
-  --color-primary-container: #ffffff;
-  --color-on-primary: #000000;
+  --app-bg: #000000 !important;
+  --app-card: #000000 !important;
+  --app-card-muted: #000000 !important;
+  --app-card-border: #FFFFFF !important;
+  --app-text: #FFFFFF !important;
+  --app-text-muted: #FFFFFF !important;
+  --app-gold: #FFFF00 !important;
+  --app-forest: #00FF66 !important;
 }
 
-html[data-bg-theme="contrast"] [class*="bg-surface"],
-html[data-bg-theme="contrast"] .bg-white,
-html[data-bg-theme="contrast"] [class*="bg-cream"] {
+/* Protect the accessibility drawer so large font sizes do not break its panel */
+.readability-panel {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.readability-panel p,
+.readability-panel span,
+.readability-panel legend,
+.readability-panel button,
+.readability-panel input {
+  font-size: initial !important;
+}
+
+/* --- 3. Background Theme & Contrast ------------------------------------ */
+
+/* Soft Cream Theme: Warm, calming cream and white for sensitive eyes */
+html[data-bg-theme="soft"] body,
+html[data-bg-theme="soft"] [class*="0D1722"],
+html[data-bg-theme="soft"] [class*="0B141E"],
+html[data-bg-theme="soft"] [class*="0A121B"],
+html[data-bg-theme="soft"] div.min-h-screen,
+html[data-bg-theme="soft"] main,
+html[data-bg-theme="soft"] header,
+html[data-bg-theme="soft"] footer,
+html[data-bg-theme="soft"] section {
+  background-color: #F5F2EB !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+}
+
+html[data-bg-theme="soft"] .tactical-grid {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px) !important;
+}
+
+html[data-bg-theme="soft"] .tactical-card,
+html[data-bg-theme="soft"] .glass-panel,
+html[data-bg-theme="soft"] [class*="121F2E"],
+html[data-bg-theme="soft"] [class*="142232"],
+html[data-bg-theme="soft"] [class*="15273B"],
+html[data-bg-theme="soft"] [class*="162536"],
+html[data-bg-theme="soft"] [class*="1C2D42"],
+html[data-bg-theme="soft"] [class*="bg-surface"],
+html[data-bg-theme="soft"] .bg-white {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: #D6D0C4 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+}
+
+html[data-bg-theme="soft"] .tactical-card::before {
+  display: none !important;
+}
+
+html[data-bg-theme="soft"] [class*="F8FAFC"]:not(button):not([class*="bg-[#2E5339]"]):not([class*="bg-secondary"]):not([class*="bg-emerald"]):not([class*="bg-error"]):not([class*="bg-[#B88B4A]"]):not([class*="bg-primary"]):not(.readability-trigger *):not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="text-white"]:not(button):not([class*="bg-[#2E5339]"]):not([class*="bg-secondary"]):not([class*="bg-emerald"]):not([class*="bg-error"]):not([class*="bg-[#B88B4A]"]):not([class*="bg-primary"]):not(.readability-trigger *):not(.readability-panel *),
+html[data-bg-theme="soft"] .text-on-surface:not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="text-on-surface"]:not([class*="text-on-surface-variant"]):not(button):not([class*="bg-[#2E5339]"]):not([class*="bg-secondary"]):not([class*="bg-emerald"]):not([class*="bg-error"]):not([class*="bg-[#B88B4A]"]):not([class*="bg-primary"]):not(.readability-trigger *):not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="text-ink"]:not(.readability-panel *),
+html[data-bg-theme="soft"] h1:not(.readability-panel *),
+html[data-bg-theme="soft"] h2:not(.readability-panel *),
+html[data-bg-theme="soft"] h3:not(.readability-panel *),
+html[data-bg-theme="soft"] h4:not(.readability-panel *),
+html[data-bg-theme="soft"] h5:not(.readability-panel *),
+html[data-bg-theme="soft"] h6:not(.readability-panel *) {
+  color: #1A1A1A !important;
+}
+
+html[data-bg-theme="soft"] [class*="94A3B8"]:not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="64748B"]:not(.readability-panel *),
+html[data-bg-theme="soft"] .text-outline:not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="text-outline"]:not(.readability-panel *),
+html[data-bg-theme="soft"] .text-on-surface-variant:not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="text-on-surface-variant"]:not(.readability-panel *) {
+  color: #525966 !important;
+}
+
+html[data-bg-theme="soft"] .text-primary:not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="text-primary"]:not(.readability-panel *) {
+  color: #1A1A1A !important;
+}
+
+html[data-bg-theme="soft"] .text-primary-container:not(.readability-panel *),
+html[data-bg-theme="soft"] [class*="text-primary-container"]:not(.readability-panel *) {
+  color: #24422D !important;
+}
+
+html[data-bg-theme="soft"] [class*="283E58"],
+html[data-bg-theme="soft"] [class*="1C2D42"],
+html[data-bg-theme="soft"] [class*="border-outline"] {
+  border-color: #D6D0C4 !important;
+}
+
+html[data-bg-theme="soft"] input,
+html[data-bg-theme="soft"] textarea,
+html[data-bg-theme="soft"] select {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: #B8B0A0 !important;
+}
+
+html[data-bg-theme="soft"] input::placeholder,
+html[data-bg-theme="soft"] textarea::placeholder {
+  color: #757B88 !important;
+}
+
+/* Ensure buttons with intentional dark backgrounds keep readable white/light text */
+html[data-bg-theme="soft"] button[class*="bg-[#2E5339]"],
+html[data-bg-theme="soft"] [class*="bg-[#2E5339]"] {
+  color: #F8FAFC !important;
+}
+html[data-bg-theme="soft"] button[class*="bg-[#B88B4A]"],
+html[data-bg-theme="soft"] [class*="bg-[#B88B4A]"] {
+  color: #0D1722 !important;
+}
+
+/* Protect the floating accessibility dialog in soft mode so its dark slate card styling and buttons remain crisp and readable */
+html[data-bg-theme="soft"] .readability-panel,
+html[data-bg-theme="soft"] div[role="dialog"].readability-panel {
+  background-color: rgba(18, 31, 46, 0.96) !important;
+  color: #F8FAFC !important;
+  border-color: rgba(184, 139, 74, 0.35) !important;
+}
+
+html[data-bg-theme="soft"] .readability-panel p,
+html[data-bg-theme="soft"] .readability-panel legend {
+  color: #94A3B8 !important;
+}
+
+html[data-bg-theme="soft"] .readability-panel [class*="text-[#F8FAFC]"] {
+  color: #F8FAFC !important;
+}
+
+/* Theme swatch buttons inside accessibility drawer: ensure dark swatches keep white text */
+html[data-bg-theme="soft"] .theme-swatch-dark,
+html[data-bg-theme="soft"] .theme-swatch-dark span,
+html[data-bg-theme="soft"] button[title="Obsidian"] span,
+html[data-bg-theme="soft"] button[title="Dark slate"] span,
+html[data-bg-theme="soft"] button[title="High contrast"] span {
+  color: #FFFFFF !important;
+}
+
+html[data-bg-theme="soft"] .theme-swatch-soft,
+html[data-bg-theme="soft"] .theme-swatch-soft span,
+html[data-bg-theme="soft"] button[title="Soft cream"] span {
+  color: #1A1A1A !important;
+}
+
+/* ==========================================================================
+   Dark / Obsidian Theme Text Contrast Guarantees
+   Fix: Dark text appearing on dark backgrounds (e.g. text-primary)
+   ========================================================================== */
+html[data-bg-theme="default"] .text-primary,
+html[data-bg-theme="default"] [class*="text-primary"],
+html:not([data-bg-theme]) .text-primary,
+html:not([data-bg-theme]) [class*="text-primary"] {
+  color: #F8FAFC !important;
+}
+
+html[data-bg-theme="default"] .text-primary-container,
+html[data-bg-theme="default"] [class*="text-primary-container"],
+html:not([data-bg-theme]) .text-primary-container,
+html:not([data-bg-theme]) [class*="text-primary-container"] {
+  color: #D4A76A !important;
+}
+
+html[data-bg-theme="default"] .text-outline,
+html[data-bg-theme="default"] [class*="text-outline"],
+html:not([data-bg-theme]) .text-outline,
+html:not([data-bg-theme]) [class*="text-outline"],
+html[data-bg-theme="default"] .text-on-surface-variant,
+html[data-bg-theme="default"] [class*="text-on-surface-variant"],
+html:not([data-bg-theme]) .text-on-surface-variant,
+html:not([data-bg-theme]) [class*="text-on-surface-variant"] {
+  color: #94A3B8 !important;
+}
+
+/* Dark Slate Theme: Neutral dark gray */
+html[data-bg-theme="dark"] body,
+html[data-bg-theme="dark"] [class*="0D1722"],
+html[data-bg-theme="dark"] [class*="0B141E"],
+html[data-bg-theme="dark"] [class*="0A121B"],
+html[data-bg-theme="dark"] div.min-h-screen,
+html[data-bg-theme="dark"] main,
+html[data-bg-theme="dark"] header,
+html[data-bg-theme="dark"] footer,
+html[data-bg-theme="dark"] section {
+  background-color: #16181D !important;
+  background-image: none !important;
+  color: #F2F2F0 !important;
+}
+
+html[data-bg-theme="dark"] .tactical-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px) !important;
+}
+
+html[data-bg-theme="dark"] .tactical-card,
+html[data-bg-theme="dark"] .glass-panel,
+html[data-bg-theme="dark"] [class*="121F2E"],
+html[data-bg-theme="dark"] [class*="142232"],
+html[data-bg-theme="dark"] [class*="15273B"],
+html[data-bg-theme="dark"] [class*="162536"],
+html[data-bg-theme="dark"] [class*="bg-surface"] {
+  background-color: #21242B !important;
+  color: #F2F2F0 !important;
+  border-color: #333944 !important;
+}
+
+html[data-bg-theme="dark"] .text-primary,
+html[data-bg-theme="dark"] [class*="text-primary"] {
+  color: #F2F2F0 !important;
+}
+
+html[data-bg-theme="dark"] .text-primary-container,
+html[data-bg-theme="dark"] [class*="text-primary-container"] {
+  color: #D4A76A !important;
+}
+
+html[data-bg-theme="dark"] .text-outline,
+html[data-bg-theme="dark"] [class*="text-outline"],
+html[data-bg-theme="dark"] .text-on-surface-variant,
+html[data-bg-theme="dark"] [class*="text-on-surface-variant"] {
+  color: #CBD5E1 !important;
+}
+
+/* High Contrast Theme: WCAG AAA pure black/white */
+html[data-bg-theme="contrast"] body,
+html[data-bg-theme="contrast"] [class*="0D1722"],
+html[data-bg-theme="contrast"] [class*="0B141E"],
+html[data-bg-theme="contrast"] [class*="0A121B"],
+html[data-bg-theme="contrast"] div.min-h-screen,
+html[data-bg-theme="contrast"] main,
+html[data-bg-theme="contrast"] header,
+html[data-bg-theme="contrast"] footer,
+html[data-bg-theme="contrast"] section {
   background-color: #000000 !important;
-  color: #ffffff !important;
-  border: 1px solid #ffffff;
+  background-image: none !important;
+  color: #FFFFFF !important;
 }
 
-html[data-bg-theme="contrast"] [class*="text-primary"],
-html[data-bg-theme="contrast"] [class*="text-navy"],
+html[data-bg-theme="contrast"] .tactical-grid {
+  background-image: none !important;
+}
+
+html[data-bg-theme="contrast"] .tactical-card,
+html[data-bg-theme="contrast"] .glass-panel,
+html[data-bg-theme="contrast"] [class*="121F2E"],
+html[data-bg-theme="contrast"] [class*="142232"],
+html[data-bg-theme="contrast"] [class*="15273B"],
+html[data-bg-theme="contrast"] [class*="162536"],
+html[data-bg-theme="contrast"] [class*="1C2D42"],
+html[data-bg-theme="contrast"] [class*="2E5339"],
+html[data-bg-theme="contrast"] [class*="bg-surface"] {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+html[data-bg-theme="contrast"] .tactical-card::before {
+  display: none !important;
+}
+
+html[data-bg-theme="contrast"] [class*="F8FAFC"],
+html[data-bg-theme="contrast"] [class*="94A3B8"],
+html[data-bg-theme="contrast"] [class*="64748B"],
+html[data-bg-theme="contrast"] [class*="text-white"],
 html[data-bg-theme="contrast"] [class*="text-ink"],
-html[data-bg-theme="contrast"] [class*="text-on-surface"],
-html[data-bg-theme="contrast"] [class*="text-outline"] {
-  color: #ffffff !important;
+html[data-bg-theme="contrast"] [class*="text-outline"],
+html[data-bg-theme="contrast"] .text-primary,
+html[data-bg-theme="contrast"] [class*="text-primary"],
+html[data-bg-theme="contrast"] .text-on-surface-variant,
+html[data-bg-theme="contrast"] [class*="text-on-surface-variant"] {
+  color: #FFFFFF !important;
+}
+
+html[data-bg-theme="contrast"] .text-primary-container,
+html[data-bg-theme="contrast"] [class*="text-primary-container"] {
+  color: #FFFF00 !important;
+}
+
+html[data-bg-theme="contrast"] [class*="283E58"],
+html[data-bg-theme="contrast"] [class*="B88B4A"],
+html[data-bg-theme="contrast"] [class*="2E5339"] {
+  border-color: #FFFFFF !important;
 }
 
 html[data-bg-theme="contrast"] a {
-  color: #ffff00;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: #FFFF00 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+}
+
+html[data-bg-theme="contrast"] input,
+html[data-bg-theme="contrast"] textarea,
+html[data-bg-theme="contrast"] select {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+html[data-bg-theme="contrast"] button:not(.readability-trigger) {
+  border: 2px solid #FFFFFF !important;
 }
 
 /* Answer button colors for multiple choice */
@@ -320,13 +623,52 @@ html[data-bg-theme="contrast"] a {
 
 /* Suspense mode glow */
 .suspense-glow {
-  box-shadow: 0 0 20px rgba(255, 185, 95, 0.3);
+  box-shadow: 0 0 25px rgba(184, 139, 74, 0.35);
 }
 
-/* Glass panel effect */
+/* Glass panel effect - Futuristic obsidian & gold */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(20, 34, 50, 0.75);
   backdrop-filter: blur(16px);
+  border: 1px solid rgba(184, 139, 74, 0.15);
+}
+
+.tactical-card {
+  background-color: #121F2E;
+  border: 1px solid rgba(184, 139, 74, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tactical-card:hover {
+  border-color: rgba(184, 139, 74, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(13, 23, 34, 0.8), 0 0 20px rgba(184, 139, 74, 0.12);
+}
+
+.tactical-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 139, 74, 0.4), transparent);
+}
+
+.gold-glow {
+  box-shadow: 0 0 24px rgba(184, 139, 74, 0.28);
+}
+
+.forest-glow {
+  box-shadow: 0 0 24px rgba(46, 83, 57, 0.4);
+}
+
+.tactical-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 36px 36px;
 }
 
 /* End game podium shimmer for 1st place */
@@ -365,22 +707,58 @@ html[data-bg-theme="contrast"] a {
    with filters (unreliable across browsers), reinforce color-only signals
    with borders/patterns and stronger outlines wherever red/green (correct
    vs. incorrect) is the only differentiator. */
-html[data-color-mode="colorblind"] .bg-emerald-500,
-html[data-color-mode="colorblind"] .bg-emerald-600 {
-  outline: 3px solid #0a5c2b;
-  outline-offset: -3px;
+html[data-color-mode="colorblind"] .answer-btn-0,
+html[data-color-mode="colorblind"] button[class*="answer-btn-0"] {
+  border: 4px solid #FFFFFF !important;
+  outline: 3px dashed #000000 !important;
+  outline-offset: -1px;
 }
 
+html[data-color-mode="colorblind"] .answer-btn-1,
+html[data-color-mode="colorblind"] button[class*="answer-btn-1"] {
+  border: 4px double #FFFFFF !important;
+  outline: 3px solid #000000 !important;
+  outline-offset: -1px;
+}
+
+html[data-color-mode="colorblind"] .answer-btn-2,
+html[data-color-mode="colorblind"] button[class*="answer-btn-2"] {
+  border: 4px dotted #FFFFFF !important;
+  outline: 3px solid #000000 !important;
+  outline-offset: -1px;
+}
+
+html[data-color-mode="colorblind"] .answer-btn-3,
+html[data-color-mode="colorblind"] button[class*="answer-btn-3"] {
+  border: 4px ridge #FFFFFF !important;
+  outline: 3px solid #000000 !important;
+  outline-offset: -1px;
+}
+
+/* Success / Correct answer */
+html[data-color-mode="colorblind"] .bg-emerald-500,
+html[data-color-mode="colorblind"] .bg-emerald-600,
+html[data-color-mode="colorblind"] [class*="bg-[#22c55e]"],
+html[data-color-mode="colorblind"] [class*="bg-forest"] {
+  outline: 4px solid #00FF66 !important;
+  outline-offset: -2px;
+  font-weight: 800 !important;
+}
+
+/* Error / Wrong answer */
 html[data-color-mode="colorblind"] .bg-red-400,
 html[data-color-mode="colorblind"] .bg-red-500,
-html[data-color-mode="colorblind"] .bg-error {
-  outline: 3px dashed #4a0000;
-  outline-offset: -3px;
+html[data-color-mode="colorblind"] .bg-error,
+html[data-color-mode="colorblind"] [class*="border-[#FF6B6B]"] {
+  outline: 4px dashed #FF3333 !important;
+  outline-offset: -2px;
+  font-weight: 800 !important;
 }
 
 html[data-color-mode="colorblind"] .text-error,
-html[data-color-mode="colorblind"] [class*="text-emerald"] {
-  font-weight: 800;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+html[data-color-mode="colorblind"] [class*="text-emerald"],
+html[data-color-mode="colorblind"] [class*="text-forest"] {
+  font-weight: 800 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
 }

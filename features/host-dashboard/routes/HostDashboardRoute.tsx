@@ -245,16 +245,16 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-surface text-on-surface">
-        <header className="bg-surface-bright border-b border-primary/10 px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <span className="text-xl font-bold text-primary-container tracking-tighter">QuizTime</span>
-            <div className="h-8 w-px bg-outline-variant/30" />
-            <span className="text-sm font-bold text-primary">Dashboard</span>
+      <div className="min-h-screen bg-[#0D1722] text-[#F8FAFC]">
+        <header className="bg-[#0D1722]/80 backdrop-blur-xl border-b border-[#283E58]/60 px-8 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <span className="text-xl font-black text-[#F8FAFC] tracking-tight">WicQuiz</span>
+            <div className="h-6 w-px bg-[#283E58]" />
+            <span className="text-xs font-mono uppercase tracking-widest text-[#B88B4A]">Host Console</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-24 h-10 bg-surface-container-high rounded-xl animate-pulse" />
-            <div className="w-20 h-10 bg-surface-container-high rounded-xl animate-pulse" />
+            <div className="w-24 h-10 bg-[#162536] rounded-xl animate-pulse" />
+            <div className="w-20 h-10 bg-[#162536] rounded-xl animate-pulse" />
           </div>
         </header>
         <main className="max-w-7xl mx-auto px-8 py-8">
@@ -274,18 +274,20 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface">
+    <div className="min-h-screen bg-[#0D1722] text-[#F8FAFC] selection:bg-[#B88B4A] selection:text-[#0D1722]">
       {/* Header */}
-      <header className="bg-surface-bright border-b border-primary/10 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-6">
+      <header className="bg-[#0D1722]/85 backdrop-blur-xl border-b border-[#283E58]/60 px-6 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div className="flex items-center gap-4">
           <span
-            className="text-xl font-bold text-primary-container tracking-tighter cursor-pointer"
+            className="text-xl font-black text-[#F8FAFC] tracking-tight cursor-pointer hover:text-[#D4A76A] transition-colors"
             onClick={() => router.push("/")}
           >
-            QuizTime
+            WicQuiz
           </span>
-          <div className="h-8 w-px bg-outline-variant/30" />
-          <span className="text-sm font-bold text-primary">Dashboard</span>
+          <div className="h-6 w-px bg-[#283E58]" />
+          <span className="text-xs font-mono uppercase tracking-widest text-[#B88B4A]">
+            Host Console
+          </span>
         </div>
         <div className="flex items-center gap-3">
           {/* History link */}
@@ -293,9 +295,9 @@ export default function DashboardPage() {
             onClick={() => router.push("/host/history")}
             title="Quiz History"
             aria-label="Lihat riwayat quiz"
-            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl font-bold text-sm text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs text-[#94A3B8] hover:bg-[#1C2D42] hover:text-[#F8FAFC] border border-transparent hover:border-[#283E58] transition-all"
           >
-            <span className="material-symbols-outlined text-[18px]">history</span>
+            <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">history</span>
             <span className="hidden sm:inline">History</span>
           </button>
           {/* User info -> profile */}
@@ -304,24 +306,24 @@ export default function DashboardPage() {
               onClick={() => router.push("/host/profile")}
               title="My Profile"
               aria-label="Lihat profil saya"
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-surface-container rounded-xl border border-outline-variant/20 hover:border-primary/30 hover:bg-surface-container-high transition-colors"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#142232] rounded-xl border border-[#283E58] hover:border-[#B88B4A]/50 transition-all"
             >
-                <span className="w-6 h-6 rounded-full overflow-hidden bg-surface-container-high flex items-center justify-center flex-shrink-0">
-                  {userAvatarUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={userAvatarUrl}
-                      alt=""
-                      className="w-full h-full object-cover"
-                      onError={() => setUserAvatarUrl(null)}
-                    />
-                  ) : (
-                    <span className="material-symbols-outlined text-[16px] text-outline">
-                      account_circle
-                    </span>
-                  )}
-                </span>
-              <span className="text-xs font-medium text-on-surface-variant truncate max-w-[140px]">
+              <span className="w-6 h-6 rounded-full overflow-hidden bg-[#1C2D42] flex items-center justify-center flex-shrink-0 border border-[#283E58]">
+                {userAvatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={userAvatarUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    onError={() => setUserAvatarUrl(null)}
+                  />
+                ) : (
+                  <span className="material-symbols-outlined text-[16px] text-[#B88B4A]">
+                    account_circle
+                  </span>
+                )}
+              </span>
+              <span className="text-xs font-bold text-[#F8FAFC] truncate max-w-[140px]">
                 {userDisplayName || userEmail}
               </span>
             </button>
@@ -330,7 +332,7 @@ export default function DashboardPage() {
             onClick={() => router.push("/host/new")}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-secondary-container text-on-secondary-container px-6 py-2.5 rounded-xl font-extrabold text-sm shadow-[0px_10px_20px_rgba(255,107,107,0.2)] flex items-center gap-1.5"
+            className="bg-[#B88B4A] text-[#0D1722] hover:bg-[#D4A76A] px-5 py-2 rounded-xl font-black text-xs shadow-[0_4px_18px_rgba(184,139,74,0.25)] flex items-center gap-1.5 transition-all"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
             New Quiz
@@ -344,35 +346,37 @@ export default function DashboardPage() {
             whileTap={{ scale: 0.95 }}
             title="Logout"
             aria-label="Logout dari akun"
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-sm border border-outline-variant/30 text-on-surface-variant hover:bg-error/10 hover:text-error hover:border-error/30 transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs border border-[#283E58] bg-[#142232] text-[#94A3B8] hover:bg-error/15 hover:text-error hover:border-error/40 transition-colors disabled:opacity-50"
           >
             {loggingOut ? (
-              <span className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
+              <span className="w-3.5 h-3.5 border-2 border-current/30 border-t-current rounded-full animate-spin" />
             ) : (
-              <span className="material-symbols-outlined text-[18px]">logout</span>
+              <span className="material-symbols-outlined text-[16px]">logout</span>
             )}
             <span className="hidden sm:inline">{loggingOut ? "Keluar..." : "Logout"}</span>
           </motion.button>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-8 py-8">
+      <main className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
         {/* Stats Bar */}
-        <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 mb-8 grid grid-cols-3 divide-x divide-outline-variant/10">
+        <div className="tactical-card rounded-2xl border border-[#283E58]/60 bg-[#121F2E] mb-8 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#283E58]/60">
           {[
-            { label: "Quizzes Created", value: totalQuizzes, icon: "quiz" },
-            { label: "Games Played", value: totalGames, icon: "sports_esports" },
-            { label: "Total Players", value: totalPlayers, icon: "group" },
+            { label: "Quizzes Created", value: totalQuizzes, icon: "quiz", color: "text-[#B88B4A]" },
+            { label: "Games Played", value: totalGames, icon: "sports_esports", color: "text-[#4ADE80]" },
+            { label: "Total Players", value: totalPlayers, icon: "group", color: "text-[#60A5FA]" },
           ].map((stat) => (
-            <div key={stat.label} className="flex items-center gap-3 px-6 py-4">
-              <span className="material-symbols-outlined text-outline">
-                {stat.icon}
-              </span>
+            <div key={stat.label} className="flex items-center gap-4 px-6 py-5">
+              <div className="w-12 h-12 rounded-xl bg-[#1C2D42] border border-[#283E58] flex items-center justify-center">
+                <span className={`material-symbols-outlined text-[24px] ${stat.color}`}>
+                  {stat.icon}
+                </span>
+              </div>
               <div>
-                <p className="text-2xl font-black text-primary leading-none">
+                <p className="text-3xl font-black text-[#F8FAFC] leading-none">
                   {stat.value}
                 </p>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-outline">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#94A3B8] mt-1 block">
                   {stat.label}
                 </span>
               </div>
@@ -383,10 +387,10 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: My Quizzes */}
           <section className="lg:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <h2 className="text-lg font-bold text-primary">My Quizzes</h2>
+            <div className="flex items-center gap-2.5 mb-4">
+              <h2 className="text-lg font-black text-[#F8FAFC] tracking-tight">My Quizzes</h2>
               {templates.length > 0 && (
-                <span className="text-xs font-bold text-outline bg-surface-container px-2 py-0.5 rounded-full">
+                <span className="text-xs font-mono font-bold text-[#B88B4A] bg-[#B88B4A]/10 border border-[#B88B4A]/25 px-2 py-0.5 rounded-full">
                   {templates.length}
                 </span>
               )}
@@ -395,25 +399,27 @@ export default function DashboardPage() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-surface-container-lowest rounded-xl border-2 border-dashed border-outline-variant/30 p-12 text-center"
+                className="tactical-card rounded-2xl border-2 border-dashed border-[#283E58] p-12 text-center"
               >
-                <span className="material-symbols-outlined text-[64px] text-outline/30 mb-4 block">
-                  lightbulb
-                </span>
-                <h3 className="text-xl font-bold text-primary mb-2">
+                <div className="w-16 h-16 rounded-2xl bg-[#1C2D42] border border-[#B88B4A]/30 flex items-center justify-center mx-auto mb-4 text-[#B88B4A]">
+                  <span className="material-symbols-outlined text-[32px]">
+                    lightbulb
+                  </span>
+                </div>
+                <h3 className="text-xl font-extrabold text-[#F8FAFC] mb-2">
                   Create your first quiz
                 </h3>
-                <p className="text-outline mb-6 max-w-sm mx-auto">
-                  Build a quiz with multiple question types, then run it live with your team. It takes about 5 minutes.
+                <p className="text-[#94A3B8] mb-6 max-w-sm mx-auto text-sm leading-relaxed">
+                  Build a quiz with multiple question types, then launch it live for your team. It takes less than 5 minutes.
                 </p>
                 <motion.button
                   onClick={() => router.push("/host/new")}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-secondary-container text-on-secondary-container px-8 py-3 rounded-xl font-extrabold shadow-[0px_10px_20px_rgba(255,107,107,0.2)] inline-flex items-center gap-1.5"
+                  className="bg-[#B88B4A] text-[#0D1722] hover:bg-[#D4A76A] px-7 py-3 rounded-xl font-black text-xs shadow-[0_4px_18px_rgba(184,139,74,0.25)] inline-flex items-center gap-1.5 transition-all"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
-                  New Quiz
+                  Create Quiz Now
                 </motion.button>
               </motion.div>
             ) : (
@@ -423,15 +429,15 @@ export default function DashboardPage() {
                   <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="rounded-xl border border-secondary-container/30 bg-gradient-to-r from-secondary-container/15 via-primary/5 to-secondary-container/10 p-4 mb-2"
+                    className="rounded-2xl border border-[#2E5339] bg-gradient-to-r from-[#2E5339]/25 via-[#121F2E] to-[#2E5339]/15 p-4 mb-3"
                   >
                     <div className="flex items-center gap-2 mb-3">
                       <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-error" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4ADE80] opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#4ADE80]" />
                       </span>
-                      <span className="text-xs font-black uppercase tracking-widest text-error">
-                        {activeRooms.length} Room Aktif
+                      <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#4ADE80]">
+                        {activeRooms.length} Active Game Arena
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -439,21 +445,21 @@ export default function DashboardPage() {
                         <button
                           key={room.id}
                           onClick={() => router.push(`/host/${room.room_code}`)}
-                          className="flex items-center gap-2 px-3 py-2 bg-surface-container-lowest rounded-lg border border-outline-variant/20 hover:border-primary/30 hover:shadow-sm transition-all text-xs"
+                          className="flex items-center gap-2 px-3 py-2 bg-[#142232] rounded-xl border border-[#283E58] hover:border-[#4ADE80]/50 hover:shadow-xs transition-all text-xs"
                         >
-                          <span className="material-symbols-outlined text-[14px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>
+                          <span className="material-symbols-outlined text-[14px] text-[#4ADE80]" style={{ fontVariationSettings: "'FILL' 1" }}>
                             sensors
                           </span>
-                          <span className="font-bold text-primary">
+                          <span className="font-bold text-[#F8FAFC]">
                             {room.quiz_title || room.room_code}
                           </span>
-                          <span className="font-mono text-outline bg-surface-container px-1.5 py-0.5 rounded">
+                          <span className="font-mono text-[#D4A76A] bg-[#1C2D42] px-1.5 py-0.5 rounded border border-[#283E58]">
                             {room.room_code}
                           </span>
                           <span className={`px-1.5 py-0.5 rounded text-[10px] font-black uppercase ${
                             room.status === "active"
-                              ? "bg-error/10 text-error"
-                              : "bg-primary/10 text-primary"
+                              ? "bg-error/20 text-error border border-error/30"
+                              : "bg-[#2E5339]/40 text-[#4ADE80] border border-[#2E5339]"
                           }`}>
                             {room.status === "active" ? "LIVE" : "Lobby"}
                           </span>
@@ -478,33 +484,33 @@ export default function DashboardPage() {
                       transition={{ delay: i * 0.05 }}
                       className={`relative rounded-2xl border p-5 flex items-center gap-4 group transition-all overflow-visible ${
                         isRunning
-                          ? "border-secondary-container/50 bg-gradient-to-r from-secondary-container/15 via-surface-container-lowest to-primary/10 shadow-[0px_4px_24px_rgba(174,47,52,0.12)] ring-1 ring-secondary-container/20"
-                          : "border-outline-variant/10 bg-surface-container-lowest hover:shadow-md"
+                          ? "border-[#2E5339] bg-gradient-to-r from-[#2E5339]/20 via-[#121F2E] to-[#1C2D42]/30 shadow-[0_4px_24px_rgba(46,83,57,0.25)] ring-1 ring-[#2E5339]/40"
+                          : "border-[#283E58]/60 bg-[#121F2E] hover:border-[#B88B4A]/40 hover:shadow-lg"
                       }`}
                     >
                       {/* Running vertical glow strip */}
                       {isRunning && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-secondary-container via-error to-primary rounded-l-2xl" />
+                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#2E5339] via-[#4ADE80] to-[#B88B4A] rounded-l-2xl" />
                       )}
                       <div className="flex-1 min-w-0 pl-1">
                         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                          <h3 className="font-extrabold text-primary text-base truncate">
+                          <h3 className="font-extrabold text-[#F8FAFC] text-base truncate">
                             {t.title}
                           </h3>
                           {isRunning ? (
-                            <span className="flex items-center gap-1.5 text-[10px] font-black px-2.5 py-0.5 rounded-full bg-error/15 text-error border border-error/30 shadow-xs">
+                            <span className="flex items-center gap-1.5 text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#2E5339]/40 text-[#4ADE80] border border-[#2E5339] shadow-xs">
                               <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-error" />
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4ADE80] opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4ADE80]" />
                               </span>
                               LIVE · {runningRoom.status === "active" ? "Sedang Berjalan" : "Lobby Terbuka"}
                             </span>
                           ) : (
                             <span
-                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                              className={`text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-md border tracking-wider uppercase ${
                                 t.is_draft
-                                  ? "bg-tertiary-fixed/30 text-on-tertiary-fixed-variant"
-                                  : "bg-emerald-100 text-emerald-700"
+                                  ? "bg-[#B88B4A]/15 text-[#B88B4A] border-[#B88B4A]/40"
+                                  : "bg-[#1E3726] text-[#4ADE80] border-[#2E5339] shadow-xs font-black"
                               }`}
                             >
                               {t.is_draft ? "Draft" : "Ready"}
@@ -512,7 +518,7 @@ export default function DashboardPage() {
                           )}
                         </div>
 
-                        <div className="flex items-center gap-3 text-xs text-outline flex-wrap">
+                        <div className="flex items-center gap-3 text-xs text-[#94A3B8] flex-wrap">
                           <span className="font-medium">
                             {(t.question_ids || []).length} pertanyaan
                           </span>
@@ -522,13 +528,13 @@ export default function DashboardPage() {
                             <>
                               <span>•</span>
                               {/* Player count indicator with icon */}
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container/15 text-secondary-container font-extrabold text-xs shadow-xs border border-secondary-container/20">
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#2E5339]/20 text-[#4ADE80] font-bold text-xs border border-[#2E5339]/40">
                                 <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                                   person
                                 </span>
                                 {runningRoom.player_count} pemain masuk
                               </span>
-                              <span className="font-mono text-outline bg-surface-container px-2 py-0.5 rounded text-[11px] font-bold">
+                              <span className="font-mono text-[#D4A76A] bg-[#142232] px-2 py-0.5 rounded text-[11px] font-bold border border-[#283E58]">
                                 Code: {runningRoom.room_code}
                               </span>
                             </>
@@ -546,7 +552,7 @@ export default function DashboardPage() {
                         {isRunning ? (
                           <button
                             onClick={() => router.push(`/host/${runningRoom.room_code}`)}
-                            className="px-4 py-2.5 bg-gradient-to-r from-secondary-container to-error text-white rounded-xl text-xs font-extrabold hover:opacity-95 transition-all inline-flex items-center gap-1.5 shadow-[0px_4px_14px_rgba(174,47,52,0.3)] animate-pulse"
+                            className="px-4 py-2 bg-gradient-to-r from-[#2E5339] to-[#3D6E4C] text-white border border-[#4ADE80]/40 rounded-xl text-xs font-black hover:opacity-95 transition-all inline-flex items-center gap-1.5 shadow-[0_0_15px_rgba(46,83,57,0.35)]"
                             title="Masuk ke room quiz yang sedang aktif"
                           >
                             <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -558,7 +564,7 @@ export default function DashboardPage() {
                           <button
                             onClick={() => handleRunQuiz(t)}
                             disabled={actionLoading === t.id}
-                            className="px-4 py-2.5 bg-secondary-container text-on-secondary-container rounded-xl text-xs font-extrabold hover:opacity-90 transition-opacity disabled:opacity-50 inline-flex items-center gap-1.5 shadow-sm"
+                            className="px-4 py-2 bg-[#B88B4A] text-[#0D1722] hover:bg-[#D4A76A] rounded-xl text-xs font-black transition-all disabled:opacity-50 inline-flex items-center gap-1.5 shadow-[0_2px_10px_rgba(184,139,74,0.2)]"
                             title="Jalankan quiz ini"
                           >
                             <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -577,8 +583,8 @@ export default function DashboardPage() {
                             title="Menu opsi"
                             className={`w-9 h-9 grid place-items-center rounded-xl transition-all ${
                               openMenuId === t.id
-                                ? "bg-primary text-white shadow-sm"
-                                : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest hover:text-primary"
+                                ? "bg-[#B88B4A] text-[#0D1722] shadow-sm"
+                                : "bg-[#142232] text-[#94A3B8] border border-[#283E58] hover:border-[#B88B4A]/50 hover:text-white"
                             }`}
                           >
                             <span className="material-symbols-outlined text-[20px]">more_vert</span>
@@ -592,19 +598,19 @@ export default function DashboardPage() {
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95, y: -4 }}
                                 transition={{ duration: 0.15 }}
-                                className="absolute right-0 top-full mt-2 w-48 bg-surface-container-lowest border border-outline-variant/20 rounded-2xl shadow-[0_12px_32px_rgba(27,43,94,0.14)] p-1.5 z-40 flex flex-col gap-0.5"
+                                className="absolute right-0 top-full mt-2 w-48 bg-[#121F2E] border border-[#283E58] rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] p-1.5 z-40 flex flex-col gap-0.5"
                               >
                                 <button
                                   onClick={() => {
                                     setOpenMenuId(null);
                                     router.push(`/host/quiz/${t.id}/edit`);
                                   }}
-                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-on-surface hover:bg-surface-container hover:text-primary transition-colors text-left"
+                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] hover:bg-[#1C2D42] hover:text-[#B88B4A] transition-colors text-left"
                                 >
-                                  <span className="material-symbols-outlined text-[18px] text-outline">
-                                    edit_note
+                                  <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
+                                    edit
                                   </span>
-                                  Edit Quiz
+                                  Edit Pertanyaan
                                 </button>
 
                                 <button
@@ -613,15 +619,15 @@ export default function DashboardPage() {
                                     handleDuplicate(t.id);
                                   }}
                                   disabled={actionLoading === t.id}
-                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-on-surface hover:bg-surface-container hover:text-primary transition-colors text-left disabled:opacity-50"
+                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] hover:bg-[#1C2D42] hover:text-[#B88B4A] transition-colors text-left disabled:opacity-50"
                                 >
-                                  <span className="material-symbols-outlined text-[18px] text-outline">
+                                  <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
                                     content_copy
                                   </span>
                                   Duplikasi
                                 </button>
 
-                                <div className="h-px bg-outline-variant/15 my-1" />
+                                <div className="h-px bg-[#283E58] my-1" />
 
                                 <button
                                   onClick={() => {
@@ -633,7 +639,7 @@ export default function DashboardPage() {
                                     setQuizToDelete(t);
                                   }}
                                   disabled={isRunning}
-                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-error hover:bg-error/10 transition-colors text-left disabled:opacity-40"
+                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-error hover:bg-error/15 transition-colors text-left disabled:opacity-40"
                                 >
                                   <span className="material-symbols-outlined text-[18px] text-error">
                                     delete
@@ -654,15 +660,15 @@ export default function DashboardPage() {
 
           {/* Right: Recent Sessions */}
           <section>
-            <h2 className="text-lg font-bold text-primary mb-4">
+            <h2 className="text-lg font-black text-[#F8FAFC] tracking-tight mb-4">
               Recent Sessions
             </h2>
             {sessions.length === 0 ? (
-              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-8 text-center">
-                <span className="material-symbols-outlined text-[32px] text-outline/30 block mb-2">
+              <div className="tactical-card rounded-2xl border border-[#283E58]/60 bg-[#121F2E] p-8 text-center">
+                <span className="material-symbols-outlined text-[32px] text-[#64748B] block mb-2">
                   history
                 </span>
-                <p className="text-sm text-outline">
+                <p className="text-sm text-[#94A3B8]">
                   No games played yet. Run a quiz to see results here.
                 </p>
               </div>
@@ -682,21 +688,22 @@ export default function DashboardPage() {
                       onClick={() =>
                         router.push(`/host/results/${s.id}`)
                       }
-                      className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 p-4 cursor-pointer hover:shadow-md transition-shadow"
+                      className="tactical-card rounded-2xl border border-[#283E58]/60 bg-[#121F2E] p-4 cursor-pointer hover:border-[#B88B4A]/50 hover:shadow-md transition-all"
                     >
-                      <h4 className="font-bold text-primary text-sm truncate">
+                      <h4 className="font-extrabold text-[#F8FAFC] text-sm truncate">
                         {s.title}
                       </h4>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-outline">
+                      <div className="flex items-center gap-3 mt-1.5 text-xs text-[#94A3B8]">
                         <span>{formatDate(s.finished_at || s.created_at)}</span>
+                        <span>•</span>
                         <span>{s.player_count} players</span>
                       </div>
                       {winner && (
-                        <div className="mt-2 flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[14px] text-tertiary-fixed-dim" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        <div className="mt-2.5 flex items-center gap-1.5 pt-2 border-t border-[#283E58]/40">
+                          <span className="material-symbols-outlined text-[16px] text-[#B88B4A]" style={{ fontVariationSettings: "'FILL' 1" }}>
                             emoji_events
                           </span>
-                          <span className="text-xs font-bold text-tertiary-fixed-dim">
+                          <span className="text-xs font-bold text-[#D4A76A]">
                             {winner}
                           </span>
                         </div>

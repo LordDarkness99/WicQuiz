@@ -72,7 +72,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="reg-name"
-          className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
+          className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5"
         >
           Full Name / Display Name
         </label>
@@ -81,13 +81,13 @@ export function RegisterForm() {
           type="text"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
-          placeholder="e.g., Sarah Connor"
+          placeholder="e.g., Alex Mercer"
           autoComplete="name"
           disabled={loading}
-          className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3 rounded-xl border bg-[#0A121B] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none transition-all ${
             errors.displayName
               ? "border-error focus:border-error"
-              : "border-outline-variant/60 focus:border-primary"
+              : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
           }`}
         />
         {errors.displayName && (
@@ -100,9 +100,9 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="reg-email"
-          className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
+          className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5"
         >
-          Email
+          Email Address
         </label>
         <input
           id="reg-email"
@@ -112,10 +112,10 @@ export function RegisterForm() {
           placeholder="name@example.com"
           autoComplete="email"
           disabled={loading}
-          className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3 rounded-xl border bg-[#0A121B] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none transition-all ${
             errors.email
               ? "border-error focus:border-error"
-              : "border-outline-variant/60 focus:border-primary"
+              : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
           }`}
         />
         {errors.email && (
@@ -126,7 +126,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="reg-password"
-          className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
+          className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5"
         >
           Password
         </label>
@@ -138,10 +138,10 @@ export function RegisterForm() {
           placeholder="Minimum 6 characters"
           autoComplete="new-password"
           disabled={loading}
-          className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3 rounded-xl border bg-[#0A121B] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none transition-all ${
             errors.password
               ? "border-error focus:border-error"
-              : "border-outline-variant/60 focus:border-primary"
+              : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
           }`}
         />
         {errors.password && (
@@ -154,7 +154,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="reg-confirm"
-          className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
+          className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5"
         >
           Confirm Password
         </label>
@@ -166,10 +166,10 @@ export function RegisterForm() {
           placeholder="Repeat password"
           autoComplete="new-password"
           disabled={loading}
-          className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3 rounded-xl border bg-[#0A121B] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none transition-all ${
             errors.confirmPassword
               ? "border-error focus:border-error"
-              : "border-outline-variant/60 focus:border-primary"
+              : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
           }`}
         />
         {errors.confirmPassword && (
@@ -180,14 +180,14 @@ export function RegisterForm() {
       </div>
 
       <Button
-        variant="coral"
+        variant="primary"
         size="lg"
         type="submit"
-        className="w-full mt-2"
+        className="w-full mt-4"
         disabled={loading}
       >
         {loading ? (
-            <span className="inline-flex items-center gap-2">
+          <span className="inline-flex items-center gap-2">
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             Creating account...
           </span>

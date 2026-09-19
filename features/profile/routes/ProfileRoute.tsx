@@ -94,16 +94,16 @@ export default function ProfileRoute() {
   return (
     <div className="min-h-screen bg-surface text-on-surface">
       {/* Header */}
-      <header className="bg-surface-bright border-b border-primary/10 px-8 py-4 flex items-center gap-4 sticky top-0 z-50">
+      <header className="bg-surface-bright border-b border-outline-variant/30 px-8 py-4 flex items-center gap-4 sticky top-0 z-50">
         <button
           onClick={() => router.push("/host/dashboard")}
-          className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors"
+          className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors"
         >
           <span className="material-symbols-outlined text-[20px]">arrow_back</span>
           Dashboard
         </button>
         <div className="h-8 w-px bg-outline-variant/30" />
-        <span className="text-sm font-bold text-primary">My Profile</span>
+        <span className="text-sm font-bold text-on-surface">My Profile</span>
       </header>
 
       <main className="max-w-2xl mx-auto px-6 py-10">
@@ -112,7 +112,7 @@ export default function ProfileRoute() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-surface-container-lowest rounded-3xl border border-outline-variant/20 shadow-sm p-8"
         >
-          <h1 className="text-2xl font-extrabold text-primary mb-1">Profile</h1>
+          <h1 className="text-2xl font-extrabold text-on-surface mb-1">Profile</h1>
           <p className="text-sm text-on-surface-variant mb-8">
             Manage how your name and avatar appear as a quiz host.
           </p>
@@ -203,8 +203,8 @@ export default function ProfileRoute() {
               <span className="material-symbols-outlined text-outline block mb-1">
                 {stat.icon}
               </span>
-              <p className="text-xl font-black text-primary leading-none">{stat.value}</p>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-outline">
+              <p className="text-xl font-black text-on-surface leading-none">{stat.value}</p>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                 {stat.label}
               </span>
             </div>
@@ -214,7 +214,7 @@ export default function ProfileRoute() {
         <div className="mt-6 text-center">
           <button
             onClick={() => router.push("/host/history")}
-            className="text-sm font-bold text-primary hover:underline inline-flex items-center gap-1.5"
+            className="text-sm font-bold text-[#D4A76A] hover:text-[#B88B4A] hover:underline inline-flex items-center gap-1.5"
           >
             <span className="material-symbols-outlined text-[18px]">history</span>
             View quiz history

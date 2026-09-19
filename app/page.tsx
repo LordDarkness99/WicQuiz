@@ -2,41 +2,76 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
 import Button from "@/shared/ui/Button";
 import AnimatedContainer from "@/shared/ui/AnimatedContainer";
 import { hasHostId } from "@/shared/hostIdentity";
 
 const STEPS = [
   {
-    icon: "mic",
+    icon: "draw",
+    step: "01",
     title: "Host creates the quiz",
-    desc: "Pick question types, set timers, add images or video — or let AI generate questions in one click.",
+    desc: "Pick question types, set timers, attach media, or generate high-quality trivia with AI in seconds.",
   },
   {
-    icon: "qr_code_2",
-    title: "Team joins the room",
-    desc: "Scan the QR code or type the room code on any phone. No app download, no account.",
+    icon: "qr_code_scanner",
+    step: "02",
+    title: "Team joins instantly",
+    desc: "Scan the on-screen QR code or type the room code on any phone. No app download, zero friction.",
   },
   {
     icon: "social_leaderboard",
-    title: "Compete live",
-    desc: "Real-time scoring, a horse-race leaderboard everyone can see, and a winner crowned at the end.",
+    step: "03",
+    title: "Compete in real-time",
+    desc: "Real-time scoring, live horse-race animation between rounds, and a dynamic podium for the winner.",
   },
 ];
 
 const FEATURES = [
-  { icon: "bolt", title: "Real-time sync", desc: "Questions appear on every phone the instant you advance. Zero lag." },
-  { icon: "directions_run", title: "Horse-race leaderboard", desc: "Watch the standings gallop across the screen between rounds." },
-  { icon: "smart_toy", title: "AI-generated questions", desc: "Out of ideas? Get quality trivia on any topic in seconds." },
-  { icon: "qr_code_2", title: "QR-code joining", desc: "One scan and players are in. Show the code on your screen — done." },
-  { icon: "style", title: "Joker rounds", desc: "Double-point wildcard questions keep the board shaken up to the end." },
-  { icon: "category", title: "Six question types", desc: "Multiple choice, true/false, slider, type-in, image, video, and audio." },
+  {
+    icon: "bolt",
+    title: "Real-time sync",
+    desc: "Questions and answer reveals push to every participant's device with sub-second latency.",
+    tag: "WebSocket Live",
+  },
+  {
+    icon: "directions_run",
+    title: "Horse-race leaderboard",
+    desc: "Watch team standings physically gallop across the screen as scores update round by round.",
+    tag: "Visual Dynamics",
+  },
+  {
+    icon: "smart_toy",
+    title: "AI question generator",
+    desc: "Generate full trivia packs on any topic or difficulty instantly with built-in AI authoring.",
+    tag: "Smart Engine",
+  },
+  {
+    icon: "qr_code_2",
+    title: "QR instant entry",
+    desc: "Display the large room QR code on your projector or monitor for effortless mobile joining.",
+    tag: "Frictionless",
+  },
+  {
+    icon: "magic_button",
+    title: "Joker wildcard rounds",
+    desc: "Double-point tactical wildcards allow players to mount thrilling comebacks before the finale.",
+    tag: "Game Mechanics",
+  },
+  {
+    icon: "category",
+    title: "Diverse question types",
+    desc: "Multiple choice, true/false, numeric sliders, type-in text, and media-rich trivia.",
+    tag: "Multi-Format",
+  },
 ];
 
 export default function HomePage() {
   const router = useRouter();
   const [roomCode, setRoomCode] = useState("");
-  const [, setIsReturningHost] = useState(false);
+  const [isReturningHost, setIsReturningHost] = useState(false);
 
   useEffect(() => {
     setIsReturningHost(hasHostId());
@@ -49,158 +84,340 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex-1 flex flex-col bg-surface text-on-surface">
-      {/* ── Hero ───────────────────────────────────────────── */}
-      <section className="bg-primary px-6 py-20 md:py-28">
-        <AnimatedContainer className="max-w-3xl mx-auto text-center">
-          <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-primary-fixed-dim mb-5">
-            Real-time pub quiz
-          </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-on-primary tracking-tight leading-[1.05] mb-5">
-            Turn any meeting into a game show
-          </h1>
-          <p className="text-lg text-on-primary/70 max-w-xl mx-auto mb-9 leading-relaxed">
-            Live scoring, horse-race leaderboards, and AI-generated questions.
-            Your team joins from their phones in seconds — no setup required.
-          </p>
+    <div className="min-h-screen flex flex-col bg-[#0D1722] text-[#F8FAFC] selection:bg-[#B88B4A] selection:text-[#0D1722]">
+      {/* ── Top Navigation Bar ───────────────────────────────── */}
+      <header className="sticky top-0 z-40 w-full border-b border-[#283E58]/60 bg-[#0D1722]/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1C2D42] to-[#121F2E] border border-[#B88B4A]/40 flex items-center justify-center shadow-[0_0_15px_rgba(184,139,74,0.15)] group-hover:border-[#B88B4A] transition-all">
+              <Image
+                src="/ikon.png"
+                alt="WicQuiz logo"
+                width={26}
+                height={26}
+                className="rounded-md"
+              />
+            </div>
+            <div>
+              <span className="text-xl font-black tracking-tight text-[#F8FAFC] group-hover:text-[#D4A76A] transition-colors">
+                WicQuiz
+              </span>
+              <div className="flex items-center gap-1.5 -mt-0.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34D399] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34D399]" />
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8]">
+                  Live Arena
+                </span>
+              </div>
+            </div>
+          </Link>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.push("/host/dashboard")}
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#1C2D42]/60 border border-transparent hover:border-[#283E58] transition-all"
+            >
+              <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
+                dashboard
+              </span>
+              Host Dashboard
+            </button>
+
+            <Link
+              href="/auth/login"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] bg-[#162536] border border-[#283E58] hover:border-[#B88B4A]/50 hover:bg-[#1C2D42] transition-all"
+            >
+              Login
+            </Link>
+
             <Button
-              variant="coral"
-              size="lg"
+              variant="primary"
+              size="sm"
               onClick={() => router.push("/host/new")}
-              className="w-full sm:w-auto"
+              className="shadow-sm"
             >
-              Host a quiz
+              <span className="flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[16px]">add_circle</span>
+                <span>Host a Quiz</span>
+              </span>
             </Button>
-            <a
-              href="#join"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-on-primary/25 text-on-primary font-bold hover:bg-on-primary/10 active:scale-95 transition"
-            >
-              I have a code
-            </a>
-          </div>
-
-          <button
-            onClick={() => router.push("/host/dashboard")}
-            className="mt-7 inline-flex items-center gap-1 text-sm font-semibold text-on-primary/50 hover:text-on-primary transition-colors"
-          >
-            Host dashboard
-            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-          </button>
-        </AnimatedContainer>
-      </section>
-
-      {/* ── How it works ───────────────────────────────────── */}
-      <section className="px-6 py-20">
-        <div className="max-w-5xl mx-auto">
-          <AnimatedContainer className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary/60">
-              How it works
-            </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary tracking-tight mt-2">
-              Three steps to game-show glory
-            </h2>
-          </AnimatedContainer>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {STEPS.map((item, i) => (
-              <AnimatedContainer key={item.title} delay={i * 0.1}>
-                <div className="h-full rounded-xl border border-outline-variant/40 bg-surface-container-lowest p-7">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary-fixed text-on-primary-fixed mb-5">
-                    <span className="material-symbols-outlined">{item.icon}</span>
-                  </div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">
-                    Step {String(i + 1).padStart(2, "0")}
-                  </div>
-                  <h3 className="text-lg font-bold text-primary mb-2">{item.title}</h3>
-                  <p className="text-on-surface-variant leading-relaxed text-sm">{item.desc}</p>
-                </div>
-              </AnimatedContainer>
-            ))}
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* ── Features ───────────────────────────────────────── */}
-      <section className="px-6 py-20 bg-surface-container-low">
-        <div className="max-w-5xl mx-auto">
-          <AnimatedContainer className="text-center mb-12">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary/60">
-              Features
-            </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-primary tracking-tight mt-2">
-              Everything a great team quiz needs
-            </h2>
-          </AnimatedContainer>
+      <main className="flex-1 flex flex-col">
+        {/* ── Hero Section ───────────────────────────────────── */}
+        <section className="relative px-6 pt-20 pb-28 md:pt-28 md:pb-36 overflow-hidden tactical-grid border-b border-[#283E58]/40">
+          {/* Subtle atmospheric ambient glows */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-[#2E5339]/25 blur-[120px] rounded-full pointer-events-none -z-10" />
+          <div className="absolute bottom-0 right-10 w-[400px] h-[300px] bg-[#B88B4A]/10 blur-[100px] rounded-full pointer-events-none -z-10" />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURES.map((feat, i) => (
-              <AnimatedContainer key={feat.title} delay={i * 0.07}>
-                <div className="h-full rounded-xl bg-surface-container-lowest border border-outline-variant/40 p-6 flex gap-4 items-start">
-                  <span className="material-symbols-outlined text-primary mt-0.5">{feat.icon}</span>
-                  <div>
-                    <h3 className="font-bold text-primary mb-1">{feat.title}</h3>
-                    <p className="text-on-surface-variant text-sm leading-relaxed">{feat.desc}</p>
-                  </div>
-                </div>
-              </AnimatedContainer>
-            ))}
-          </div>
-        </div>
-      </section>
+          <AnimatedContainer className="max-w-4xl mx-auto text-center relative z-10">
+            {/* Tactical Pill Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#162536]/90 border border-[#B88B4A]/30 mb-7 shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B88B4A]" />
+              <span className="text-[11px] font-mono font-bold uppercase tracking-[0.2em] text-[#D4A76A]">
+                Next-Gen Multiplayer Arena
+              </span>
+            </div>
 
-      {/* ── Join / Host ────────────────────────────────────── */}
-      <section id="join" className="px-6 py-20">
-        <div className="max-w-md mx-auto">
-          <AnimatedContainer className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold text-primary tracking-tight">Ready to play?</h2>
-            <p className="text-on-surface-variant mt-2">Start as a host or grab a seat as a player.</p>
-          </AnimatedContainer>
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-[1.08] mb-6">
+              Turn any meeting into a{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B88B4A] via-[#E2BE80] to-[#B88B4A]">
+                high-stakes
+              </span>{" "}
+              game show
+            </h1>
 
-          <AnimatedContainer delay={0.1}>
-            <div className="rounded-xl bg-primary p-8 text-center">
-              <span className="material-symbols-outlined text-tertiary-fixed-dim text-3xl">mic</span>
-              <h3 className="text-xl font-bold text-on-primary mt-2 mb-1">Host a quiz</h3>
-              <p className="text-on-primary/60 text-sm mb-6">Create questions, run the show, crown a winner.</p>
-              <Button variant="coral" size="lg" className="w-full" onClick={() => router.push("/host/new")}>
-                Host a quiz
+            <p className="text-base sm:text-lg md:text-xl text-[#94A3B8] max-w-2xl mx-auto mb-10 leading-relaxed">
+              Real-time synchronization, galloping horse-race leaderboards, and AI question authoring.
+              Participants join from any mobile device in seconds without app installs.
+            </p>
+
+            {/* Quick Actions */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => router.push("/host/new")}
+                className="w-full sm:w-auto min-w-[200px]"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  <span className="material-symbols-outlined text-[20px]">mic</span>
+                  <span>Host a Quiz Now</span>
+                </span>
               </Button>
+              <a
+                href="#join"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-2xl border border-[#283E58] bg-[#142232]/80 text-[#F8FAFC] font-extrabold hover:border-[#B88B4A]/60 hover:bg-[#1C2D42] active:scale-98 transition-all"
+              >
+                <span className="material-symbols-outlined text-[20px] text-[#B88B4A]">
+                  dialpad
+                </span>
+                <span>Enter Room Code</span>
+              </a>
+            </div>
+
+            {/* Live Metrics Ribbon */}
+            <div className="mt-16 pt-8 border-t border-[#283E58]/50 grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-black text-[#F8FAFC] tracking-tight">0 ms</span>
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#94A3B8]">
+                  Perceived Lag
+                </span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-black text-[#D4A76A] tracking-tight">6+ Types</span>
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#94A3B8]">
+                  Question Formats
+                </span>
+              </div>
+              <div className="col-span-2 sm:col-span-1 flex flex-col items-center">
+                <span className="text-2xl font-black text-[#4ADE80] tracking-tight">1-Click</span>
+                <span className="text-[11px] font-mono uppercase tracking-widest text-[#94A3B8]">
+                  Mobile Join
+                </span>
+              </div>
             </div>
           </AnimatedContainer>
+        </section>
 
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-outline-variant/50" />
-            <span className="text-on-surface-variant/70 font-semibold text-xs uppercase tracking-widest">or</span>
-            <div className="flex-1 h-px bg-outline-variant/50" />
+        {/* ── Join or Host Interactive Terminal ───────────────── */}
+        <section id="join" className="px-6 py-20 bg-[#0D1722]">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+              {/* Player Join Card */}
+              <AnimatedContainer delay={0.1}>
+                <div className="tactical-card h-full rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-12 h-12 rounded-2xl bg-[#1C2D42] border border-[#B88B4A]/30 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[26px] text-[#B88B4A]">
+                          confirmation_number
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] bg-[#162536] px-3 py-1 rounded-full border border-[#283E58]">
+                        Player Entrance
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-extrabold text-[#F8FAFC] mb-2 tracking-tight">
+                      Join Active Game
+                    </h3>
+                    <p className="text-sm text-[#94A3B8] mb-8 leading-relaxed">
+                      Enter the 4–6 character room code displayed on the host screen to jump straight into the arena.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleJoin} className="space-y-4">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={roomCode}
+                        onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
+                        placeholder="ROOM CODE"
+                        maxLength={6}
+                        className="w-full text-center text-2xl font-black tracking-[0.3em] uppercase px-6 py-4 rounded-2xl bg-[#0A121B] border border-[#283E58] text-[#F8FAFC] placeholder:text-[#64748B] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A] focus:outline-none transition-all"
+                      />
+                    </div>
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      type="submit"
+                      disabled={roomCode.trim().length < 4}
+                      className="w-full"
+                    >
+                      Enter Arena
+                    </Button>
+                  </form>
+                </div>
+              </AnimatedContainer>
+
+              {/* Host Quick Launch Card */}
+              <AnimatedContainer delay={0.2}>
+                <div className="tactical-card h-full rounded-3xl p-8 sm:p-10 flex flex-col justify-between border-t-2 border-t-[#2E5339]">
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-12 h-12 rounded-2xl bg-[#2E5339]/30 border border-[#2E5339] flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[26px] text-[#4ADE80]">
+                          sensors
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#4ADE80] bg-[#2E5339]/30 px-3 py-1 rounded-full border border-[#2E5339]/50">
+                        Host Console
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-extrabold text-[#F8FAFC] mb-2 tracking-tight">
+                      Launch as Host
+                    </h3>
+                    <p className="text-sm text-[#94A3B8] mb-8 leading-relaxed">
+                      Create custom questions, schedule rounds, configure timers, and command the leaderboard live on your terms.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Button
+                      variant="secondary"
+                      size="lg"
+                      onClick={() => router.push("/host/new")}
+                      className="w-full"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <span className="material-symbols-outlined text-[20px]">add</span>
+                        <span>Create New Quiz</span>
+                      </span>
+                    </Button>
+                    <button
+                      onClick={() => router.push("/host/dashboard")}
+                      className="w-full py-3 text-xs font-bold text-[#94A3B8] hover:text-[#F8FAFC] transition-colors flex items-center justify-center gap-1.5"
+                    >
+                      <span>Open Host Dashboard</span>
+                      <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                    </button>
+                  </div>
+                </div>
+              </AnimatedContainer>
+            </div>
           </div>
+        </section>
 
-          <AnimatedContainer delay={0.2}>
-            <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/40 p-8 text-center">
-              <span className="material-symbols-outlined text-primary text-3xl">confirmation_number</span>
-              <h3 className="text-xl font-bold text-primary mt-2 mb-1">Join the game</h3>
-              <p className="text-on-surface-variant text-sm mb-6">Got a room code? Enter it and get in.</p>
-              <form onSubmit={handleJoin} className="space-y-3">
-                <input
-                  type="text"
-                  value={roomCode}
-                  onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                  placeholder="ROOM CODE"
-                  maxLength={6}
-                  className="w-full text-center text-2xl font-bold tracking-[0.3em] px-6 py-4 rounded-xl border border-outline-variant/60 focus:border-primary focus:outline-none bg-surface placeholder:text-on-surface-variant/40"
-                />
-                <Button variant="primary" size="lg" className="w-full" type="submit" disabled={roomCode.trim().length < 4}>
-                  Join the game
-                </Button>
-              </form>
+        {/* ── Three-Step Pipeline ─────────────────────────────── */}
+        <section className="px-6 py-24 border-t border-[#283E58]/40 bg-[#0B141E]">
+          <div className="max-w-5xl mx-auto">
+            <AnimatedContainer className="text-center mb-16">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-[0.2em] text-[#B88B4A]">
+                Workflow Architecture
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-2">
+                Three steps to game-show glory
+              </h2>
+            </AnimatedContainer>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {STEPS.map((item, i) => (
+                <AnimatedContainer key={item.title} delay={i * 0.1}>
+                  <div className="tactical-card h-full rounded-2xl p-8 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="w-12 h-12 rounded-xl bg-[#1C2D42] border border-[#B88B4A]/30 flex items-center justify-center text-[#B88B4A]">
+                          <span className="material-symbols-outlined text-[24px]">
+                            {item.icon}
+                          </span>
+                        </div>
+                        <span className="text-xs font-mono font-black text-[#B88B4A] bg-[#B88B4A]/10 px-2.5 py-1 rounded-md border border-[#B88B4A]/20">
+                          {item.step}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                      <p className="text-sm text-[#94A3B8] leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </AnimatedContainer>
+              ))}
             </div>
-          </AnimatedContainer>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <footer className="py-8 text-center border-t border-outline-variant/40">
-        <p className="text-on-surface-variant/60 text-sm">No account needed — just create or join.</p>
+        {/* ── Feature Matrix ─────────────────────────────────── */}
+        <section className="px-6 py-24 border-t border-[#283E58]/40 bg-[#0D1722]">
+          <div className="max-w-5xl mx-auto">
+            <AnimatedContainer className="text-center mb-16">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-[0.2em] text-[#B88B4A]">
+                Platform Capabilities
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-2">
+                Engineered for engagement & speed
+              </h2>
+            </AnimatedContainer>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {FEATURES.map((feat, i) => (
+                <AnimatedContainer key={feat.title} delay={i * 0.05}>
+                  <div className="tactical-card h-full rounded-2xl p-6 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="w-10 h-10 rounded-lg bg-[#1C2D42] border border-[#283E58] flex items-center justify-center text-[#D4A76A]">
+                          <span className="material-symbols-outlined text-[20px]">
+                            {feat.icon}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-[#94A3B8] bg-[#142232] px-2 py-0.5 rounded border border-[#283E58]/50">
+                          {feat.tag}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-white mb-1.5 text-base">{feat.title}</h3>
+                      <p className="text-xs text-[#94A3B8] leading-relaxed">{feat.desc}</p>
+                    </div>
+                  </div>
+                </AnimatedContainer>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* ── Footer ─────────────────────────────────────────── */}
+      <footer className="py-8 px-6 border-t border-[#283E58]/40 bg-[#0A121B] text-center">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94A3B8]">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[#F8FAFC]">WicQuiz</span>
+            <span>•</span>
+            <span>Modern Real-Time Pub Quiz Platform</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <Link href="/auth/login" className="hover:text-[#F8FAFC] transition-colors">
+              Host Login
+            </Link>
+            <Link href="/auth/register" className="hover:text-[#F8FAFC] transition-colors">
+              Create Account
+            </Link>
+            <Link href="/host/dashboard" className="hover:text-[#F8FAFC] transition-colors">
+              Dashboard
+            </Link>
+          </div>
+        </div>
       </footer>
-    </main>
+    </div>
   );
 }

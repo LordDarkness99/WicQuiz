@@ -14,7 +14,7 @@ export function ResetPasswordRoute() {
         <p>
           <Link
             href="/auth/login"
-            className="font-bold text-primary hover:text-secondary-container transition-colors"
+            className="font-bold text-[#D4A76A] hover:text-[#B88B4A] hover:underline transition-colors"
           >
             Cancel and return to Login
           </Link>

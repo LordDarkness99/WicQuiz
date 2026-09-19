@@ -118,7 +118,7 @@ export default function QuestionEditor({
       {/* Header & Type Tabs */}
       <section className="space-y-6">
         <div className="flex justify-between items-end">
-          <h2 className="text-3xl font-extrabold text-primary tracking-tight">
+          <h2 className="text-3xl font-extrabold text-on-surface tracking-tight">
             Question Editor
           </h2>
           <div className="flex items-center gap-2 text-xs font-bold text-outline bg-surface-container-low px-3 py-1.5 rounded-lg">
@@ -136,8 +136,8 @@ export default function QuestionEditor({
               onClick={() => switchType(tab.type)}
               className={`flex-1 py-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all ${
                 question.type === tab.type
-                  ? "bg-surface-container-lowest text-primary shadow-sm ring-1 ring-outline-variant/10"
-                  : "text-outline hover:text-primary hover:bg-surface-container-lowest/50"
+                  ? "bg-surface-container-lowest text-on-surface shadow-sm ring-1 ring-outline-variant/10"
+                  : "text-outline hover:text-on-surface hover:bg-surface-container-lowest/50"
               }`}
             >
               <span className="material-symbols-outlined text-base">
@@ -171,7 +171,7 @@ export default function QuestionEditor({
 
         <div className="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)]">
           <textarea
-            className="w-full border-none focus:ring-0 focus:outline-none p-0 text-2xl font-bold text-primary placeholder:text-surface-container-highest resize-none bg-transparent"
+            className="w-full border-none focus:ring-0 focus:outline-none p-0 text-2xl font-bold text-on-surface placeholder:text-outline/60 resize-none bg-transparent"
             placeholder="Type your question here..."
             rows={2}
             value={question.question_text}
@@ -284,7 +284,7 @@ export default function QuestionEditor({
                       {answerLabels[i]}
                     </div>
                     <input
-                      className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-primary bg-transparent placeholder:text-outline"
+                      className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface bg-transparent placeholder:text-outline"
                       type="text"
                       value={opt}
                       onChange={(e) => {
@@ -313,7 +313,7 @@ export default function QuestionEditor({
                         disabled={!opt.trim()}
                         className="w-5 h-5 text-emerald-600 border-outline focus:ring-emerald-500 cursor-pointer disabled:opacity-30"
                       />
-                      <span className="text-xs font-bold text-outline group-hover:text-primary transition-colors">
+                      <span className="text-xs font-bold text-outline group-hover:text-on-surface transition-colors">
                         Correct
                       </span>
                     </label>
@@ -340,7 +340,7 @@ export default function QuestionEditor({
                       ? val === "True"
                         ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md ring-2 ring-emerald-500/20"
                         : "border-red-500 bg-red-50 text-red-700 shadow-md ring-2 ring-red-500/20"
-                      : "bg-surface-container-lowest border-transparent text-primary hover:border-outline-variant/30"
+                      : "bg-surface-container-lowest border-transparent text-on-surface hover:border-outline-variant/30"
                   }`}
                 >
                   <span className="flex items-center gap-3">
@@ -375,7 +375,7 @@ export default function QuestionEditor({
               value={question.correct_answer}
               onChange={(e) => update({ correct_answer: e.target.value })}
               placeholder="The answer players must type (e.g. Jupiter, Paris, 1945)"
-              className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-lg font-bold text-primary placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
+              className="w-full bg-surface-container-low border-none rounded-xl px-4 py-3 text-lg font-bold text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary-container focus:outline-none"
             />
             <p className="text-xs text-outline font-medium">
               Matching is case-insensitive. AI grading fallback also helps catch minor typos.
@@ -393,7 +393,7 @@ export default function QuestionEditor({
             </label>
             <div className="flex items-center bg-surface-container-low rounded-xl px-4 py-2 w-32">
               <input
-                className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-primary w-full"
+                className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface w-full"
                 type="number"
                 min={5}
                 max={120}
@@ -412,7 +412,7 @@ export default function QuestionEditor({
             </label>
             <div className="flex items-center bg-surface-container-low rounded-xl px-4 py-2 w-32">
               <input
-                className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-primary w-full"
+                className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface w-full"
                 type="number"
                 value={1000}
                 readOnly

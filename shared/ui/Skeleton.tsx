@@ -80,7 +80,7 @@ export function QuestionSkeleton() {
       {/* Timer bar */}
       <Skeleton className="h-2.5 w-full rounded-full" />
       {/* Question card */}
-      <div className="bg-white rounded-3xl shadow-md p-6 space-y-3">
+      <div className="bg-surface-container-lowest border border-outline-variant/30 rounded-3xl shadow-md p-6 space-y-3">
         <Skeleton className="h-6 w-full" />
         <Skeleton className="h-6 w-4/5" />
         <Skeleton className="h-6 w-3/5" />

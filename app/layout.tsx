@@ -34,6 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-bg-theme="soft"
       className={`${plusJakarta.variable} ${atkinsonHyperlegible.variable} h-full antialiased`}
     >
       <head>

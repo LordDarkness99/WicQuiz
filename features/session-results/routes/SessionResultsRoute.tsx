@@ -120,23 +120,23 @@ export default function SessionResultsPage() {
   return (
     <div className="min-h-screen bg-surface text-on-surface">
       {/* Header */}
-      <header className="bg-surface-bright border-b border-primary/10 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+      <header className="bg-surface-bright border-b border-outline-variant/30 px-6 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center gap-6">
           <button
             onClick={() => router.push("/host/dashboard")}
-            className="flex items-center gap-1 text-sm font-bold text-outline hover:text-primary transition-colors"
+            className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px]">
               arrow_back
             </span>
             Dashboard
           </button>
-          <div className="h-8 w-px bg-outline-variant/30" />
-          <span className="text-sm font-bold text-primary">{result.title}</span>
+          <div className="h-6 w-px bg-outline-variant/40" />
+          <span className="text-sm font-extrabold text-on-surface">{result.title}</span>
         </div>
         <button
           onClick={handleDownload}
-          className="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-xl text-sm font-bold text-on-surface-variant hover:bg-surface-container-highest transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-highest transition-colors cursor-pointer border border-outline-variant/30"
         >
           <span className="material-symbols-outlined text-[18px]">
             download
@@ -145,30 +145,30 @@ export default function SessionResultsPage() {
         </button>
       </header>
 
-      <main className="max-w-4xl mx-auto px-8 py-8">
+      <main className="max-w-4xl mx-auto px-6 sm:px-8 py-8">
         {/* Session info */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/10 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-outline mb-1">
+          <div className="tactical-card bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/30 text-center">
+            <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant mb-1">
               Players
             </p>
-            <p className="text-2xl font-black text-primary">
+            <p className="text-2xl font-black text-on-surface">
               {result.player_count}
             </p>
           </div>
-          <div className="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/10 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-outline mb-1">
+          <div className="tactical-card bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/30 text-center">
+            <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant mb-1">
               Questions
             </p>
-            <p className="text-2xl font-black text-primary">
+            <p className="text-2xl font-black text-on-surface">
               {result.question_count}
             </p>
           </div>
-          <div className="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/10 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-outline mb-1">
+          <div className="tactical-card bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/30 text-center">
+            <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant mb-1">
               Date
             </p>
-            <p className="text-lg font-bold text-primary">
+            <p className="text-lg font-extrabold text-on-surface">
               {result.finished_at
                 ? new Date(result.finished_at).toLocaleDateString("en-AU", {
                     day: "numeric",
@@ -181,7 +181,7 @@ export default function SessionResultsPage() {
         </div>
 
         {/* Final Leaderboard */}
-        <h2 className="text-lg font-bold text-primary mb-4">
+        <h2 className="text-xl font-extrabold text-on-surface mb-4">
           Final Leaderboard
         </h2>
         <div className="space-y-3 mb-10">
@@ -191,44 +191,44 @@ export default function SessionResultsPage() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.06 }}
-              className={`flex items-center gap-4 rounded-xl p-4 ${
+              className={`flex items-center gap-4 rounded-2xl p-4 border ${
                 idx === 0
-                  ? "bg-secondary-container/10 border-2 border-secondary-container/30"
+                  ? "bg-[#B88B4A]/15 border-[#B88B4A]/40 shadow-xs"
                   : idx < 3
-                  ? "bg-tertiary-fixed/20 border border-tertiary-fixed-dim/20"
-                  : "bg-surface-container-low border border-outline-variant/10"
+                  ? "bg-[#B88B4A]/8 border-[#B88B4A]/25"
+                  : "bg-surface-container-lowest border-outline-variant/30"
               }`}
             >
               <span
-                className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
+                className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-base ${
                   idx === 0
-                    ? "bg-secondary-container text-white"
+                    ? "bg-[#B88B4A] text-[#0D1722]"
                     : idx === 1
-                    ? "bg-tertiary-fixed-dim text-on-tertiary-fixed"
+                    ? "bg-[#D4A76A] text-[#0D1722]"
                     : idx === 2
-                    ? "bg-primary text-on-primary"
+                    ? "bg-surface-container-highest text-on-surface"
                     : "bg-surface-container-high text-on-surface-variant"
                 }`}
               >
                 {entry.rank}
               </span>
               <div className="flex-1 min-w-0">
-                <p className="text-primary font-bold truncate">
+                <p className="text-on-surface font-extrabold truncate">
                   {entry.player_name}
                 </p>
                 {entry.horse_name && (
-                  <p className="text-outline text-sm truncate">
+                  <p className="text-on-surface-variant text-xs truncate">
                     {entry.horse_name}
                   </p>
                 )}
               </div>
-              <span className="text-primary font-mono font-bold text-xl">
+              <span className="text-on-surface font-mono font-black text-xl">
                 {entry.score}
               </span>
             </motion.div>
           ))}
           {leaderboard.length === 0 && (
-            <p className="text-outline text-center py-8">
+            <p className="text-on-surface-variant text-center py-8 text-sm">
               No leaderboard data available.
             </p>
           )}
@@ -237,7 +237,7 @@ export default function SessionResultsPage() {
         {/* Per-Question Breakdown */}
         {stats.length > 0 && (
           <>
-            <h2 className="text-lg font-bold text-primary mb-4">
+            <h2 className="text-xl font-extrabold text-on-surface mb-4">
               Question Breakdown
             </h2>
             <div className="space-y-3 mb-10">
@@ -253,52 +253,52 @@ export default function SessionResultsPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`rounded-xl p-5 border ${
+                    className={`tactical-card rounded-2xl p-5 border ${
                       isHardest
-                        ? "bg-error/5 border-error/20"
-                        : "bg-surface-container-lowest border-outline-variant/10"
+                        ? "bg-error/8 border-error/30"
+                        : "bg-surface-container-lowest border-outline-variant/30"
                     }`}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-outline">
+                          <span className="text-[10px] font-mono font-bold text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
                             Q{i + 1}
                           </span>
                           {isHardest && (
-                            <span className="text-[10px] font-bold bg-error/10 text-error px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] font-bold bg-error/15 text-error px-2 py-0.5 rounded-full border border-error/30">
                               Hardest
                             </span>
                           )}
                         </div>
-                        <p className="font-bold text-primary mt-1 truncate">
+                        <p className="font-bold text-on-surface mt-1 truncate">
                           {s.text}
                         </p>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-outline">
+                        <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant">
                           Correct
                         </p>
-                        <p className="text-lg font-black text-primary">
+                        <p className="text-lg font-black text-on-surface">
                           {pct}%
                         </p>
-                        <p className="text-xs text-outline">
+                        <p className="text-xs text-on-surface-variant">
                           {s.correctCount}/{s.totalAnswers}
                         </p>
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-outline">
+                        <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant">
                           Avg Time
                         </p>
-                        <p className="text-lg font-black text-primary">
+                        <p className="text-lg font-black text-on-surface">
                           {(s.avgTimeMs / 1000).toFixed(1)}s
                         </p>
                       </div>
                       <div>
                         {/* Correctness bar */}
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-outline mb-1">
+                        <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant mb-1">
                           Distribution
                         </p>
                         <div className="h-3 bg-surface-container-high rounded-full overflow-hidden">

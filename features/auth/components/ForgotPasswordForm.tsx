@@ -78,9 +78,9 @@ export function ForgotPasswordForm() {
       <div>
         <label
           htmlFor="forgot-email"
-          className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1.5"
+          className="block text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8] mb-1.5"
         >
-          Registered Email
+          Registered Email Address
         </label>
         <input
           id="forgot-email"
@@ -90,10 +90,10 @@ export function ForgotPasswordForm() {
           placeholder="name@example.com"
           autoComplete="email"
           disabled={loading}
-          className={`w-full px-4 py-3 rounded-xl border bg-surface text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3 rounded-xl border bg-[#0A121B] text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none transition-all ${
             errors.email
               ? "border-error focus:border-error"
-              : "border-outline-variant/60 focus:border-primary"
+              : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
           }`}
         />
         {errors.email && (
@@ -102,14 +102,14 @@ export function ForgotPasswordForm() {
       </div>
 
       <Button
-        variant="coral"
+        variant="primary"
         size="lg"
         type="submit"
-        className="w-full mt-2"
+        className="w-full mt-4"
         disabled={loading}
       >
         {loading ? (
-            <span className="inline-flex items-center gap-2">
+          <span className="inline-flex items-center gap-2">
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             Sending link...
           </span>
