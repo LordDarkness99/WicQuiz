@@ -10,6 +10,7 @@ import { getQuizTemplates } from "@/features/quiz-authoring";
 import { getSessionResults } from "@/features/session-results";
 import { ImageUpload } from "@/features/media";
 import { getHostId } from "@/shared/hostIdentity";
+import { HostHeader } from "@/shared/ui/HostHeader";
 
 export default function ProfileRoute() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function ProfileRoute() {
         setTotalGames(sessions.length);
         setTotalPlayers(sessions.reduce((sum, s) => sum + s.player_count, 0));
       } catch {
-        toast.error("Gagal memuat profil.");
+        toast.error("Failed to load profile.");
       } finally {
         setLoading(false);
       }
@@ -61,7 +62,7 @@ export default function ProfileRoute() {
   const handleSave = useCallback(async () => {
     if (!userId) return;
     if (!displayName.trim()) {
-      toast.warning("Nama tampilan tidak boleh kosong.");
+      toast.warning("Display name cannot be empty.");
       return;
     }
     setSaving(true);
@@ -71,9 +72,9 @@ export default function ProfileRoute() {
         avatarUrl,
       });
       setProfile(updated);
-      toast.success("Profil berhasil diperbarui.");
+      toast.success("Profile updated successfully.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Gagal memperbarui profil.");
+      toast.error(err instanceof Error ? err.message : "Failed to update profile.");
     } finally {
       setSaving(false);
     }
@@ -93,18 +94,7 @@ export default function ProfileRoute() {
 
   return (
     <div className="min-h-screen bg-surface text-on-surface">
-      {/* Header */}
-      <header className="bg-surface-bright border-b border-outline-variant/30 px-8 py-4 flex items-center gap-4 sticky top-0 z-50">
-        <button
-          onClick={() => router.push("/host/dashboard")}
-          className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors"
-        >
-          <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-          Dashboard
-        </button>
-        <div className="h-8 w-px bg-outline-variant/30" />
-        <span className="text-sm font-bold text-on-surface">My Profile</span>
-      </header>
+      <HostHeader />
 
       <main className="max-w-2xl mx-auto px-6 py-10">
         <motion.div

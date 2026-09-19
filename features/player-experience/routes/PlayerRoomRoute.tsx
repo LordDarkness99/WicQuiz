@@ -1289,7 +1289,7 @@ export default function PlayPage() {
                 className="flex items-center gap-2 mt-3 px-4 py-2 rounded-full bg-navy/5 border border-navy/10 text-xs font-bold text-navy/70"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Menunggu host memulai ulang quiz (Play Again) atau menutup room...
+                Waiting for the host to restart the quiz (Play Again) or close the room...
               </motion.div>
 
               <p className="text-sm text-outline/60 mt-4 text-center">
@@ -1304,7 +1304,7 @@ export default function PlayPage() {
                 className="flex items-center gap-2 mt-2 px-6 py-3 rounded-xl bg-navy text-white font-bold text-sm shadow-md hover:scale-[1.02] active:scale-95 transition-all"
               >
                 <span className="material-symbols-outlined text-[18px]">logout</span>
-                Keluar
+                Exit
               </motion.button>
             </AnimatedContainer>
           )}

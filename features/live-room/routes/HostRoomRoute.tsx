@@ -790,7 +790,7 @@ export default function HostControlPanel() {
         router.push("/host/dashboard");
       } catch (err) {
         toast.error(
-          err instanceof Error ? err.message : "Gagal menghentikan quiz. Coba lagi."
+          err instanceof Error ? err.message : "Failed to stop quiz. Please try again."
         );
         setStoppingQuiz(false);
       }
@@ -1120,8 +1120,8 @@ export default function HostControlPanel() {
                           </span>
                           <span className="text-xs font-bold text-primary">
                             {isLastQuestion
-                              ? `Menampilkan hasil akhir dalam ${autoAdvanceSeconds} detik...`
-                              : `Melanjutkan ke soal berikutnya dalam ${autoAdvanceSeconds} detik...`}
+                              ? `Showing final results in ${autoAdvanceSeconds} seconds...`
+                              : `Proceeding to the next question in ${autoAdvanceSeconds} seconds...`}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -1129,7 +1129,7 @@ export default function HostControlPanel() {
                             onClick={() => setAutoAdvanceSeconds(null)}
                             className="px-2.5 py-1 rounded-lg border border-primary/20 text-[11px] font-bold text-primary hover:bg-primary/10 transition-colors"
                           >
-                            Jeda Otomatis
+                            Pause Timer
                           </button>
                           <button
                             onClick={() => {
@@ -1139,7 +1139,7 @@ export default function HostControlPanel() {
                             }}
                             className="px-3 py-1 rounded-lg bg-primary text-white text-[11px] font-bold hover:bg-primary/90 transition-colors"
                           >
-                            Lanjut Sekarang
+                            Continue Now
                           </button>
                         </div>
                       </div>
@@ -1149,7 +1149,7 @@ export default function HostControlPanel() {
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
-                      Jawaban Ditampilkan
+                      Answers Revealed
                     </div>
                     <div className="flex gap-4">
                       <button

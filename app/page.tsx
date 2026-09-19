@@ -87,8 +87,8 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-[#0D1722] text-[#F8FAFC] selection:bg-[#B88B4A] selection:text-[#0D1722]">
       {/* ── Top Navigation Bar ───────────────────────────────── */}
       <header className="sticky top-0 z-40 w-full border-b border-[#283E58]/60 bg-[#0D1722]/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1C2D42] to-[#121F2E] border border-[#B88B4A]/40 flex items-center justify-center shadow-[0_0_15px_rgba(184,139,74,0.15)] group-hover:border-[#B88B4A] transition-all">
               <Image
                 src="/ikon.png"
@@ -114,33 +114,35 @@ export default function HomePage() {
             </div>
           </Link>
 
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => router.push("/host/dashboard")}
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-[#94A3B8] hover:text-[#F8FAFC] hover:bg-[#1C2D42]/60 border border-transparent hover:border-[#283E58] transition-all"
-            >
-              <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
-                dashboard
-              </span>
-              Host Dashboard
-            </button>
-
-            <Link
-              href="/auth/login"
-              className="px-4 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] bg-[#162536] border border-[#283E58] hover:border-[#B88B4A]/50 hover:bg-[#1C2D42] transition-all"
-            >
-              Login
-            </Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            {isReturningHost ? (
+              <button
+                onClick={() => router.push("/host/dashboard")}
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] bg-[#162536] border border-[#283E58] hover:border-[#B88B4A]/50 hover:bg-[#1C2D42] transition-all"
+                title="Host Dashboard"
+              >
+                <span className="hidden sm:inline">Dashboard</span>
+                <span className="sm:hidden material-symbols-outlined text-[16px] text-[#B88B4A]">dashboard</span>
+              </button>
+            ) : (
+              <Link
+                href="/auth/login"
+                className="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] bg-[#162536] border border-[#283E58] hover:border-[#B88B4A]/50 hover:bg-[#1C2D42] transition-all"
+              >
+                Login
+              </Link>
+            )}
 
             <Button
               variant="primary"
               size="sm"
               onClick={() => router.push("/host/new")}
-              className="shadow-sm"
+              className="shadow-sm px-3 sm:px-4"
             >
               <span className="flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[16px]">add_circle</span>
-                <span>Host a Quiz</span>
+                <span className="hidden sm:inline">Host a Quiz</span>
+                <span className="sm:hidden">Host</span>
               </span>
             </Button>
           </div>
@@ -149,7 +151,7 @@ export default function HomePage() {
 
       <main className="flex-1 flex flex-col">
         {/* ── Hero Section ───────────────────────────────────── */}
-        <section className="relative px-6 pt-20 pb-28 md:pt-28 md:pb-36 overflow-hidden tactical-grid border-b border-[#283E58]/40">
+        <section className="relative px-4 sm:px-6 pt-16 sm:pt-20 pb-20 sm:pb-28 md:pt-28 md:pb-36 overflow-hidden tactical-grid border-b border-[#283E58]/40">
           {/* Subtle atmospheric ambient glows */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-[#2E5339]/25 blur-[120px] rounded-full pointer-events-none -z-10" />
           <div className="absolute bottom-0 right-10 w-[400px] h-[300px] bg-[#B88B4A]/10 blur-[100px] rounded-full pointer-events-none -z-10" />
@@ -163,7 +165,7 @@ export default function HomePage() {
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white leading-[1.08] mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1] sm:leading-[1.08] mb-4 sm:mb-6">
               Turn any meeting into a{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B88B4A] via-[#E2BE80] to-[#B88B4A]">
                 high-stakes
@@ -225,7 +227,7 @@ export default function HomePage() {
         </section>
 
         {/* ── Join or Host Interactive Terminal ───────────────── */}
-        <section id="join" className="px-6 py-20 bg-[#0D1722]">
+        <section id="join" className="px-4 sm:px-6 py-12 sm:py-20 bg-[#0D1722]">
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               {/* Player Join Card */}
@@ -323,7 +325,7 @@ export default function HomePage() {
         </section>
 
         {/* ── Three-Step Pipeline ─────────────────────────────── */}
-        <section className="px-6 py-24 border-t border-[#283E58]/40 bg-[#0B141E]">
+        <section className="px-4 sm:px-6 py-16 sm:py-24 border-t border-[#283E58]/40 bg-[#0B141E]">
           <div className="max-w-5xl mx-auto">
             <AnimatedContainer className="text-center mb-16">
               <span className="text-[11px] font-mono font-bold uppercase tracking-[0.2em] text-[#B88B4A]">
@@ -360,7 +362,7 @@ export default function HomePage() {
         </section>
 
         {/* ── Feature Matrix ─────────────────────────────────── */}
-        <section className="px-6 py-24 border-t border-[#283E58]/40 bg-[#0D1722]">
+        <section className="px-4 sm:px-6 py-16 sm:py-24 border-t border-[#283E58]/40 bg-[#0D1722]">
           <div className="max-w-5xl mx-auto">
             <AnimatedContainer className="text-center mb-16">
               <span className="text-[11px] font-mono font-bold uppercase tracking-[0.2em] text-[#B88B4A]">
@@ -399,13 +401,13 @@ export default function HomePage() {
 
       {/* ── Footer ─────────────────────────────────────────── */}
       <footer className="py-8 px-6 border-t border-[#283E58]/40 bg-[#0A121B] text-center">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94A3B8]">
-          <div className="flex items-center gap-2">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-4 text-xs text-[#94A3B8]">
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-center sm:text-left">
             <span className="font-bold text-[#F8FAFC]">WicQuiz</span>
-            <span>•</span>
+            <span className="hidden sm:inline">•</span>
             <span>Modern Real-Time Pub Quiz Platform</span>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
             <Link href="/auth/login" className="hover:text-[#F8FAFC] transition-colors">
               Host Login
             </Link>

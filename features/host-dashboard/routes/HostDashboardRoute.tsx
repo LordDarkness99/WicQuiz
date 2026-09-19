@@ -22,21 +22,17 @@ import {
   type SessionResult,
 } from "@/features/session-results";
 import { QuizCardSkeleton, StatCardSkeleton } from "@/shared/ui/Skeleton";
-import { getCurrentUser, logoutUser } from "@/features/auth";
-import { getProfile } from "@/features/profile";
+import { getCurrentUser } from "@/features/auth";
+import { HostHeader } from "@/shared/ui/HostHeader";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [hostId, setHostId] = useState("");
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [userDisplayName, setUserDisplayName] = useState<string | null>(null);
-  const [userAvatarUrl, setUserAvatarUrl] = useState<string | null>(null);
   const [templates, setTemplates] = useState<QuizTemplate[]>([]);
   const [sessions, setSessions] = useState<SessionResult[]>([]);
   const [activeRooms, setActiveRooms] = useState<ActiveRoomInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [loggingOut, setLoggingOut] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [quizToDelete, setQuizToDelete] = useState<QuizTemplate | null>(null);
 
@@ -63,12 +59,6 @@ export default function DashboardPage() {
         setTemplates(t);
         setSessions(s);
         setActiveRooms(rooms);
-        if (currentUser) {
-          setUserEmail(currentUser.email);
-          setUserDisplayName(currentUser.displayName || null);
-          const profile = await getProfile(currentUser.id);
-          setUserAvatarUrl(profile?.avatar_url ?? null);
-        }
       } catch {
         // Silently handle - empty state will show
       } finally {
@@ -79,7 +69,7 @@ export default function DashboardPage() {
     load();
   }, []);
 
-  // Keep the "N pemain masuk" count on active-room cards fresh without
+  // Keep the "N players joined" count on active-room cards fresh without
   // requiring a manual page refresh — poll while the host is on this page.
   useEffect(() => {
     if (!hostId) return;
@@ -93,25 +83,6 @@ export default function DashboardPage() {
     }, 4000);
     return () => clearInterval(interval);
   }, [hostId]);
-
-  const handleLogout = useCallback(async () => {
-    setLoggingOut(true);
-    try {
-      clearHostId();
-      const { error } = await logoutUser();
-      if (error) {
-        toast.error("Gagal logout: " + error);
-        setLoggingOut(false);
-        return;
-      }
-      toast.success("Berhasil logout. Sampai jumpa! 👋");
-      router.push("/auth/login");
-      router.refresh();
-    } catch {
-      toast.error("Terjadi kesalahan saat logout.");
-      setLoggingOut(false);
-    }
-  }, [router]);
 
   // Close menu on click outside
   useEffect(() => {
@@ -142,7 +113,7 @@ export default function DashboardPage() {
       // If room for this quiz is already active, go straight to it!
       const existingRoom = activeRooms.find((r) => r.quiz_title === template.title);
       if (existingRoom) {
-        toast.info(`Room untuk "${template.title}" sudah berjalan (${existingRoom.room_code}). Masuk ke room…`);
+        toast.info(`Room for "${template.title}" is already running (${existingRoom.room_code}). Joining room…`);
         router.push(`/host/${existingRoom.room_code}`);
         return;
       }
@@ -151,7 +122,7 @@ export default function DashboardPage() {
       try {
         const { questions } = await loadQuizTemplate(template.id);
         if (questions.length === 0) {
-          toast.warning("Quiz ini belum memiliki pertanyaan — edit quiz terlebih dahulu.");
+          toast.warning("This quiz has no questions — please edit the quiz first.");
           setActionLoading(null);
           return;
         }
@@ -187,10 +158,10 @@ export default function DashboardPage() {
         }
 
         await markTemplateAsRun(template.id);
-        toast.success(`"${template.title}" — room berhasil dibuat! Menuju lobby…`);
+        toast.success(`"${template.title}" — room successfully created! Heading to lobby…`);
         router.push(`/host/${room.room_code}?templateId=${template.id}`);
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Gagal menjalankan quiz.");
+        toast.error(err instanceof Error ? err.message : "Failed to run quiz.");
         setActionLoading(null);
       }
     },
@@ -205,10 +176,10 @@ export default function DashboardPage() {
       try {
         await deleteQuizTemplate(id);
         setTemplates((prev) => prev.filter((t) => t.id !== id));
-        toast.success(`Quiz "${quizToDelete.title}" berhasil dihapus.`);
+        toast.success(`Quiz "${quizToDelete.title}" successfully deleted.`);
         setQuizToDelete(null);
       } catch {
-        toast.error("Gagal menghapus quiz.");
+        toast.error("Failed to delete quiz.");
       } finally {
         setActionLoading(null);
       }
@@ -246,17 +217,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0D1722] text-[#F8FAFC]">
-        <header className="bg-[#0D1722]/80 backdrop-blur-xl border-b border-[#283E58]/60 px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <span className="text-xl font-black text-[#F8FAFC] tracking-tight">WicQuiz</span>
-            <div className="h-6 w-px bg-[#283E58]" />
-            <span className="text-xs font-mono uppercase tracking-widest text-[#B88B4A]">Host Console</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-24 h-10 bg-[#162536] rounded-xl animate-pulse" />
-            <div className="w-20 h-10 bg-[#162536] rounded-xl animate-pulse" />
-          </div>
-        </header>
+        <HostHeader />
         <main className="max-w-7xl mx-auto px-8 py-8">
           <div className="grid grid-cols-3 gap-4 mb-8">
             {[0, 1, 2].map((i) => (
@@ -275,88 +236,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#0D1722] text-[#F8FAFC] selection:bg-[#B88B4A] selection:text-[#0D1722]">
-      {/* Header */}
-      <header className="bg-[#0D1722]/85 backdrop-blur-xl border-b border-[#283E58]/60 px-6 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-4">
-          <span
-            className="text-xl font-black text-[#F8FAFC] tracking-tight cursor-pointer hover:text-[#D4A76A] transition-colors"
-            onClick={() => router.push("/")}
-          >
-            WicQuiz
-          </span>
-          <div className="h-6 w-px bg-[#283E58]" />
-          <span className="text-xs font-mono uppercase tracking-widest text-[#B88B4A]">
-            Host Console
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* History link */}
-          <button
-            onClick={() => router.push("/host/history")}
-            title="Quiz History"
-            aria-label="Lihat riwayat quiz"
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs text-[#94A3B8] hover:bg-[#1C2D42] hover:text-[#F8FAFC] border border-transparent hover:border-[#283E58] transition-all"
-          >
-            <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">history</span>
-            <span className="hidden sm:inline">History</span>
-          </button>
-          {/* User info -> profile */}
-          {userEmail && (
-            <button
-              onClick={() => router.push("/host/profile")}
-              title="My Profile"
-              aria-label="Lihat profil saya"
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#142232] rounded-xl border border-[#283E58] hover:border-[#B88B4A]/50 transition-all"
-            >
-              <span className="w-6 h-6 rounded-full overflow-hidden bg-[#1C2D42] flex items-center justify-center flex-shrink-0 border border-[#283E58]">
-                {userAvatarUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={userAvatarUrl}
-                    alt=""
-                    className="w-full h-full object-cover"
-                    onError={() => setUserAvatarUrl(null)}
-                  />
-                ) : (
-                  <span className="material-symbols-outlined text-[16px] text-[#B88B4A]">
-                    account_circle
-                  </span>
-                )}
-              </span>
-              <span className="text-xs font-bold text-[#F8FAFC] truncate max-w-[140px]">
-                {userDisplayName || userEmail}
-              </span>
-            </button>
-          )}
-          <motion.button
-            onClick={() => router.push("/host/new")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-[#B88B4A] text-[#0D1722] hover:bg-[#D4A76A] px-5 py-2 rounded-xl font-black text-xs shadow-[0_4px_18px_rgba(184,139,74,0.25)] flex items-center gap-1.5 transition-all"
-          >
-            <span className="material-symbols-outlined text-[18px]">add</span>
-            New Quiz
-          </motion.button>
-          {/* Logout button */}
-          <motion.button
-            id="logout-button"
-            onClick={handleLogout}
-            disabled={loggingOut}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.95 }}
-            title="Logout"
-            aria-label="Logout dari akun"
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl font-bold text-xs border border-[#283E58] bg-[#142232] text-[#94A3B8] hover:bg-error/15 hover:text-error hover:border-error/40 transition-colors disabled:opacity-50"
-          >
-            {loggingOut ? (
-              <span className="w-3.5 h-3.5 border-2 border-current/30 border-t-current rounded-full animate-spin" />
-            ) : (
-              <span className="material-symbols-outlined text-[16px]">logout</span>
-            )}
-            <span className="hidden sm:inline">{loggingOut ? "Keluar..." : "Logout"}</span>
-          </motion.button>
-        </div>
-      </header>
+      <HostHeader />
 
       <main className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
         {/* Stats Bar */}
@@ -456,11 +336,10 @@ export default function DashboardPage() {
                           <span className="font-mono text-[#D4A76A] bg-[#1C2D42] px-1.5 py-0.5 rounded border border-[#283E58]">
                             {room.room_code}
                           </span>
-                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-black uppercase ${
-                            room.status === "active"
+                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-black uppercase ${room.status === "active"
                               ? "bg-error/20 text-error border border-error/30"
                               : "bg-[#2E5339]/40 text-[#4ADE80] border border-[#2E5339]"
-                          }`}>
+                            }`}>
                             {room.status === "active" ? "LIVE" : "Lobby"}
                           </span>
                         </button>
@@ -476,183 +355,181 @@ export default function DashboardPage() {
                     );
                     const isRunning = !!runningRoom;
                     return (
-                    <motion.div
-                      key={t.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ delay: i * 0.05 }}
-                      className={`relative rounded-2xl border p-5 flex items-center gap-4 group transition-all overflow-visible ${
-                        isRunning
-                          ? "border-[#2E5339] bg-gradient-to-r from-[#2E5339]/20 via-[#121F2E] to-[#1C2D42]/30 shadow-[0_4px_24px_rgba(46,83,57,0.25)] ring-1 ring-[#2E5339]/40"
-                          : "border-[#283E58]/60 bg-[#121F2E] hover:border-[#B88B4A]/40 hover:shadow-lg"
-                      }`}
-                    >
-                      {/* Running vertical glow strip */}
-                      {isRunning && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#2E5339] via-[#4ADE80] to-[#B88B4A] rounded-l-2xl" />
-                      )}
-                      <div className="flex-1 min-w-0 pl-1">
-                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                          <h3 className="font-extrabold text-[#F8FAFC] text-base truncate">
-                            {t.title}
-                          </h3>
-                          {isRunning ? (
-                            <span className="flex items-center gap-1.5 text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#2E5339]/40 text-[#4ADE80] border border-[#2E5339] shadow-xs">
-                              <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4ADE80] opacity-75" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4ADE80]" />
-                              </span>
-                              LIVE · {runningRoom.status === "active" ? "Sedang Berjalan" : "Lobby Terbuka"}
-                            </span>
-                          ) : (
-                            <span
-                              className={`text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-md border tracking-wider uppercase ${
-                                t.is_draft
-                                  ? "bg-[#B88B4A]/15 text-[#B88B4A] border-[#B88B4A]/40"
-                                  : "bg-[#1E3726] text-[#4ADE80] border-[#2E5339] shadow-xs font-black"
-                              }`}
-                            >
-                              {t.is_draft ? "Draft" : "Ready"}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-3 text-xs text-[#94A3B8] flex-wrap">
-                          <span className="font-medium">
-                            {(t.question_ids || []).length} pertanyaan
-                          </span>
-                          <span>•</span>
-                          <span>Dimainkan {t.times_run}x</span>
-                          {isRunning ? (
-                            <>
-                              <span>•</span>
-                              {/* Player count indicator with icon */}
-                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#2E5339]/20 text-[#4ADE80] font-bold text-xs border border-[#2E5339]/40">
-                                <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                                  person
-                                </span>
-                                {runningRoom.player_count} pemain masuk
-                              </span>
-                              <span className="font-mono text-[#D4A76A] bg-[#142232] px-2 py-0.5 rounded text-[11px] font-bold border border-[#283E58]">
-                                Code: {runningRoom.room_code}
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <span>•</span>
-                              <span>Terakhir: {formatDate(t.last_run_at)}</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Action buttons: 1 Main action (Run or Masuk Room) + 1 Menu Dropdown button */}
-                      <div className="flex items-center gap-2 shrink-0">
-                        {isRunning ? (
-                          <button
-                            onClick={() => router.push(`/host/${runningRoom.room_code}`)}
-                            className="px-4 py-2 bg-gradient-to-r from-[#2E5339] to-[#3D6E4C] text-white border border-[#4ADE80]/40 rounded-xl text-xs font-black hover:opacity-95 transition-all inline-flex items-center gap-1.5 shadow-[0_0_15px_rgba(46,83,57,0.35)]"
-                            title="Masuk ke room quiz yang sedang aktif"
-                          >
-                            <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                              sensors
-                            </span>
-                            Masuk Room
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleRunQuiz(t)}
-                            disabled={actionLoading === t.id}
-                            className="px-4 py-2 bg-[#B88B4A] text-[#0D1722] hover:bg-[#D4A76A] rounded-xl text-xs font-black transition-all disabled:opacity-50 inline-flex items-center gap-1.5 shadow-[0_2px_10px_rgba(184,139,74,0.2)]"
-                            title="Jalankan quiz ini"
-                          >
-                            <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                              play_arrow
-                            </span>
-                            {actionLoading === t.id ? "Memulai…" : "Run"}
-                          </button>
+                      <motion.div
+                        key={t.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ delay: i * 0.05 }}
+                        className={`relative rounded-2xl border p-5 flex items-center gap-4 group transition-all overflow-visible ${isRunning
+                            ? "border-[#2E5339] bg-gradient-to-r from-[#2E5339]/20 via-[#121F2E] to-[#1C2D42]/30 shadow-[0_4px_24px_rgba(46,83,57,0.25)] ring-1 ring-[#2E5339]/40"
+                            : "border-[#283E58]/60 bg-[#121F2E] hover:border-[#B88B4A]/40 hover:shadow-lg"
+                          }`}
+                      >
+                        {/* Running vertical glow strip */}
+                        {isRunning && (
+                          <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-[#2E5339] via-[#4ADE80] to-[#B88B4A] rounded-l-2xl" />
                         )}
-
-                        {/* Combined Settings/Action Menu */}
-                        <div className="relative" data-quiz-menu>
-                          <button
-                            onClick={() => setOpenMenuId(openMenuId === t.id ? null : t.id)}
-                            aria-expanded={openMenuId === t.id}
-                            aria-label="Menu opsi quiz"
-                            title="Menu opsi"
-                            className={`w-9 h-9 grid place-items-center rounded-xl transition-all ${
-                              openMenuId === t.id
-                                ? "bg-[#B88B4A] text-[#0D1722] shadow-sm"
-                                : "bg-[#142232] text-[#94A3B8] border border-[#283E58] hover:border-[#B88B4A]/50 hover:text-white"
-                            }`}
-                          >
-                            <span className="material-symbols-outlined text-[20px]">more_vert</span>
-                          </button>
-
-                          {/* Dropdown Menu Popover */}
-                          <AnimatePresence>
-                            {openMenuId === t.id && (
-                              <motion.div
-                                initial={{ opacity: 0, scale: 0.95, y: -4 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.95, y: -4 }}
-                                transition={{ duration: 0.15 }}
-                                className="absolute right-0 top-full mt-2 w-48 bg-[#121F2E] border border-[#283E58] rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] p-1.5 z-40 flex flex-col gap-0.5"
+                        <div className="flex-1 min-w-0 pl-1">
+                          <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                            <h3 className="font-extrabold text-[#F8FAFC] text-base truncate">
+                              {t.title}
+                            </h3>
+                            {isRunning ? (
+                              <span className="flex items-center gap-1.5 text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#2E5339]/40 text-[#4ADE80] border border-[#2E5339] shadow-xs">
+                                <span className="relative flex h-2 w-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4ADE80] opacity-75" />
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4ADE80]" />
+                                </span>
+                                LIVE · {runningRoom.status === "active" ? "Running" : "Lobby Open"}
+                              </span>
+                            ) : (
+                              <span
+                                className={`text-[10px] font-mono font-extrabold px-2.5 py-0.5 rounded-md border tracking-wider uppercase ${t.is_draft
+                                    ? "bg-[#B88B4A]/15 text-[#B88B4A] border-[#B88B4A]/40"
+                                    : "bg-[#1E3726] text-[#4ADE80] border-[#2E5339] shadow-xs font-black"
+                                  }`}
                               >
-                                <button
-                                  onClick={() => {
-                                    setOpenMenuId(null);
-                                    router.push(`/host/quiz/${t.id}/edit`);
-                                  }}
-                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] hover:bg-[#1C2D42] hover:text-[#B88B4A] transition-colors text-left"
-                                >
-                                  <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
-                                    edit
-                                  </span>
-                                  Edit Pertanyaan
-                                </button>
-
-                                <button
-                                  onClick={() => {
-                                    setOpenMenuId(null);
-                                    handleDuplicate(t.id);
-                                  }}
-                                  disabled={actionLoading === t.id}
-                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] hover:bg-[#1C2D42] hover:text-[#B88B4A] transition-colors text-left disabled:opacity-50"
-                                >
-                                  <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
-                                    content_copy
-                                  </span>
-                                  Duplikasi
-                                </button>
-
-                                <div className="h-px bg-[#283E58] my-1" />
-
-                                <button
-                                  onClick={() => {
-                                    setOpenMenuId(null);
-                                    if (isRunning) {
-                                      toast.warning("Hentikan quiz terlebih dahulu sebelum menghapusnya.");
-                                      return;
-                                    }
-                                    setQuizToDelete(t);
-                                  }}
-                                  disabled={isRunning}
-                                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-error hover:bg-error/15 transition-colors text-left disabled:opacity-40"
-                                >
-                                  <span className="material-symbols-outlined text-[18px] text-error">
-                                    delete
-                                  </span>
-                                  Hapus Quiz
-                                </button>
-                              </motion.div>
+                                {t.is_draft ? "Draft" : "Ready"}
+                              </span>
                             )}
-                          </AnimatePresence>
+                          </div>
+
+                          <div className="flex items-center gap-3 text-xs text-[#94A3B8] flex-wrap">
+                            <span className="font-medium">
+                              {(t.question_ids || []).length} questions
+                            </span>
+                            <span>•</span>
+                            <span>Played {t.times_run}x</span>
+                            {isRunning ? (
+                              <>
+                                <span>•</span>
+                                {/* Player count indicator with icon */}
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#2E5339]/20 text-[#4ADE80] font-bold text-xs border border-[#2E5339]/40">
+                                  <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                    person
+                                  </span>
+                                  {runningRoom.player_count} players joined
+                                </span>
+                                <span className="font-mono text-[#D4A76A] bg-[#142232] px-2 py-0.5 rounded text-[11px] font-bold border border-[#283E58]">
+                                  Code: {runningRoom.room_code}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span>•</span>
+                                <span>Last run: {formatDate(t.last_run_at)}</span>
+                              </>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  )})}
+
+                        {/* Action buttons: 1 Main action (Run or Join Room) + 1 Menu Dropdown button */}
+                        <div className="flex items-center gap-2 shrink-0">
+                          {isRunning ? (
+                            <button
+                              onClick={() => router.push(`/host/${runningRoom.room_code}`)}
+                              className="px-4 py-2 bg-gradient-to-r from-[#2E5339] to-[#3D6E4C] text-white border border-[#4ADE80]/40 rounded-xl text-xs font-black hover:opacity-95 transition-all inline-flex items-center gap-1.5 shadow-[0_0_15px_rgba(46,83,57,0.35)]"
+                              title="Join running room"
+                            >
+                              <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                sensors
+                              </span>
+                              Join Room
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleRunQuiz(t)}
+                              disabled={actionLoading === t.id}
+                              className="px-4 py-2 bg-[#B88B4A] text-[#0D1722] hover:bg-[#D4A76A] rounded-xl text-xs font-black transition-all disabled:opacity-50 inline-flex items-center gap-1.5 shadow-[0_2px_10px_rgba(184,139,74,0.2)]"
+                              title="Run this quiz"
+                            >
+                              <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                                play_arrow
+                              </span>
+                              {actionLoading === t.id ? "Starting…" : "Run"}
+                            </button>
+                          )}
+
+                          {/* Combined Settings/Action Menu */}
+                          <div className="relative" data-quiz-menu>
+                            <button
+                              onClick={() => setOpenMenuId(openMenuId === t.id ? null : t.id)}
+                              aria-expanded={openMenuId === t.id}
+                              aria-label="Quiz options"
+                              title="Options"
+                              className={`w-9 h-9 grid place-items-center rounded-xl transition-all ${openMenuId === t.id
+                                  ? "bg-[#B88B4A] text-[#0D1722] shadow-sm"
+                                  : "bg-[#142232] text-[#94A3B8] border border-[#283E58] hover:border-[#B88B4A]/50 hover:text-white"
+                                }`}
+                            >
+                              <span className="material-symbols-outlined text-[20px]">more_vert</span>
+                            </button>
+
+                            {/* Dropdown Menu Popover */}
+                            <AnimatePresence>
+                              {openMenuId === t.id && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -4 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -4 }}
+                                  transition={{ duration: 0.15 }}
+                                  className="absolute right-0 top-full mt-2 w-48 bg-[#121F2E] border border-[#283E58] rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] p-1.5 z-40 flex flex-col gap-0.5"
+                                >
+                                  <button
+                                    onClick={() => {
+                                      setOpenMenuId(null);
+                                      router.push(`/host/quiz/${t.id}/edit`);
+                                    }}
+                                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] hover:bg-[#1C2D42] hover:text-[#B88B4A] transition-colors text-left"
+                                  >
+                                    <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
+                                      edit
+                                    </span>
+                                    Edit Questions
+                                  </button>
+
+                                  <button
+                                    onClick={() => {
+                                      setOpenMenuId(null);
+                                      handleDuplicate(t.id);
+                                    }}
+                                    disabled={actionLoading === t.id}
+                                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-[#F8FAFC] hover:bg-[#1C2D42] hover:text-[#B88B4A] transition-colors text-left disabled:opacity-50"
+                                  >
+                                    <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">
+                                      content_copy
+                                    </span>
+                                    Duplicate
+                                  </button>
+
+                                  <div className="h-px bg-[#283E58] my-1" />
+
+                                  <button
+                                    onClick={() => {
+                                      setOpenMenuId(null);
+                                      if (isRunning) {
+                                        toast.warning("Stop the quiz first before deleting it.");
+                                        return;
+                                      }
+                                      setQuizToDelete(t);
+                                    }}
+                                    disabled={isRunning}
+                                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-error hover:bg-error/15 transition-colors text-left disabled:opacity-40"
+                                  >
+                                    <span className="material-symbols-outlined text-[18px] text-error">
+                                      delete
+                                    </span>
+                                    Delete Quiz
+                                  </button>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
                 </AnimatePresence>
               </div>
             )}
@@ -739,11 +616,11 @@ export default function DashboardPage() {
                 <span className="material-symbols-outlined text-[32px]">delete_forever</span>
               </div>
               <h3 id="delete-quiz-dialog-title" className="text-xl font-extrabold text-primary mb-2">
-                Hapus Quiz?
+                Delete Quiz?
               </h3>
               <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
-                Apakah Anda yakin ingin menghapus quiz{" "}
-                <strong className="text-primary">"{quizToDelete.title}"</strong>? Semua pertanyaan di dalam quiz ini akan dihapus dan tindakan ini tidak dapat dibatalkan.
+                Are you sure you want to delete the quiz{" "}
+                <strong className="text-primary">"{quizToDelete.title}"</strong>? All questions in this quiz will be deleted and this action cannot be undone.
               </p>
               <div className="flex items-center gap-3 justify-center">
                 <button
@@ -752,7 +629,7 @@ export default function DashboardPage() {
                   disabled={!!actionLoading}
                   className="flex-1 py-3 px-4 rounded-xl border border-outline-variant/30 text-sm font-bold text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-50"
                 >
-                  Batal
+                  Cancel
                 </button>
                 <button
                   type="button"
@@ -763,12 +640,12 @@ export default function DashboardPage() {
                   {actionLoading === quizToDelete.id ? (
                     <>
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Menghapus...
+                      Deleting...
                     </>
                   ) : (
                     <>
                       <span className="material-symbols-outlined text-[18px]">delete</span>
-                      Ya, Hapus Quiz
+                      Yes, Delete Quiz
                     </>
                   )}
                 </button>

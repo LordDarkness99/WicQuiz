@@ -15,6 +15,7 @@ import {
   type SessionResult,
 } from "@/features/session-results";
 import { QuizCardSkeleton } from "@/shared/ui/Skeleton";
+import { HostHeader } from "@/shared/ui/HostHeader";
 
 type Tab = "played" | "created";
 
@@ -49,7 +50,7 @@ export default function HistoryRoute() {
         setSessions(s);
         setTemplates(t);
       } catch {
-        toast.error("Gagal memuat riwayat.");
+        toast.error("Failed to load history.");
       } finally {
         setLoading(false);
       }
@@ -75,18 +76,7 @@ export default function HistoryRoute() {
 
   return (
     <div className="min-h-screen bg-surface text-on-surface">
-      {/* Header */}
-      <header className="bg-surface-bright border-b border-outline-variant/30 px-6 sm:px-8 py-4 flex items-center gap-4 sticky top-0 z-50">
-        <button
-          onClick={() => router.push("/host/dashboard")}
-          className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-          Dashboard
-        </button>
-        <div className="h-6 w-px bg-outline-variant/40" />
-        <span className="text-sm font-extrabold text-on-surface">Quiz History</span>
-      </header>
+      <HostHeader />
 
       <main className="max-w-4xl mx-auto px-6 py-8">
         {/* Tabs */}

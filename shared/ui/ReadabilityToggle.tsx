@@ -14,11 +14,7 @@ const FONT_OPTIONS: { value: FontMode; label: string; hint: string }[] = [
   { value: "dyslexic", label: "Dyslexia-friendly", hint: "OpenDyslexic" },
 ];
 
-const SIZE_OPTIONS: { value: FontSize; label: string }[] = [
-  { value: "default", label: "A" },
-  { value: "large", label: "A" },
-  { value: "xlarge", label: "A" },
-];
+
 
 const BG_OPTIONS: { value: BgTheme; label: string; swatch: string; border: string }[] = [
   { value: "soft", label: "Soft cream", swatch: "#F5F2EB", border: "#D6D0C4" },
@@ -99,14 +95,14 @@ export default function ReadabilityToggle() {
         <div
           role="dialog"
           aria-label="Easy reading settings"
-          className="readability-panel absolute bottom-full right-0 mb-3 w-[calc(100vw-2rem)] sm:w-84 rounded-2xl border border-[#B88B4A]/30 bg-[#121F2E]/95 backdrop-blur-xl p-5 shadow-2xl text-[#F8FAFC]"
+          className="readability-panel absolute bottom-full right-0 mb-3 w-[calc(100vw-2rem)] sm:w-84 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-[#B88B4A]/30 bg-[#121F2E]/95 backdrop-blur-xl p-4 sm:p-5 shadow-2xl text-[#F8FAFC]"
         >
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#283E58]">
             <p className="text-sm font-extrabold text-[#F8FAFC] flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[18px] text-[#B88B4A]">tune</span>
               Reading Settings
             </p>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#B88B4A] bg-[#B88B4A]/10 px-2 py-0.5 rounded">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-white bg-white/10 px-2 py-0.5 rounded">
               Accessibility
             </span>
           </div>
@@ -143,23 +139,30 @@ export default function ReadabilityToggle() {
             <legend className="mb-2 text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8]">
               Text size
             </legend>
-            <div className="flex gap-1.5">
-              {SIZE_OPTIONS.map((opt, i) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  aria-pressed={settings.fontSize === opt.value}
-                  onClick={() => setFontSize(opt.value)}
-                  title={opt.value}
-                  className={`flex-1 rounded-xl border py-1.5 font-bold transition-all cursor-pointer ${settings.fontSize === opt.value
-                    ? "border-[#B88B4A] bg-[#B88B4A] text-[#0D1722] shadow-xs"
-                    : "border-[#283E58] bg-[#162536]/40 text-[#94A3B8] hover:border-[#B88B4A]/40 hover:text-white"
-                    }`}
-                  style={{ fontSize: `${1 + i * 0.2}rem` }}
-                >
-                  {opt.label}
-                </button>
-              ))}
+            <div className="flex items-center gap-3 px-2 py-2">
+              <span className="text-xs font-bold text-[#64748B]">A</span>
+              <div className="flex-1">
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="1"
+                  value={
+                    settings.fontSize === "default" ? 0 : 1
+                  }
+                  onChange={(e) => {
+                    const vals = ["default", "large"] as const;
+                    setFontSize(vals[Number(e.target.value)]);
+                  }}
+                  className="w-full h-1.5 bg-[#283E58] rounded-lg appearance-none cursor-pointer accent-[#B88B4A] hover:accent-[#D4A76A] transition-all"
+                  aria-label="Text size scale"
+                />
+                <div className="flex justify-between mt-1.5 text-[9px] font-mono text-[#64748B] px-0.5">
+                  <span>1.0x</span>
+                  <span>1.075x</span>
+                </div>
+              </div>
+              <span className="text-base font-bold text-[#F8FAFC]">A</span>
             </div>
           </fieldset>
 
@@ -294,8 +297,8 @@ export default function ReadabilityToggle() {
           px-4 py-2.5 font-extrabold shadow-xl border transition-all
           cursor-pointer text-xs tracking-wide
           ${isCustomized
-            ? "bg-[#B88B4A] text-[#0D1722] border-[#B88B4A] shadow-[0_0_20px_rgba(184,139,74,0.35)]"
-            : "bg-[#142232]/90 backdrop-blur-md text-[#F8FAFC] border-[#283E58] hover:border-[#B88B4A]/70 hover:shadow-[0_0_15px_rgba(184,139,74,0.2)]"
+            ? "bg-[#142232]/95 backdrop-blur-md text-[#B88B4A] border-[#B88B4A] shadow-[0_0_20px_rgba(184,139,74,0.35)] ring-1 ring-[#B88B4A]"
+            : "bg-[#142232]/90 backdrop-blur-md text-[#B88B4A] border-[#B88B4A]/50 hover:border-[#B88B4A] hover:bg-[#B88B4A]/10 hover:shadow-[0_0_15px_rgba(184,139,74,0.2)]"
           }
         `}
       >
@@ -306,8 +309,8 @@ export default function ReadabilityToggle() {
         >
           visibility
         </span>
-        <span className="hidden sm:inline">
-          {isCustomized ? "Reading: Active" : "Accessibility"}
+        <span className="text-[#B88B4A] font-extrabold" style={{ color: "#B88B4A" }}>
+          Accessibility
         </span>
       </button>
     </div>

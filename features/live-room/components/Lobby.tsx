@@ -72,7 +72,7 @@ export default function Lobby({
             <button
               onClick={onBackToDashboard}
               className="flex items-center gap-1.5 text-sm font-bold text-outline hover:text-primary transition-colors"
-              title="Kembali ke Dashboard (room tetap aktif)"
+              title="Back to Dashboard (room remains active)"
             >
               <span className="material-symbols-outlined text-[18px]">arrow_back</span>
               Dashboard
@@ -114,20 +114,20 @@ export default function Lobby({
             <>
               {confirmStop ? (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-error font-bold">Yakin stop?</span>
+                  <span className="text-xs text-error font-bold">Are you sure?</span>
                   <button
                     onClick={() => { onStopQuiz(); setConfirmStop(false); }}
                     disabled={stoppingQuiz}
                     className="px-3 py-1.5 rounded-lg bg-error text-white text-xs font-bold hover:opacity-90 transition-opacity disabled:opacity-50"
                   >
-                    {stoppingQuiz ? "Menghentikan..." : "Ya, Stop"}
+                    {stoppingQuiz ? "Stopping..." : "Yes, Stop"}
                   </button>
                   <button
                     onClick={() => setConfirmStop(false)}
                     disabled={stoppingQuiz}
                     className="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors disabled:opacity-50"
                   >
-                    Batal
+                    Cancel
                   </button>
                 </div>
               ) : (
@@ -135,10 +135,10 @@ export default function Lobby({
                   onClick={() => setConfirmStop(true)}
                   disabled={stoppingQuiz}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-error/30 text-error text-sm font-bold hover:bg-error/10 transition-colors disabled:opacity-50"
-                  title="Hentikan quiz dan kembali ke dashboard"
+                  title="Stop quiz and back to dashboard"
                 >
                   <span className="material-symbols-outlined text-[16px]">stop_circle</span>
-                  {stoppingQuiz ? "Menghentikan..." : "Stop Quiz"}
+                  {stoppingQuiz ? "Stopping..." : "Stop Quiz"}
                 </button>
               )}
             </>
@@ -195,7 +195,7 @@ export default function Lobby({
                 sensors
               </span>
               <p className="text-xs text-on-surface-variant font-medium">
-                Room aktif. Anda bisa kembali ke Dashboard tanpa menutup room ini.
+                Room is active. You can go back to the Dashboard without closing this room.
               </p>
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
@@ -203,7 +203,7 @@ export default function Lobby({
                 <button
                   onClick={onBackToDashboard}
                   className="px-3.5 py-2 rounded-xl bg-surface text-primary text-xs font-bold border border-outline-variant/30 hover:border-primary transition-colors flex items-center justify-center gap-1 shadow-xs"
-                  title="Kembali ke Dashboard (room tetap berjalan)"
+                  title="Back to Dashboard (room remains running)"
                 >
                   <span className="material-symbols-outlined text-[16px]">arrow_back</span>
                   Dashboard
@@ -213,7 +213,7 @@ export default function Lobby({
                 <button
                   onClick={() => setConfirmStop(true)}
                   className="px-3.5 py-2 rounded-xl bg-error/10 text-error text-xs font-bold hover:bg-error/20 transition-colors flex items-center justify-center gap-1"
-                  title="Hentikan quiz dan selesaikan room"
+                  title="Stop quiz and finish room"
                 >
                   <span className="material-symbols-outlined text-[16px]">stop_circle</span>
                   Stop
@@ -245,13 +245,13 @@ export default function Lobby({
                   <span className="material-symbols-outlined text-[32px]">stop_circle</span>
                 </div>
                 <h3 id="stop-quiz-modal-title" className="text-xl font-extrabold text-primary mb-2">
-                  Hentikan Quiz?
+                  Stop Quiz?
                 </h3>
                 <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
-                  Room <span className="font-mono font-bold text-primary">{roomCode}</span> akan ditutup dan statusnya diselesaikan. Pemain yang sudah masuk tidak dapat melanjutkan.
+                  Room <span className="font-mono font-bold text-primary">{roomCode}</span> will be closed and marked as completed. Players who have joined cannot continue.
                   <br /><br />
                   <span className="text-xs text-outline">
-                    💡 Tips: Jika hanya ingin melihat dashboard sementara waktu, klik <strong>Batal</strong> lalu pilih tombol <strong>Dashboard</strong>.
+                    💡 Tip: If you just want to view the dashboard temporarily, click <strong>Cancel</strong> then select the <strong>Dashboard</strong> button.
                   </span>
                 </p>
                 <div className="flex items-center gap-3 justify-center">
@@ -260,7 +260,7 @@ export default function Lobby({
                     onClick={() => setConfirmStop(false)}
                     className="flex-1 py-3 px-4 rounded-xl border border-outline-variant/30 text-sm font-bold text-on-surface-variant hover:bg-surface-container transition-colors"
                   >
-                    Batal
+                    Cancel
                   </button>
                   <button
                     type="button"
@@ -276,7 +276,7 @@ export default function Lobby({
                     ) : (
                       <span className="material-symbols-outlined text-[18px]">stop</span>
                     )}
-                    Ya, Hentikan
+                    Yes, Stop
                   </button>
                 </div>
               </motion.div>

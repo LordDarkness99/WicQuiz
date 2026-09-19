@@ -45,11 +45,11 @@ export default function QuestionEditor({
   function handleSaveQuestion() {
     const text = question.question_text.trim();
     if (!text) {
-      toast.error(`Pertanyaan #${index + 1} belum diisi.`);
+      toast.error(`Question #${index + 1} is empty.`);
       return;
     }
     setJustSaved(true);
-    toast.success(`Pertanyaan #${index + 1} tersimpan.`);
+    toast.success(`Question #${index + 1} saved.`);
     setTimeout(() => setJustSaved(false), 1500);
   }
 
@@ -122,21 +122,21 @@ export default function QuestionEditor({
           Question Editor &bull; Q{String(index + 1).padStart(2, "0")}
         </div>
         {/* Type Selector Tabs */}
-        <div className="bg-surface-container-low p-1.5 rounded-2xl flex gap-1">
+        <div className="bg-surface-container-low p-1.5 rounded-2xl flex flex-wrap sm:flex-nowrap gap-1">
           {typeTabs.map((tab) => (
             <button
               key={tab.type}
               type="button"
               onClick={() => switchType(tab.type)}
-              className={`flex-1 py-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all ${question.type === tab.type
+              className={`flex-1 min-w-[45%] sm:min-w-0 py-2 sm:py-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-1 sm:gap-2 transition-all ${question.type === tab.type
                 ? "bg-surface-container-lowest text-on-surface shadow-sm ring-1 ring-outline-variant/10"
                 : "text-outline hover:text-on-surface hover:bg-surface-container-lowest/50"
                 }`}
             >
-              <span className="material-symbols-outlined text-base">
+              <span className="material-symbols-outlined text-sm sm:text-base">
                 {tab.icon}
               </span>
-              {tab.label}
+              <span className="truncate">{tab.label}</span>
             </button>
           ))}
         </div>
@@ -162,11 +162,11 @@ export default function QuestionEditor({
             </div>
           )}
 
-        <div className="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)]">
+        <div className="bg-surface-container-lowest p-4 sm:p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)]">
           <textarea
-            className="w-full border-none focus:ring-0 focus:outline-none p-0 text-2xl font-bold text-on-surface placeholder:text-outline/60 resize-none bg-transparent"
+            className="w-full border-none focus:ring-0 focus:outline-none p-0 text-xl sm:text-2xl font-bold text-on-surface placeholder:text-outline/60 resize-none bg-transparent"
             placeholder="Type your question here..."
-            rows={2}
+            rows={3}
             value={question.question_text}
             onChange={(e) => update({ question_text: e.target.value })}
           />
@@ -255,13 +255,13 @@ export default function QuestionEditor({
                   Select the correct answer below
                 </p>
               )}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {question.options.slice(0, 4).map((opt, i) => {
                   const isCorrect = question.correct_answer === opt && opt !== "";
                   return (
                     <div
                       key={i}
-                      className={`p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 ${isCorrect
+                      className={`p-3 sm:p-5 rounded-xl shadow-sm flex items-center gap-3 sm:gap-4 group transition-all border-2 ${isCorrect
                         ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500"
                         : "bg-surface-container-lowest border-transparent focus-within:border-primary-fixed hover:border-outline-variant/30"
                         }`}
@@ -318,7 +318,7 @@ export default function QuestionEditor({
 
         {/* True / False Options */}
         {question.type === "true_false" && (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {["True", "False"].map((val) => {
               const isCorrect =
                 question.correct_answer.toLowerCase() === val.toLowerCase();
@@ -327,7 +327,7 @@ export default function QuestionEditor({
                   key={val}
                   type="button"
                   onClick={() => update({ correct_answer: val })}
-                  className={`p-6 rounded-xl font-black text-lg flex items-center justify-between transition-all border-2 ${isCorrect
+                  className={`p-4 sm:p-6 rounded-xl font-black text-base sm:text-lg flex items-center justify-between transition-all border-2 ${isCorrect
                     ? val === "True"
                       ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md ring-2 ring-emerald-500/20"
                       : "border-red-500 bg-red-50 text-red-700 shadow-md ring-2 ring-red-500/20"
@@ -356,7 +356,7 @@ export default function QuestionEditor({
 
         {/* Type-in Question */}
         {question.type === "type_in" && (
-          <div className="bg-surface-container-lowest p-8 rounded-xl shadow-sm space-y-4">
+          <div className="bg-surface-container-lowest p-5 sm:p-8 rounded-xl shadow-sm space-y-4">
             <label className="text-[10px] font-black uppercase tracking-widest text-on-primary-container">
               Correct Answer (Short Answer / Isian Singkat)
             </label>
@@ -375,13 +375,13 @@ export default function QuestionEditor({
       </div>
 
       {/* Settings Controls */}
-      <div className="flex items-center justify-between gap-8 pt-4">
-        <div className="flex items-center gap-6">
-          <div className="flex flex-col gap-1">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-8 pt-4">
+        <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex flex-col gap-1 flex-1 sm:flex-none">
             <label className="text-[10px] font-black uppercase tracking-widest text-outline">
               Time Limit
             </label>
-            <div className="flex items-center bg-surface-container-low rounded-xl px-4 py-2 w-32">
+            <div className="flex items-center bg-surface-container-low rounded-xl px-3 sm:px-4 py-2 w-full sm:w-32">
               <input
                 className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface w-full"
                 type="number"
@@ -392,15 +392,15 @@ export default function QuestionEditor({
                   update({ time_limit: Number(e.target.value) || 15 })
                 }
               />
-              <span className="text-xs font-bold text-outline">SEC</span>
+              <span className="text-[10px] sm:text-xs font-bold text-outline">SEC</span>
             </div>
           </div>
           <div className="h-10 w-px bg-outline-variant/30 mt-4" />
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 flex-1 sm:flex-none">
             <label className="text-[10px] font-black uppercase tracking-widest text-outline">
               Points
             </label>
-            <div className="flex items-center bg-surface-container-low rounded-xl px-4 py-2 w-32">
+            <div className="flex items-center bg-surface-container-low rounded-xl px-3 sm:px-4 py-2 w-full sm:w-32">
               <input
                 className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface w-full"
                 type="number"
@@ -415,7 +415,7 @@ export default function QuestionEditor({
         </div>
 
         {/* Joker Toggle */}
-        <div className="flex items-center gap-4 bg-amber-500/10 border-2 border-amber-500/30 p-4 rounded-2xl">
+        <div className="flex items-center justify-between sm:justify-start gap-4 bg-amber-500/10 border-2 border-amber-500/30 p-3 sm:p-4 rounded-2xl w-full md:w-auto">
           <div className="flex flex-col">
             <span className="text-sm font-black text-amber-500 flex items-center gap-1">
               <span
@@ -430,7 +430,7 @@ export default function QuestionEditor({
               Double points for all players
             </span>
           </div>
-          <label className="relative inline-flex items-center cursor-pointer">
+          <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
             <input
               className="sr-only peer"
               type="checkbox"
@@ -443,25 +443,25 @@ export default function QuestionEditor({
       </div>
 
       {/* Footer Actions */}
-      <div className="flex justify-between items-center pt-6 border-t border-outline-variant/10">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-4 pt-6 border-t border-outline-variant/10 pb-8 sm:pb-0">
+        <div className="flex items-center justify-center sm:justify-start">
           <button
             onClick={onRemove}
-            className="flex items-center gap-2 px-4 py-2 text-error hover:text-white hover:bg-error rounded-xl font-bold text-sm transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-3 sm:py-2 w-full sm:w-auto text-error hover:text-white hover:bg-error rounded-xl font-bold text-sm transition-colors"
           >
             <span className="material-symbols-outlined">delete</span>
             Delete
           </button>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-center sm:justify-end">
           <button
             onClick={handleSaveQuestion}
-            className={`px-10 py-3 rounded-xl text-sm font-bold shadow-[0px_20px_40px_rgba(27,43,94,0.15)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 ${justSaved
+            className={`w-full sm:w-auto px-6 sm:px-10 py-3.5 sm:py-3 rounded-xl text-sm font-bold shadow-[0px_20px_40px_rgba(27,43,94,0.15)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 ${justSaved
               ? "bg-tertiary-fixed-dim text-white"
               : "bg-primary text-on-primary"
               }`}
           >
-            {justSaved ? "Tersimpan" : "Save Question"}
+            {justSaved ? "Saved" : "Save Question"}
             <span className="material-symbols-outlined text-lg">
               check_circle
             </span>

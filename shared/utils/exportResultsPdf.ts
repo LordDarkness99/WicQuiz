@@ -24,10 +24,10 @@ export function downloadResultsAsPdf(
     .join("");
 
   const html = `<!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>${escapeHtml(quizTitle)} — Hasil Akhir</title>
+<title>${escapeHtml(quizTitle)} — Final Results</title>
 <style>
   body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: #1B2B5E; margin: 40px; }
   h1 { font-size: 24px; margin-bottom: 4px; }
@@ -44,10 +44,10 @@ export function downloadResultsAsPdf(
 </style>
 </head>
 <body>
-  <h1>${escapeHtml(quizTitle)} — Hasil Akhir</h1>
-  <div class="meta">Total peserta: ${entries.length} &nbsp;•&nbsp; Total pertanyaan: ${totalQuestions}</div>
+  <h1>${escapeHtml(quizTitle)} — Final Results</h1>
+  <div class="meta">Total players: ${entries.length} &nbsp;•&nbsp; Total questions: ${totalQuestions}</div>
   <table>
-    <thead><tr><th>#</th><th>Nama</th><th style="text-align:right">Skor</th></tr></thead>
+    <thead><tr><th>#</th><th>Name</th><th style="text-align:right">Score</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>
   <script>

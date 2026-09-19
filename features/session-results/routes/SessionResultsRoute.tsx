@@ -120,8 +120,8 @@ export default function SessionResultsPage() {
   return (
     <div className="min-h-screen bg-surface text-on-surface">
       {/* Header */}
-      <header className="bg-surface-bright border-b border-outline-variant/30 px-6 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-6">
+      <header className="bg-surface-bright border-b border-outline-variant/30 px-4 sm:px-8 py-4 flex flex-wrap gap-3 justify-between items-center sticky top-0 z-50">
+        <div className="flex items-center gap-3 sm:gap-6 min-w-[200px]">
           <button
             onClick={() => router.push("/host/dashboard")}
             className="flex items-center gap-1.5 text-sm font-bold text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
@@ -129,14 +129,14 @@ export default function SessionResultsPage() {
             <span className="material-symbols-outlined text-[18px]">
               arrow_back
             </span>
-            Dashboard
+            <span className="hidden sm:inline">Dashboard</span>
           </button>
           <div className="h-6 w-px bg-outline-variant/40" />
-          <span className="text-sm font-extrabold text-on-surface">{result.title}</span>
+          <span className="text-sm font-extrabold text-on-surface truncate max-w-[150px] sm:max-w-[300px]">{result.title}</span>
         </div>
         <button
           onClick={handleDownload}
-          className="flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-highest transition-colors cursor-pointer border border-outline-variant/30"
+          className="flex items-center justify-center gap-2 px-4 py-2 w-full sm:w-auto bg-surface-container-high rounded-xl text-sm font-bold text-on-surface hover:bg-surface-container-highest transition-colors cursor-pointer border border-outline-variant/30"
         >
           <span className="material-symbols-outlined text-[18px]">
             download
@@ -145,9 +145,9 @@ export default function SessionResultsPage() {
         </button>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 sm:px-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-8 py-8">
         {/* Session info */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="tactical-card bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/30 text-center">
             <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant mb-1">
               Players
@@ -271,12 +271,12 @@ export default function SessionResultsPage() {
                             </span>
                           )}
                         </div>
-                        <p className="font-bold text-on-surface mt-1 truncate">
+                        <p className="font-bold text-on-surface mt-1 text-sm sm:text-base">
                           {s.text}
                         </p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
                         <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-on-surface-variant">
                           Correct

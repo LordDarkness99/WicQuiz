@@ -193,11 +193,11 @@ html[data-font-size="default"] {
 }
 
 html[data-font-size="large"] {
-  font-size: 125% !important;
+  font-size: 107.5% !important;
 }
 
 html[data-font-size="large"] body {
-  font-size: 1.15rem !important;
+  font-size: 1.075rem !important;
 }
 
 html[data-font-size="large"] p,
@@ -206,15 +206,15 @@ html[data-font-size="large"] a,
 html[data-font-size="large"] button:not(.readability-trigger),
 html[data-font-size="large"] input,
 html[data-font-size="large"] label {
-  font-size: 1.12em !important;
+  font-size: 1.05em !important;
 }
 
 html[data-font-size="xlarge"] {
-  font-size: 150% !important;
+  font-size: 115% !important;
 }
 
 html[data-font-size="xlarge"] body {
-  font-size: 1.35rem !important;
+  font-size: 1.15rem !important;
 }
 
 html[data-font-size="xlarge"] p,
@@ -223,7 +223,7 @@ html[data-font-size="xlarge"] a,
 html[data-font-size="xlarge"] button:not(.readability-trigger),
 html[data-font-size="xlarge"] input,
 html[data-font-size="xlarge"] label {
-  font-size: 1.25em !important;
+  font-size: 1.1em !important;
 }
 
 :root {

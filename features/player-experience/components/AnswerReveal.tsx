@@ -220,7 +220,7 @@ export default function AnswerReveal({
         )}
       </motion.div>
 
-      {/* Answer Distribution (Pilihan Jawaban & Yang Paling Banyak Dipilih) */}
+      {/* Answer Distribution (Answer Options & Most Selected) */}
       {options && options.length > 0 && (
         <motion.div
           initial={noAnim ? undefined : { opacity: 0, y: 15 }}
@@ -229,7 +229,7 @@ export default function AnswerReveal({
           className="w-full max-w-md space-y-2 mt-2"
         >
           <p className="text-xs font-bold text-ink/50 uppercase tracking-wider text-left">
-            Pilihan Semua Pemain:
+            All Players' Choices:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
             {options.map((opt, i) => {
@@ -280,12 +280,12 @@ export default function AnswerReveal({
                   <div className="flex items-center gap-1.5 shrink-0">
                     {isOptionCorrect && (
                       <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white px-2 py-0.5 rounded-full">
-                        Benar
+                        Correct
                       </span>
                     )}
                     {isPlayerPick && !isOptionCorrect && (
                       <span className="text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full">
-                        Pilihanmu
+                        Your Pick
                       </span>
                     )}
                     <span className="text-xs font-black text-navy/70 bg-navy/5 px-2 py-0.5 rounded-md">
@@ -307,7 +307,7 @@ export default function AnswerReveal({
         className="flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-navy/5 border border-navy/10 text-xs font-bold text-navy/70"
       >
         <span className="w-2 h-2 rounded-full bg-amber animate-ping" />
-        Menunggu host melanjutkan ke soal berikutnya...
+        Waiting for host to proceed to the next question...
       </motion.div>
     </motion.div>
   );

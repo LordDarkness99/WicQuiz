@@ -54,10 +54,10 @@ export default function AIGenerateButton({
 
   const placeholderText =
     questionType === "type_in"
-      ? "Topik (opsional): misal Ibu Kota, Tokoh Sejarah, Nama Planet..."
+      ? "Topic (optional): e.g., Capitals, Historical Figures, Planet Names..."
       : questionType === "true_false"
-      ? "Topik (opsional): misal Mitos Sains, Fakta Hewan, Geografi..."
-      : "Topik (opsional): misal Sejarah 90an, Film, Pop Culture...";
+        ? "Topic (optional): e.g., Science Myths, Animal Facts, Geography..."
+        : "Topic (optional): for example, History of the '90s, Movies, Pop Culture...";
 
   if (!expanded) {
     return (
