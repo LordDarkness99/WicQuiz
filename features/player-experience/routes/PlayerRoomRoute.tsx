@@ -320,8 +320,8 @@ export default function PlayPage() {
               typeof qPayload.current_question_index === "number"
                 ? qPayload.current_question_index
                 : typeof qPayload.question_number === "number"
-                ? qPayload.question_number - 1
-                : 0;
+                  ? qPayload.question_number - 1
+                  : 0;
             currentQuestionIndexRef.current = idx;
 
             if (qPayload.question) {
@@ -699,8 +699,8 @@ export default function PlayPage() {
     <main className="flex-1 flex flex-col min-h-dvh bg-cream">
       {/* Header bar */}
       <div className="flex items-center justify-between px-4 py-3 bg-navy text-white">
-        <span className="font-bold text-sm tracking-wide">QuizTime</span>
-        <span className="font-mono text-sm font-bold tracking-widest bg-white/10 px-3 py-1 rounded-xl">
+        <span className="font-bold text-sm tracking-wide text-[#B88B4A]">QuizTime</span>
+        <span className="font-bold text-sm tracking-wide text-[#B88B4A]">
           {roomCode}
         </span>
       </div>
@@ -826,83 +826,83 @@ export default function PlayPage() {
           {phase === "question" && currentQuestion && (() => {
             const waitingForImage = !!currentQuestion.image_url && !imageLoaded;
             return (
-            <AnimatedContainer
-              key={`question-${currentQuestion.id}`}
-              className="flex-1 flex flex-col gap-5"
-            >
-              {/* Question counter */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-navy/60">
-                  Q{questionNumber}/{totalQuestions}
-                </span>
-                {currentQuestion.is_joker && (
-                  <motion.span
-                    initial={{ scale: 0, rotate: -12 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                    className="px-3 py-1 rounded-xl bg-amber text-white text-xs font-extrabold uppercase tracking-wider"
-                  >
-                    Joker x2
-                  </motion.span>
-                )}
-              </div>
+              <AnimatedContainer
+                key={`question-${currentQuestion.id}`}
+                className="flex-1 flex flex-col gap-5"
+              >
+                {/* Question counter */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-navy/60">
+                    Q{questionNumber}/{totalQuestions}
+                  </span>
+                  {currentQuestion.is_joker && (
+                    <motion.span
+                      initial={{ scale: 0, rotate: -12 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                      className="px-3 py-1 rounded-xl bg-amber text-white text-xs font-extrabold uppercase tracking-wider"
+                    >
+                      Joker x2
+                    </motion.span>
+                  )}
+                </div>
 
-              {/* Timer — show full bar while image loading, real value once ready */}
-              <TimerBar
-                timeRemaining={waitingForImage ? timeLimit : timeRemaining}
-                timeLimit={timeLimit}
-              />
-
-              {/* Question text */}
-              <div className="bg-white rounded-3xl shadow-md p-6">
-                {currentQuestion.image_url && (
-                  <div className="mb-4 rounded-2xl overflow-hidden relative aspect-video">
-                    {!imageLoaded && (
-                      <div className="absolute inset-0 bg-gray-200 rounded-xl animate-pulse flex items-center justify-center">
-                        <div className="flex flex-col items-center gap-2">
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                            className="w-8 h-8 border-3 border-navy/20 border-t-navy rounded-full"
-                          />
-                          <span className="text-xs font-bold text-navy/40">Loading image...</span>
-                        </div>
-                      </div>
-                    )}
-                    <Image
-                      src={currentQuestion.image_url}
-                      alt="Question image"
-                      fill
-                      className="object-cover rounded-xl"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      loading="eager"
-                      onLoad={() => setImageLoaded(true)}
-                      style={currentQuestion.is_image_blurred ? {
-                        filter: `blur(${blurAmount}px)`,
-                        transition: 'filter 0.8s ease-out',
-                      } : undefined}
-                    />
-                  </div>
-                )}
-                <h2 className="text-xl font-bold text-navy leading-snug flex items-start gap-2">
-                  <span className="flex-1">{currentQuestion.question_text}</span>
-                  <SpeakButton
-                    text={currentQuestion.question_text}
-                    autoSpeak={accessibility.settings.speakText}
-                    className="shrink-0 w-8 h-8 bg-navy/10 text-navy hover:bg-navy/20"
-                  />
-                </h2>
-              </div>
-
-              {/* Answer buttons — hidden until image is ready */}
-              <div className={`mt-auto pb-2 ${waitingForImage ? 'opacity-0 pointer-events-none' : ''}`}>
-                <AnswerButtons
-                  question={currentQuestion}
-                  onAnswer={handleAnswer}
-                  disabled={waitingForImage || timeRemaining <= 0}
+                {/* Timer — show full bar while image loading, real value once ready */}
+                <TimerBar
+                  timeRemaining={waitingForImage ? timeLimit : timeRemaining}
+                  timeLimit={timeLimit}
                 />
-              </div>
-            </AnimatedContainer>
+
+                {/* Question text */}
+                <div className="bg-white rounded-3xl shadow-md p-6">
+                  {currentQuestion.image_url && (
+                    <div className="mb-4 rounded-2xl overflow-hidden relative aspect-video">
+                      {!imageLoaded && (
+                        <div className="absolute inset-0 bg-gray-200 rounded-xl animate-pulse flex items-center justify-center">
+                          <div className="flex flex-col items-center gap-2">
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                              className="w-8 h-8 border-3 border-navy/20 border-t-navy rounded-full"
+                            />
+                            <span className="text-xs font-bold text-navy/40">Loading image...</span>
+                          </div>
+                        </div>
+                      )}
+                      <Image
+                        src={currentQuestion.image_url}
+                        alt="Question image"
+                        fill
+                        className="object-cover rounded-xl"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        loading="eager"
+                        onLoad={() => setImageLoaded(true)}
+                        style={currentQuestion.is_image_blurred ? {
+                          filter: `blur(${blurAmount}px)`,
+                          transition: 'filter 0.8s ease-out',
+                        } : undefined}
+                      />
+                    </div>
+                  )}
+                  <h2 className="text-xl font-bold text-navy leading-snug flex items-start gap-2">
+                    <span className="flex-1">{currentQuestion.question_text}</span>
+                    <SpeakButton
+                      text={currentQuestion.question_text}
+                      autoSpeak={accessibility.settings.speakText}
+                      className="shrink-0 w-8 h-8 bg-navy/10 text-navy hover:bg-navy/20"
+                    />
+                  </h2>
+                </div>
+
+                {/* Answer buttons — hidden until image is ready */}
+                <div className={`mt-auto pb-2 ${waitingForImage ? 'opacity-0 pointer-events-none' : ''}`}>
+                  <AnswerButtons
+                    question={currentQuestion}
+                    onAnswer={handleAnswer}
+                    disabled={waitingForImage || timeRemaining <= 0}
+                  />
+                </div>
+              </AnimatedContainer>
             );
           })()}
 
@@ -1102,36 +1102,32 @@ export default function PlayPage() {
                         initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
                         transition={{ delay: i * 0.08 }}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-2xl ${
-                          isMe
-                            ? "bg-navy text-white"
-                            : "bg-cream text-ink"
-                        }`}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-2xl ${isMe
+                          ? "bg-navy text-white"
+                          : "bg-cream text-ink"
+                          }`}
                       >
                         <span className="text-lg font-extrabold w-8 text-center">
                           {entry.rank}
                         </span>
                         <div className="flex-1 min-w-0">
                           <p
-                            className={`font-bold truncate ${
-                              isMe ? "text-white" : "text-navy"
-                            }`}
+                            className={`font-bold truncate ${isMe ? "text-white" : "text-navy"
+                              }`}
                           >
                             {entry.player_name}
                             {isMe && " (you)"}
                           </p>
                           <p
-                            className={`text-xs truncate ${
-                              isMe ? "text-white/60" : "text-ink/40"
-                            }`}
+                            className={`text-xs truncate ${isMe ? "text-white/60" : "text-ink/40"
+                              }`}
                           >
                             {entry.horse_name}
                           </p>
                         </div>
                         <span
-                          className={`font-bold text-sm ${
-                            isMe ? "text-amber" : "text-coral"
-                          }`}
+                          className={`font-bold text-sm ${isMe ? "text-amber" : "text-coral"
+                            }`}
                         >
                           {entry.score.toLocaleString()}
                         </span>
@@ -1216,27 +1212,24 @@ export default function PlayPage() {
                     return (
                       <div
                         key={entry.player_id}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm ${
-                          isMe
-                            ? "bg-navy text-white"
-                            : "bg-cream text-ink"
-                        }`}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm ${isMe
+                          ? "bg-navy text-white"
+                          : "bg-cream text-ink"
+                          }`}
                       >
                         <span className="font-extrabold w-6 text-center">
                           {entry.rank}
                         </span>
                         <span
-                          className={`flex-1 truncate font-bold ${
-                            isMe ? "text-white" : "text-navy"
-                          }`}
+                          className={`flex-1 truncate font-bold ${isMe ? "text-white" : "text-navy"
+                            }`}
                         >
                           {entry.player_name}
                           {isMe && " (you)"}
                         </span>
                         <span
-                          className={`font-bold ${
-                            isMe ? "text-amber" : "text-coral"
-                          }`}
+                          className={`font-bold ${isMe ? "text-amber" : "text-coral"
+                            }`}
                         >
                           {entry.score.toLocaleString()}
                         </span>

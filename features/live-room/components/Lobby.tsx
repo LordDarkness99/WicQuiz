@@ -66,8 +66,8 @@ export default function Lobby({
   return (
     <div className="bg-surface text-on-surface min-h-screen overflow-hidden flex flex-col">
       {/* Top Nav */}
-      <header className="bg-surface-bright flex justify-between items-center w-full px-8 py-4 border-b border-primary/10 sticky top-0 z-50">
-        <div className="flex items-center gap-6">
+      <header className="bg-surface-bright flex flex-col md:flex-row justify-between items-center w-full px-4 md:px-8 py-4 border-b border-primary/10 sticky top-0 z-50 gap-4 md:gap-0">
+        <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 md:gap-6">
           {onBackToDashboard && (
             <button
               onClick={onBackToDashboard}
@@ -92,7 +92,7 @@ export default function Lobby({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap justify-center md:justify-end items-center gap-3">
           <motion.div
             animate={
               !reduced && countPulse
@@ -146,7 +146,7 @@ export default function Lobby({
         </div>
       </header>
 
-      <main className="max-w-[1440px] mx-auto p-8 lg:p-12 flex-1 flex gap-12">
+      <main className="max-w-[1440px] mx-auto p-4 md:p-8 lg:p-12 flex-1 flex flex-col lg:flex-row gap-8 lg:gap-12 w-full">
         {/* Left Section: Join Instructions */}
         <section className="flex-1 flex flex-col justify-center items-start space-y-8" data-aos="fade-right" data-aos-delay="100">
           <div className="space-y-2">
@@ -160,20 +160,19 @@ export default function Lobby({
           </div>
 
           {/* QR Code */}
-          <div className="relative group">
-            <div className="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.06)] relative z-10">
+          <div className="relative group self-center lg:self-start">
+            <div className="bg-surface-container-lowest p-4 md:p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.06)] relative z-10 inline-block">
               <QRCodeDisplay url={joinUrl} size={240} />
             </div>
-            <div className="absolute -top-4 -left-4 w-full h-full bg-surface-container-low rounded-xl -z-10 transition-transform group-hover:translate-x-2 group-hover:translate-y-2" />
           </div>
 
           {/* Room Code */}
-          <div className="space-y-1">
+          <div className="space-y-1 text-center lg:text-left w-full lg:w-auto">
             <p className="text-outline text-xs uppercase tracking-widest font-bold">
               Room Code
             </p>
-            <div className="flex items-center gap-4">
-              <span className="text-7xl font-black text-primary tracking-tighter">
+            <div className="flex items-center justify-center lg:justify-start gap-4">
+              <span className="text-5xl md:text-7xl font-black text-primary tracking-tighter">
                 {roomCode}
               </span>
               <button
@@ -285,8 +284,8 @@ export default function Lobby({
         </AnimatePresence>
 
         {/* Right Section: Player List */}
-        <aside className="w-[450px] flex flex-col gap-6" data-aos="fade-left" data-aos-delay="100">
-          <div className="flex-1 bg-surface-container-low rounded-xl p-6 flex flex-col gap-4 overflow-hidden relative shadow-inner">
+        <aside className="w-full lg:w-[450px] flex flex-col gap-6" data-aos="fade-left" data-aos-delay="100">
+          <div className="flex-1 bg-surface-container-low rounded-xl p-4 md:p-6 flex flex-col gap-4 overflow-hidden relative shadow-inner min-h-[300px] lg:min-h-0">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-xl font-bold text-primary">Live Players</h3>
               <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />

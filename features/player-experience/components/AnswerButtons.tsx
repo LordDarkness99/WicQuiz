@@ -47,7 +47,7 @@ export default function AnswerButtons({
     return (
       <div className="w-full space-y-3">
         <div
-          className={`grid grid-cols-2 gap-3 w-full ${
+          className={`grid grid-cols-1 sm:grid-cols-2 gap-3 w-full ${
             disabled && !isLockedIn ? "opacity-50 pointer-events-none" : ""
           } ${isLockedIn ? "pointer-events-none" : ""}`}
         >

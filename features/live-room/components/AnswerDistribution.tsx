@@ -31,7 +31,7 @@ export default function AnswerDistribution({
   const maxCount = Math.max(...answers.map((a) => a.count), 1);
 
   return (
-    <div className="bg-surface-container-low p-8 rounded-xl flex flex-col h-full">
+    <div className="bg-surface-container-low p-4 sm:p-8 rounded-xl flex flex-col h-full">
       <div className="flex justify-between items-end mb-8">
         <div>
           <h2 className="text-2xl font-bold text-primary">

@@ -179,7 +179,7 @@ export default function ProfileRoute() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="grid grid-cols-3 gap-3 mt-6"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6"
         >
           {[
             { label: "Quizzes Created", value: totalQuizzes, icon: "quiz" },
@@ -194,7 +194,7 @@ export default function ProfileRoute() {
                 {stat.icon}
               </span>
               <p className="text-xl font-black text-on-surface leading-none">{stat.value}</p>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant block mt-1 break-words">
                 {stat.label}
               </span>
             </div>
