@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { ReadabilityModeProvider } from "@/shared/hooks/useReadabilityMode";
 import ReadabilityToggle from "@/shared/ui/ReadabilityToggle";
+import { AosInitializer } from "@/shared/ui/AosInitializer";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col font-sans">
+        <AosInitializer />
         <ReadabilityModeProvider>
           {children}
           <ReadabilityToggle />

@@ -238,9 +238,9 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#0D1722] text-[#F8FAFC] selection:bg-[#B88B4A] selection:text-[#0D1722]">
       <HostHeader />
 
-      <main className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-6 sm:px-8 py-8" data-aos="fade-in">
         {/* Stats Bar */}
-        <div className="tactical-card rounded-2xl border border-[#283E58]/60 bg-[#121F2E] mb-8 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#283E58]/60">
+        <div data-aos="fade-up" className="tactical-card rounded-2xl border border-[#283E58]/60 bg-[#121F2E] mb-8 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#283E58]/60">
           {[
             { label: "Quizzes Created", value: totalQuizzes, icon: "quiz", color: "text-[#B88B4A]" },
             { label: "Games Played", value: totalGames, icon: "sports_esports", color: "text-[#4ADE80]" },
@@ -266,7 +266,7 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left: My Quizzes */}
-          <section className="lg:col-span-2">
+          <section className="lg:col-span-2" data-aos="fade-right" data-aos-delay="100">
             <div className="flex items-center gap-2.5 mb-4">
               <h2 className="text-lg font-black text-[#F8FAFC] tracking-tight">My Quizzes</h2>
               {templates.length > 0 && (
@@ -536,7 +536,7 @@ export default function DashboardPage() {
           </section>
 
           {/* Right: Recent Sessions */}
-          <section>
+          <section data-aos="fade-left" data-aos-delay="100">
             <h2 className="text-lg font-black text-[#F8FAFC] tracking-tight mb-4">
               Recent Sessions
             </h2>

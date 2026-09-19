@@ -165,7 +165,7 @@ export default function HomePage() {
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1] sm:leading-[1.08] mb-4 sm:mb-6">
+            <h1 data-aos="fade-up" className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.1] sm:leading-[1.08] mb-4 sm:mb-6">
               Turn any meeting into a{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B88B4A] via-[#E2BE80] to-[#B88B4A]">
                 high-stakes
@@ -173,13 +173,13 @@ export default function HomePage() {
               game show
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl text-[#94A3B8] max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p data-aos="fade-up" data-aos-delay="100" className="text-base sm:text-lg md:text-xl text-[#94A3B8] max-w-2xl mx-auto mb-10 leading-relaxed">
               Real-time synchronization, galloping horse-race leaderboards, and AI question authoring.
               Participants join from any mobile device in seconds without app installs.
             </p>
 
             {/* Quick Actions */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+            <div data-aos="fade-up" data-aos-delay="200" className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
               <Button
                 variant="primary"
                 size="lg"
@@ -232,7 +232,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
               {/* Player Join Card */}
               <AnimatedContainer delay={0.1}>
-                <div className="tactical-card h-full rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
+                <div data-aos="fade-right" className="tactical-card h-full rounded-3xl p-8 sm:p-10 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-6">
                       <div className="w-12 h-12 rounded-2xl bg-[#1C2D42] border border-[#B88B4A]/30 flex items-center justify-center">
@@ -278,7 +278,7 @@ export default function HomePage() {
 
               {/* Host Quick Launch Card */}
               <AnimatedContainer delay={0.2}>
-                <div className="tactical-card h-full rounded-3xl p-8 sm:p-10 flex flex-col justify-between border-t-2 border-t-[#2E5339]">
+                <div data-aos="fade-left" className="tactical-card h-full rounded-3xl p-8 sm:p-10 flex flex-col justify-between border-t-2 border-t-[#2E5339]">
                   <div>
                     <div className="flex items-center justify-between mb-6">
                       <div className="w-12 h-12 rounded-2xl bg-[#2E5339]/30 border border-[#2E5339] flex items-center justify-center">
@@ -339,7 +339,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {STEPS.map((item, i) => (
                 <AnimatedContainer key={item.title} delay={i * 0.1}>
-                  <div className="tactical-card h-full rounded-2xl p-8 flex flex-col justify-between">
+                  <div data-aos="flip-up" data-aos-delay={i * 100} className="tactical-card h-full rounded-2xl p-8 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between mb-6">
                         <div className="w-12 h-12 rounded-xl bg-[#1C2D42] border border-[#B88B4A]/30 flex items-center justify-center text-[#B88B4A]">
@@ -376,7 +376,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {FEATURES.map((feat, i) => (
                 <AnimatedContainer key={feat.title} delay={i * 0.05}>
-                  <div className="tactical-card h-full rounded-2xl p-6 flex flex-col justify-between">
+                  <div data-aos="zoom-in" data-aos-delay={i * 100} className="tactical-card h-full rounded-2xl p-6 flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <div className="w-10 h-10 rounded-lg bg-[#1C2D42] border border-[#283E58] flex items-center justify-center text-[#D4A76A]">

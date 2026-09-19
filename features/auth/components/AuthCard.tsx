@@ -58,7 +58,7 @@ export function AuthCard({
         {/* Top accent specular border strip */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2E5339] via-[#B88B4A] to-[#2E5339]" />
 
-        <div className="mb-6">
+        <div className="mb-6" data-aos="fade-down" data-aos-delay="200">
           <span className="inline-block text-[11px] font-mono font-bold uppercase tracking-wider text-[#D4A76A] bg-[#B88B4A]/15 border border-[#B88B4A]/30 px-3 py-1 rounded-full mb-3">
             {badgeText}
           </span>

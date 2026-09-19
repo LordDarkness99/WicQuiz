@@ -148,7 +148,7 @@ export default function Lobby({
 
       <main className="max-w-[1440px] mx-auto p-8 lg:p-12 flex-1 flex gap-12">
         {/* Left Section: Join Instructions */}
-        <section className="flex-1 flex flex-col justify-center items-start space-y-8">
+        <section className="flex-1 flex flex-col justify-center items-start space-y-8" data-aos="fade-right" data-aos-delay="100">
           <div className="space-y-2">
             <span className="text-sm font-extrabold text-on-tertiary-container bg-tertiary-fixed px-3 py-1 rounded-full uppercase tracking-widest">
               Join the Game
@@ -285,7 +285,7 @@ export default function Lobby({
         </AnimatePresence>
 
         {/* Right Section: Player List */}
-        <aside className="w-[450px] flex flex-col gap-6">
+        <aside className="w-[450px] flex flex-col gap-6" data-aos="fade-left" data-aos-delay="100">
           <div className="flex-1 bg-surface-container-low rounded-xl p-6 flex flex-col gap-4 overflow-hidden relative shadow-inner">
             <div className="flex justify-between items-center mb-2">
               <h3 className="text-xl font-bold text-primary">Live Players</h3>
