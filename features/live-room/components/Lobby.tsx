@@ -67,24 +67,13 @@ export default function Lobby({
     <div className="bg-surface text-on-surface min-h-screen overflow-hidden flex flex-col">
       {/* Top Nav */}
       <header className="bg-surface-bright flex flex-col md:flex-row justify-between items-center w-full px-4 md:px-8 py-4 border-b border-primary/10 sticky top-0 z-50 gap-4 md:gap-0">
-        <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 md:gap-6">
-          {onBackToDashboard && (
-            <button
-              onClick={onBackToDashboard}
-              className="flex items-center gap-1.5 text-sm font-bold text-outline hover:text-primary transition-colors"
-              title="Back to Dashboard (room remains active)"
-            >
-              <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-              Dashboard
-            </button>
-          )}
-          {onBackToDashboard && <div className="h-6 w-px bg-outline-variant/30" />}
-          <span className="text-xl font-bold text-primary-container tracking-tighter">
+        <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-2 sm:gap-4 md:gap-6 w-full md:w-auto text-center sm:text-left">
+          <span className="text-xl font-bold text-primary-container tracking-tighter shrink-0">
             QuizTime
           </span>
-          <div className="h-6 w-px bg-outline-variant/30" />
-          <div className="flex flex-col">
-            <h1 className="text-lg font-bold text-primary tracking-tight">
+          <div className="hidden sm:block h-6 w-px bg-outline-variant/30" />
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-lg font-bold text-primary tracking-tight truncate max-w-full px-2 sm:px-0">
               {quizTitle}
             </h1>
             <p className="text-[10px] uppercase tracking-widest text-outline">
@@ -92,7 +81,7 @@ export default function Lobby({
             </p>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center md:justify-end items-center gap-3">
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center md:justify-end items-center gap-3 w-full md:w-auto">
           <motion.div
             animate={
               !reduced && countPulse
@@ -100,12 +89,12 @@ export default function Lobby({
                 : { scale: 1 }
             }
             transition={{ duration: 0.3 }}
-            className="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full"
+            className="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full w-full sm:w-auto justify-center"
           >
-            <span className="material-symbols-outlined text-primary text-sm">
+            <span className="material-symbols-outlined text-primary text-sm shrink-0">
               group
             </span>
-            <span className="text-sm font-bold text-primary">
+            <span className="text-sm font-bold text-primary truncate">
               {players.length} player{players.length !== 1 ? "s" : ""} in the room
             </span>
           </motion.div>
@@ -134,11 +123,11 @@ export default function Lobby({
                 <button
                   onClick={() => setConfirmStop(true)}
                   disabled={stoppingQuiz}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-error/30 text-error text-sm font-bold hover:bg-error/10 transition-colors disabled:opacity-50"
+                  className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-full border border-error/30 text-error text-sm font-bold hover:bg-error/10 transition-colors disabled:opacity-50 w-full sm:w-auto"
                   title="Stop quiz and back to dashboard"
                 >
-                  <span className="material-symbols-outlined text-[16px]">stop_circle</span>
-                  {stoppingQuiz ? "Stopping..." : "Stop Quiz"}
+                  <span className="material-symbols-outlined text-[16px] shrink-0">stop_circle</span>
+                  <span className="truncate">{stoppingQuiz ? "Stopping..." : "Stop Quiz"}</span>
                 </button>
               )}
             </>
@@ -171,51 +160,51 @@ export default function Lobby({
             <p className="text-outline text-xs uppercase tracking-widest font-bold">
               Room Code
             </p>
-            <div className="flex items-center justify-center lg:justify-start gap-4">
-              <span className="text-5xl md:text-7xl font-black text-primary tracking-tighter">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <span className="text-5xl md:text-7xl font-black text-primary tracking-tighter break-words text-center sm:text-left">
                 {roomCode}
               </span>
               <button
                 onClick={() => navigator.clipboard.writeText(roomCode)}
-                className="bg-surface-container-high p-3 rounded-full text-primary hover:bg-primary hover:text-white transition-all duration-200"
+                className="bg-surface-container-high p-3 rounded-full text-primary hover:bg-primary hover:text-white transition-all duration-200 shrink-0"
               >
                 <span className="material-symbols-outlined">content_copy</span>
               </button>
             </div>
-            <p className="text-outline font-medium">
+            <p className="text-outline font-medium break-words px-2 sm:px-0 mt-2 sm:mt-0 text-center sm:text-left">
               {joinUrl.replace(/^https?:\/\//, "")}
             </p>
           </div>
 
           {/* Quick Host Navigation Banner */}
-          <div className="w-full max-w-md bg-surface-container-low rounded-2xl p-4 border border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
-            <div className="flex items-center gap-2.5">
-              <span className="material-symbols-outlined text-secondary-container text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <div className="w-full max-w-md bg-surface-container-low rounded-2xl p-4 border border-outline-variant/20 flex flex-col items-center justify-center gap-4 shadow-xs text-center sm:text-left sm:items-start">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2.5">
+              <span className="material-symbols-outlined text-secondary-container text-[20px] shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>
                 sensors
               </span>
               <p className="text-xs text-on-surface-variant font-medium">
                 Room is active. You can go back to the Dashboard without closing this room.
               </p>
             </div>
-            <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full shrink-0">
               {onBackToDashboard && (
                 <button
                   onClick={onBackToDashboard}
-                  className="px-3.5 py-2 rounded-xl bg-surface text-primary text-xs font-bold border border-outline-variant/30 hover:border-primary transition-colors flex items-center justify-center gap-1 shadow-xs"
+                  className="w-full sm:w-auto sm:flex-1 px-3.5 py-2.5 rounded-xl bg-surface text-primary text-xs font-bold border border-outline-variant/30 hover:border-primary transition-colors flex items-center justify-center gap-1.5 shadow-xs"
                   title="Back to Dashboard (room remains running)"
                 >
-                  <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-                  Dashboard
+                  <span className="material-symbols-outlined text-[16px] shrink-0">arrow_back</span>
+                  <span className="truncate">Dashboard</span>
                 </button>
               )}
               {onStopQuiz && (
                 <button
                   onClick={() => setConfirmStop(true)}
-                  className="px-3.5 py-2 rounded-xl bg-error/10 text-error text-xs font-bold hover:bg-error/20 transition-colors flex items-center justify-center gap-1"
+                  className="w-full sm:w-auto sm:flex-1 px-3.5 py-2.5 rounded-xl bg-error/10 text-error text-xs font-bold hover:bg-error/20 transition-colors flex items-center justify-center gap-1.5"
                   title="Stop quiz and finish room"
                 >
-                  <span className="material-symbols-outlined text-[16px]">stop_circle</span>
-                  Stop
+                  <span className="material-symbols-outlined text-[16px] shrink-0">stop_circle</span>
+                  <span className="truncate">Stop</span>
                 </button>
               )}
             </div>
@@ -292,7 +281,7 @@ export default function Lobby({
             </div>
 
             {/* Player Grid */}
-            <div className="grid grid-cols-2 gap-3 overflow-y-auto pr-2 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto pr-2 relative">
               {players.map((player, idx) => (
                 <motion.div
                   key={`${player.name}-${idx}`}

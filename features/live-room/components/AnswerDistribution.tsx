@@ -63,7 +63,7 @@ export default function AnswerDistribution({
           return (
             <div key={answer.answer_value} className="space-y-2">
               <div
-                className={`flex justify-between items-center text-sm font-bold text-primary ${
+                className={`flex justify-between items-center text-sm font-bold text-primary gap-4 ${
                   !isTop && answer.count > 0
                     ? "opacity-60"
                     : answer.count === 0
@@ -71,10 +71,10 @@ export default function AnswerDistribution({
                     : ""
                 }`}
               >
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-start sm:items-center gap-1.5 min-w-0">
                   {revealed && (
                     <span
-                      className={`material-symbols-outlined text-[16px] ${
+                      className={`material-symbols-outlined text-[16px] shrink-0 mt-0.5 sm:mt-0 ${
                         isCorrect ? "text-emerald-600" : "text-red-500"
                       }`}
                       aria-label={isCorrect ? "Correct" : "Incorrect"}
@@ -82,12 +82,14 @@ export default function AnswerDistribution({
                       {isCorrect ? "check_circle" : "cancel"}
                     </span>
                   )}
-                  {questionType === "multiple_choice" || questionType === "image_question"
-                    ? `${optionLabels[idx] ?? idx + 1}: `
-                    : ""}
-                  {answer.answer_value}
+                  <span className="break-words min-w-0 text-left">
+                    {questionType === "multiple_choice" || questionType === "image_question"
+                      ? `${optionLabels[idx] ?? idx + 1}: `
+                      : ""}
+                    {answer.answer_value}
+                  </span>
                 </span>
-                <span className="bg-surface-container-highest px-3 py-1 rounded-full text-xs">
+                <span className="bg-surface-container-highest px-3 py-1 rounded-full text-xs shrink-0 whitespace-nowrap">
                   {answer.count} {answer.count === 1 ? "Vote" : "Votes"}
                 </span>
               </div>

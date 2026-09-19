@@ -149,19 +149,7 @@ export default function EndGame({
     >
       <Confetti />
 
-      {/* Back to dashboard (host only) */}
-      {isHost && onBackToDashboard && (
-        <motion.button
-          initial={reduced ? undefined : { opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-          onClick={onBackToDashboard}
-          className="absolute top-6 left-6 z-30 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/10 text-[#FAFAF7] text-sm font-bold hover:bg-white/20 active:scale-95 transition-all backdrop-blur-sm"
-        >
-          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-          Dashboard
-        </motion.button>
-      )}
+      {/* Top dashboard button removed to prevent overlapping with title */}
 
       {/* Game Over header */}
       <motion.div
@@ -314,11 +302,11 @@ export default function EndGame({
 
         {/* Host action buttons */}
         {isHost && (
-          <div className="flex gap-3 mt-6 pt-4 border-t border-[#1B2B5E]/10">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mt-6 pt-4 border-t border-[#1B2B5E]/10">
             {onBackToDashboard && (
               <button
                 onClick={onBackToDashboard}
-                className="flex-1 py-3.5 rounded-xl border-2 border-[#1B2B5E] text-[#1B2B5E] font-bold text-sm hover:bg-[#1B2B5E]/5 active:scale-95 transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto sm:flex-1 py-3.5 px-4 rounded-xl border-2 border-[#1B2B5E] text-[#1B2B5E] font-bold text-sm hover:bg-[#1B2B5E]/5 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[18px]">arrow_back</span>
                 Back to Dashboard
@@ -327,7 +315,7 @@ export default function EndGame({
             {onPlayAgain && (
               <button
                 onClick={onPlayAgain}
-                className="flex-1 py-3.5 rounded-xl bg-[#FF6B6B] text-white font-bold text-sm shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
+                className="w-full sm:w-auto sm:flex-1 py-3.5 px-4 rounded-xl bg-[#FF6B6B] text-white font-bold text-sm shadow-lg hover:scale-[1.02] active:scale-95 transition-all"
               >
                 Play Again
               </button>
@@ -335,7 +323,7 @@ export default function EndGame({
             {onNewQuiz && (
               <button
                 onClick={onNewQuiz}
-                className="flex-1 py-3.5 rounded-xl border-2 border-[#1B2B5E] text-[#1B2B5E] font-bold text-sm hover:bg-[#1B2B5E]/5 active:scale-95 transition-all"
+                className="w-full sm:w-auto sm:flex-1 py-3.5 px-4 rounded-xl border-2 border-[#1B2B5E] text-[#1B2B5E] font-bold text-sm hover:bg-[#1B2B5E]/5 active:scale-95 transition-all"
               >
                 New Quiz
               </button>
@@ -343,7 +331,7 @@ export default function EndGame({
             {onDownloadResults && (
               <button
                 onClick={onDownloadResults}
-                className="py-3.5 px-5 rounded-xl text-[#1B2B5E]/60 font-bold text-sm hover:text-[#1B2B5E] hover:bg-[#1B2B5E]/5 transition-all"
+                className="w-full sm:w-auto sm:flex-1 py-3.5 px-4 rounded-xl border-2 border-transparent text-[#1B2B5E]/60 font-bold text-sm hover:text-[#1B2B5E] hover:bg-[#1B2B5E]/5 transition-all flex items-center justify-center"
               >
                 Download PDF
               </button>

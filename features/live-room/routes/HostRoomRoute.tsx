@@ -98,6 +98,7 @@ export default function HostControlPanel() {
   const [hostBlurAmount, setHostBlurAmount] = useState(0);
   const [autoAdvanceSeconds, setAutoAdvanceSeconds] = useState<number | null>(null);
   const [stoppingQuiz, setStoppingQuiz] = useState(false);
+  const [isMobileHostMenuOpen, setIsMobileHostMenuOpen] = useState(false);
   const scoredResultsRef = useRef<Record<string, { isCorrect: boolean; pointsEarned: number }>>({});
 
   // Refs to avoid stale closures
@@ -117,10 +118,10 @@ export default function HostControlPanel() {
   const { broadcast, onBroadcast } = useRoomChannel(roomCode);
 
   // Refs so display toolbar can call these before they're defined below
-  const nextQuestionRef = useRef<() => void>(() => {});
-  const showLeaderboardRef = useRef<() => void>(() => {});
-  const finishGameRef = useRef<() => Promise<void>>(async () => {});
-  const revealAnswerRef = useRef<() => Promise<void>>(async () => {});
+  const nextQuestionRef = useRef<() => void>(() => { });
+  const showLeaderboardRef = useRef<() => void>(() => { });
+  const finishGameRef = useRef<() => Promise<void>>(async () => { });
+  const revealAnswerRef = useRef<() => Promise<void>>(async () => { });
 
   // Listen for display screen toolbar requests
   useEffect(() => {
@@ -894,21 +895,6 @@ export default function HostControlPanel() {
           )}
 
         <div className="flex items-center gap-4">
-          {gameState === "question_start" && (
-            <button
-              onClick={() => {
-                setTimerRunning(false);
-                setGameState("question_end");
-                broadcast("game_state_change", {
-                  state: "question_end",
-                  current_question_index: currentQuestionIndex,
-                });
-              }}
-              className="px-6 py-2.5 rounded-xl text-sm font-bold text-primary border border-primary/10 hover:bg-surface-container-low transition-colors"
-            >
-              End Early
-            </button>
-          )}
           <span className="text-sm font-bold text-outline">
             {players.length} players
           </span>
@@ -925,11 +911,11 @@ export default function HostControlPanel() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -60 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="flex-1 flex p-8 gap-8 max-w-[1600px] mx-auto w-full overflow-hidden"
+              className="flex-1 flex flex-col lg:flex-row p-4 sm:p-8 gap-6 sm:gap-8 max-w-[1600px] mx-auto w-full overflow-y-auto overflow-x-hidden"
             >
               {/* Left: Question & Media */}
-              <section className="flex-[1.2] flex flex-col gap-6">
-                <div className="bg-surface-container-lowest p-10 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)] flex-1 flex flex-col justify-between relative overflow-hidden">
+              <section className="flex-1 lg:flex-[1.2] flex flex-col gap-6">
+                <div className="bg-surface-container-lowest p-6 sm:p-10 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)] flex-1 flex flex-col justify-between relative overflow-hidden">
                   <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
                   <div>
                     <span className="inline-block px-4 py-1.5 rounded-full bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest mb-6">
@@ -979,22 +965,22 @@ export default function HostControlPanel() {
                       {!answerRevealed ? (
                         /* Before reveal: live stats only */
                         <div className="bg-surface-container-low border border-outline-variant/20 rounded-xl p-6">
-                          <div className="grid grid-cols-3 gap-4 text-center">
-                            <div>
-                              <p className="text-[10px] font-bold text-outline uppercase tracking-widest">Answered</p>
-                              <p className="text-2xl font-black text-primary">{currentAnswers.length}/{players.length}</p>
+                          <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                            <div className="min-w-0 flex flex-col justify-center">
+                              <p className="text-[9px] sm:text-[10px] font-bold text-outline uppercase tracking-widest break-words hyphens-auto">Answered</p>
+                              <p className="text-xl sm:text-2xl font-black text-primary">{currentAnswers.length}/{players.length}</p>
                             </div>
-                            <div>
-                              <p className="text-[10px] font-bold text-outline uppercase tracking-widest">Fastest</p>
-                              <p className="text-2xl font-black text-primary">
+                            <div className="min-w-0 flex flex-col justify-center">
+                              <p className="text-[9px] sm:text-[10px] font-bold text-outline uppercase tracking-widest break-words hyphens-auto">Fastest</p>
+                              <p className="text-xl sm:text-2xl font-black text-primary truncate">
                                 {currentAnswers.length > 0
                                   ? (Math.min(...currentAnswers.map(a => a.time_taken_ms)) / 1000).toFixed(1) + "s"
                                   : "—"}
                               </p>
                             </div>
-                            <div>
-                              <p className="text-[10px] font-bold text-outline uppercase tracking-widest">Avg Time</p>
-                              <p className="text-2xl font-black text-primary">
+                            <div className="min-w-0 flex flex-col justify-center">
+                              <p className="text-[9px] sm:text-[10px] font-bold text-outline uppercase tracking-widest break-words hyphens-auto">Avg Time</p>
+                              <p className="text-xl sm:text-2xl font-black text-primary truncate">
                                 {currentAnswers.length > 0
                                   ? (currentAnswers.reduce((sum, a) => sum + a.time_taken_ms, 0) / currentAnswers.length / 1000).toFixed(1) + "s"
                                   : "—"}
@@ -1228,24 +1214,22 @@ export default function HostControlPanel() {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.08 }}
-                  className={`flex items-center gap-4 rounded-xl p-4 ${
-                    idx === 0
-                      ? "bg-secondary-container/10 border-2 border-secondary-container/30"
-                      : idx < 3
+                  className={`flex items-center gap-4 rounded-xl p-4 ${idx === 0
+                    ? "bg-secondary-container/10 border-2 border-secondary-container/30"
+                    : idx < 3
                       ? "bg-tertiary-fixed/20 border border-tertiary-fixed-dim/20"
                       : "bg-surface-container-low border border-outline-variant/10"
-                  }`}
+                    }`}
                 >
                   <span
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
-                      idx === 0
-                        ? "bg-secondary-container text-white"
-                        : idx === 1
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${idx === 0
+                      ? "bg-secondary-container text-white"
+                      : idx === 1
                         ? "bg-tertiary-fixed-dim text-on-tertiary-fixed"
                         : idx === 2
-                        ? "bg-primary text-on-primary"
-                        : "bg-surface-container-high text-on-surface-variant"
-                    }`}
+                          ? "bg-primary text-on-primary"
+                          : "bg-surface-container-high text-on-surface-variant"
+                      }`}
                   >
                     {entry.rank}
                   </span>
@@ -1267,33 +1251,33 @@ export default function HostControlPanel() {
               currentQuestionIndex + 1,
               questions.length
             ) && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-8 bg-tertiary-fixed/10 border border-tertiary-fixed-dim/30 rounded-2xl p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-tertiary-fixed-dim font-extrabold uppercase tracking-wider text-sm flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-pulse" />
-                    Suspense Mode
-                  </h3>
-                  <button
-                    onClick={() => setShowSuspenseModal(true)}
-                    className="text-sm font-bold text-primary hover:text-primary-container transition-colors underline"
-                  >
-                    Open Controls
-                  </button>
-                </div>
-                <button
-                  onClick={() => {
-                    broadcast("final_reveal_start", {});
-                  }}
-                  className="w-full py-3 rounded-xl font-bold text-lg bg-secondary-container text-white shadow-[0px_10px_20px_rgba(255,107,107,0.3)] hover:translate-y-[-2px] active:scale-95 transition-all"
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-8 bg-tertiary-fixed/10 border border-tertiary-fixed-dim/30 rounded-2xl p-6"
                 >
-                  Start Final Reveal
-                </button>
-              </motion.div>
-            )}
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-tertiary-fixed-dim font-extrabold uppercase tracking-wider text-sm flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-tertiary-fixed-dim animate-pulse" />
+                      Suspense Mode
+                    </h3>
+                    <button
+                      onClick={() => setShowSuspenseModal(true)}
+                      className="text-sm font-bold text-primary hover:text-primary-container transition-colors underline"
+                    >
+                      Open Controls
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => {
+                      broadcast("final_reveal_start", {});
+                    }}
+                    className="w-full py-3 rounded-xl font-bold text-lg bg-secondary-container text-white shadow-[0px_10px_20px_rgba(255,107,107,0.3)] hover:translate-y-[-2px] active:scale-95 transition-all"
+                  >
+                    Start Final Reveal
+                  </button>
+                </motion.div>
+              )}
 
             <div className="flex justify-center gap-4 mt-6 flex-wrap">
               <button
@@ -1306,31 +1290,30 @@ export default function HostControlPanel() {
                 currentQuestionIndex + 1,
                 questions.length
               ) && (
-                <>
-                  <button
-                    className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-colors ${
-                      suspenseMode
+                  <>
+                    <button
+                      className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-colors ${suspenseMode
                         ? "bg-secondary-container text-white"
                         : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest"
-                    }`}
-                    onClick={() => {
-                      const next = !suspenseMode;
-                      setSuspenseMode(next);
-                      broadcast("suspense_mode", { enabled: next });
-                    }}
-                  >
-                    {suspenseMode ? "Suspense ON" : "Suspense Mode"}
-                  </button>
-                  <button
-                    className="px-5 py-2.5 rounded-xl font-bold text-sm bg-tertiary-fixed-dim text-on-tertiary-fixed hover:opacity-90 transition-opacity"
-                    onClick={() => {
-                      broadcast("final_reveal_start", {});
-                    }}
-                  >
-                    Final Reveal
-                  </button>
-                </>
-              )}
+                        }`}
+                      onClick={() => {
+                        const next = !suspenseMode;
+                        setSuspenseMode(next);
+                        broadcast("suspense_mode", { enabled: next });
+                      }}
+                    >
+                      {suspenseMode ? "Suspense ON" : "Suspense Mode"}
+                    </button>
+                    <button
+                      className="px-5 py-2.5 rounded-xl font-bold text-sm bg-tertiary-fixed-dim text-on-tertiary-fixed hover:opacity-90 transition-opacity"
+                      onClick={() => {
+                        broadcast("final_reveal_start", {});
+                      }}
+                    >
+                      Final Reveal
+                    </button>
+                  </>
+                )}
               {!isLastQuestion ? (
                 <Button variant="primary" size="lg" onClick={nextQuestion}>
                   Next Question
@@ -1386,39 +1369,61 @@ export default function HostControlPanel() {
 
       {/* Bottom Controls Bar (during question phases) */}
       {gameState === "question_start" && currentQuestion && (
-        <footer className="bg-surface-container-lowest px-12 py-6 flex justify-between items-center shadow-[0px_-10px_30px_rgba(0,0,0,0.03)]">
-          <div className="flex items-center gap-10">
-            <label className="flex items-center cursor-pointer group">
-              <div className="relative">
-                <input className="sr-only peer" type="checkbox" readOnly />
-                <div className="w-12 h-6 bg-surface-container-high rounded-full peer peer-checked:bg-primary-container transition-colors" />
-                <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-6" />
-              </div>
-              <span className="ml-3 text-sm font-bold text-primary group-hover:text-primary-container transition-colors">
-                Show Leaderboard After Reveal
-              </span>
-            </label>
-          </div>
-          <button
-            onClick={() => {
-              setTimerRunning(false);
-              setGameState("question_end");
-              broadcast("game_state_change", {
-                state: "question_end",
-                current_question_index: currentQuestionIndex,
-              });
-            }}
-            className="flex items-center gap-3 px-10 py-4 bg-secondary-container text-white rounded-xl font-extrabold text-lg shadow-[0px_10px_25px_rgba(255,107,107,0.3)] hover:scale-[1.02] active:scale-95 transition-all"
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontVariationSettings: "'FILL' 1" }}
+        <>
+          {/* Unified Hamburger Footer */}
+          <footer className="bg-surface-container-lowest pl-6 pr-36 sm:pl-12 sm:pr-48 py-4 sm:py-6 flex justify-between items-center shadow-[0px_-10px_30px_rgba(0,0,0,0.1)] z-[40]">
+            <span className="text-sm font-bold text-primary">Host Controls</span>
+            <button
+              onClick={() => setIsMobileHostMenuOpen(!isMobileHostMenuOpen)}
+              className="px-4 py-2 sm:px-6 sm:py-3 flex items-center gap-2 rounded-xl bg-surface-container-highest text-primary hover:bg-surface-container-high active:scale-95 transition-all font-bold text-sm shadow-sm"
+              aria-label="Toggle Host Controls"
             >
-              timer_off
-            </span>
-            End Timer
-          </button>
-        </footer>
+              <span className="hidden sm:inline">Options</span>
+              <span className="material-symbols-outlined">
+                {isMobileHostMenuOpen ? "close" : "menu"}
+              </span>
+            </button>
+          </footer>
+
+          {/* Unified Menu Drawer */}
+          <AnimatePresence>
+            {isMobileHostMenuOpen && (
+              <motion.div
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "100%", opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="fixed bottom-[68px] sm:bottom-[88px] left-0 right-0 bg-surface-container-lowest border-t border-primary/10 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 z-[39] shadow-[0px_-10px_30px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-none sm:px-12"
+              >
+                <label className="flex items-center justify-between sm:justify-start sm:gap-4 cursor-pointer group">
+                  <span className="text-sm font-bold text-primary group-hover:text-primary-container transition-colors">
+                    Show Leaderboard After Reveal
+                  </span>
+                  <div className="relative">
+                    <input className="sr-only peer" type="checkbox" readOnly />
+                    <div className="w-12 h-6 bg-black/10 border border-black/5 rounded-full peer-checked:bg-[#B88B4A] peer-checked:border-[#B88B4A] transition-colors" />
+                    <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-6 shadow-md" />
+                  </div>
+                </label>
+                <button
+                  onClick={() => {
+                    setIsMobileHostMenuOpen(false);
+                    setTimerRunning(false);
+                    setGameState("question_end");
+                    broadcast("game_state_change", {
+                      state: "question_end",
+                      current_question_index: currentQuestionIndex,
+                    });
+                  }}
+                  className="w-full sm:w-auto flex justify-center items-center gap-3 px-8 py-3 bg-secondary-container text-white rounded-xl font-extrabold text-lg shadow-[0px_10px_25px_rgba(255,107,107,0.3)] hover:scale-[1.02] active:scale-95 transition-all"
+                >
+                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>timer_off</span>
+                  End Timer Early
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
       )}
 
       {/* Suspense Modal */}
