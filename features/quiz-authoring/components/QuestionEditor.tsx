@@ -116,13 +116,13 @@ export default function QuestionEditor({
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header & Type Tabs */}
-      <section className="space-y-4">
+      <section className="bg-surface-container-low p-4 sm:p-6 rounded-3xl space-y-4">
         <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-outline pl-1">
           <span className="material-symbols-outlined text-[14px]">edit_document</span>
           Question Editor &bull; Q{String(index + 1).padStart(2, "0")}
         </div>
         {/* Type Selector Tabs */}
-        <div className="bg-surface-container-low p-1.5 rounded-2xl flex flex-wrap sm:flex-nowrap gap-1">
+        <div className="bg-surface-container-lowest/60 p-1.5 rounded-2xl flex flex-wrap sm:flex-nowrap gap-1">
           {typeTabs.map((tab) => (
             <button
               key={tab.type}
