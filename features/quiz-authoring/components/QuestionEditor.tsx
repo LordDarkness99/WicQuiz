@@ -116,17 +116,11 @@ export default function QuestionEditor({
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header & Type Tabs */}
-      <section className="space-y-6">
-        <div className="flex justify-between items-end">
-          <h2 className="text-3xl font-extrabold text-on-surface tracking-tight">
-            Question Editor
-          </h2>
-          <div className="flex items-center gap-2 text-xs font-bold text-outline bg-surface-container-low px-3 py-1.5 rounded-lg">
-            <span className="material-symbols-outlined text-sm">schedule</span>
-            EDITING QUESTION {String(index + 1).padStart(2, "0")}
-          </div>
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-outline pl-1">
+          <span className="material-symbols-outlined text-[14px]">edit_document</span>
+          Question Editor &bull; Q{String(index + 1).padStart(2, "0")}
         </div>
-
         {/* Type Selector Tabs */}
         <div className="bg-surface-container-low p-1.5 rounded-2xl flex gap-1">
           {typeTabs.map((tab) => (
@@ -134,11 +128,10 @@ export default function QuestionEditor({
               key={tab.type}
               type="button"
               onClick={() => switchType(tab.type)}
-              className={`flex-1 py-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all ${
-                question.type === tab.type
-                  ? "bg-surface-container-lowest text-on-surface shadow-sm ring-1 ring-outline-variant/10"
-                  : "text-outline hover:text-on-surface hover:bg-surface-container-lowest/50"
-              }`}
+              className={`flex-1 py-3 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all ${question.type === tab.type
+                ? "bg-surface-container-lowest text-on-surface shadow-sm ring-1 ring-outline-variant/10"
+                : "text-outline hover:text-on-surface hover:bg-surface-container-lowest/50"
+                }`}
             >
               <span className="material-symbols-outlined text-base">
                 {tab.icon}
@@ -155,19 +148,19 @@ export default function QuestionEditor({
         {(question.type === "multiple_choice" ||
           question.type === "true_false" ||
           question.type === "type_in") && (
-          <div className="flex items-center gap-3">
-            <AIGenerateButton
-              onGenerate={handleAIGenerate}
-              questionType={question.type}
-            />
-            {aiSuccess && (
-              <span className="text-sm font-bold text-secondary animate-pulse flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-sm">check</span>
-                Question generated! Review and edit as needed.
-              </span>
-            )}
-          </div>
-        )}
+            <div className="flex items-center gap-3">
+              <AIGenerateButton
+                onGenerate={handleAIGenerate}
+                questionType={question.type}
+              />
+              {aiSuccess && (
+                <span className="text-sm font-bold text-secondary animate-pulse flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm">check</span>
+                  Question generated! Review and edit as needed.
+                </span>
+              )}
+            </div>
+          )}
 
         <div className="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(27,43,94,0.04)]">
           <textarea
@@ -255,74 +248,73 @@ export default function QuestionEditor({
         {/* MC / Image Answer Grid */}
         {(question.type === "multiple_choice" ||
           question.type === "image_question") && (
-          <>
-            {!question.correct_answer.trim() && question.question_text.trim() && (
-              <p className="text-amber-600 text-xs font-bold flex items-center gap-1.5 mb-1">
-                <span className="material-symbols-outlined text-sm">warning</span>
-                Select the correct answer below
-              </p>
-            )}
-            <div className="grid grid-cols-2 gap-4">
-              {question.options.slice(0, 4).map((opt, i) => {
-                const isCorrect = question.correct_answer === opt && opt !== "";
-                return (
-                  <div
-                    key={i}
-                    className={`p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 ${
-                      isCorrect
+            <>
+              {!question.correct_answer.trim() && question.question_text.trim() && (
+                <p className="text-amber-600 text-xs font-bold flex items-center gap-1.5 mb-1">
+                  <span className="material-symbols-outlined text-sm">warning</span>
+                  Select the correct answer below
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-4">
+                {question.options.slice(0, 4).map((opt, i) => {
+                  const isCorrect = question.correct_answer === opt && opt !== "";
+                  return (
+                    <div
+                      key={i}
+                      className={`p-5 rounded-xl shadow-sm flex items-center gap-4 group transition-all border-2 ${isCorrect
                         ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500"
                         : "bg-surface-container-lowest border-transparent focus-within:border-primary-fixed hover:border-outline-variant/30"
-                    }`}
-                  >
-                    <div
-                      className={`w-10 h-10 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0 cursor-pointer`}
-                      onClick={() => {
-                        if (opt.trim()) update({ correct_answer: opt });
-                      }}
-                      title="Click to mark as correct answer"
+                        }`}
                     >
-                      {answerLabels[i]}
-                    </div>
-                    <input
-                      className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface bg-transparent placeholder:text-outline"
-                      type="text"
-                      value={opt}
-                      onChange={(e) => {
-                        const oldVal = opt;
-                        const newVal = e.target.value;
-                        updateOption(i, newVal);
-                        if (oldVal !== "" && question.correct_answer === oldVal) {
-                          update({
-                            correct_answer: newVal,
-                            options: question.options.map((o, j) =>
-                              j === i ? newVal : o
-                            ),
-                          });
-                        }
-                      }}
-                      placeholder="Add answer..."
-                    />
-                    <label className="relative flex items-center gap-2 cursor-pointer select-none">
-                      <input
-                        type="radio"
-                        name={`correct-${index}`}
-                        checked={isCorrect}
-                        onChange={() => {
+                      <div
+                        className={`w-10 h-10 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0 cursor-pointer`}
+                        onClick={() => {
                           if (opt.trim()) update({ correct_answer: opt });
                         }}
-                        disabled={!opt.trim()}
-                        className="w-5 h-5 text-emerald-600 border-outline focus:ring-emerald-500 cursor-pointer disabled:opacity-30"
+                        title="Click to mark as correct answer"
+                      >
+                        {answerLabels[i]}
+                      </div>
+                      <input
+                        className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface bg-transparent placeholder:text-outline"
+                        type="text"
+                        value={opt}
+                        onChange={(e) => {
+                          const oldVal = opt;
+                          const newVal = e.target.value;
+                          updateOption(i, newVal);
+                          if (oldVal !== "" && question.correct_answer === oldVal) {
+                            update({
+                              correct_answer: newVal,
+                              options: question.options.map((o, j) =>
+                                j === i ? newVal : o
+                              ),
+                            });
+                          }
+                        }}
+                        placeholder="Add answer..."
                       />
-                      <span className="text-xs font-bold text-outline group-hover:text-on-surface transition-colors">
-                        Correct
-                      </span>
-                    </label>
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
+                      <label className="relative flex items-center gap-2 cursor-pointer select-none">
+                        <input
+                          type="radio"
+                          name={`correct-${index}`}
+                          checked={isCorrect}
+                          onChange={() => {
+                            if (opt.trim()) update({ correct_answer: opt });
+                          }}
+                          disabled={!opt.trim()}
+                          className="w-5 h-5 text-emerald-600 border-outline focus:ring-emerald-500 cursor-pointer disabled:opacity-30"
+                        />
+                        <span className="text-xs font-bold text-outline group-hover:text-on-surface transition-colors">
+                          Correct
+                        </span>
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
 
         {/* True / False Options */}
         {question.type === "true_false" && (
@@ -335,19 +327,17 @@ export default function QuestionEditor({
                   key={val}
                   type="button"
                   onClick={() => update({ correct_answer: val })}
-                  className={`p-6 rounded-xl font-black text-lg flex items-center justify-between transition-all border-2 ${
-                    isCorrect
-                      ? val === "True"
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md ring-2 ring-emerald-500/20"
-                        : "border-red-500 bg-red-50 text-red-700 shadow-md ring-2 ring-red-500/20"
-                      : "bg-surface-container-lowest border-transparent text-on-surface hover:border-outline-variant/30"
-                  }`}
+                  className={`p-6 rounded-xl font-black text-lg flex items-center justify-between transition-all border-2 ${isCorrect
+                    ? val === "True"
+                      ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md ring-2 ring-emerald-500/20"
+                      : "border-red-500 bg-red-50 text-red-700 shadow-md ring-2 ring-red-500/20"
+                    : "bg-surface-container-lowest border-transparent text-on-surface hover:border-outline-variant/30"
+                    }`}
                 >
                   <span className="flex items-center gap-3">
                     <span
-                      className={`material-symbols-outlined text-2xl ${
-                        val === "True" ? "text-emerald-500" : "text-red-500"
-                      }`}
+                      className={`material-symbols-outlined text-2xl ${val === "True" ? "text-emerald-500" : "text-red-500"
+                        }`}
                     >
                       {val === "True" ? "check_circle" : "cancel"}
                     </span>
@@ -425,9 +415,9 @@ export default function QuestionEditor({
         </div>
 
         {/* Joker Toggle */}
-        <div className="flex items-center gap-4 bg-tertiary-fixed-dim/10 border-2 border-tertiary-fixed-dim/20 p-4 rounded-2xl">
+        <div className="flex items-center gap-4 bg-amber-500/10 border-2 border-amber-500/30 p-4 rounded-2xl">
           <div className="flex flex-col">
-            <span className="text-sm font-black text-on-tertiary-container flex items-center gap-1">
+            <span className="text-sm font-black text-amber-500 flex items-center gap-1">
               <span
                 className="material-symbols-outlined text-[18px]"
                 style={{ fontVariationSettings: "'FILL' 1" }}
@@ -436,7 +426,7 @@ export default function QuestionEditor({
               </span>
               JOKER ROUND
             </span>
-            <span className="text-[10px] font-medium text-on-tertiary-fixed-variant">
+            <span className="text-[10px] font-medium text-amber-600/70 dark:text-amber-400/70">
               Double points for all players
             </span>
           </div>
@@ -447,7 +437,7 @@ export default function QuestionEditor({
               checked={question.is_joker}
               onChange={(e) => update({ is_joker: e.target.checked })}
             />
-            <div className="w-11 h-6 bg-surface-container-highest rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary-fixed-dim" />
+            <div className="w-11 h-6 bg-surface-container-highest rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-outline-variant after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500" />
           </label>
         </div>
       </div>
@@ -466,11 +456,10 @@ export default function QuestionEditor({
         <div className="flex items-center gap-4">
           <button
             onClick={handleSaveQuestion}
-            className={`px-10 py-3 rounded-xl text-sm font-bold shadow-[0px_20px_40px_rgba(27,43,94,0.15)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 ${
-              justSaved
-                ? "bg-tertiary-fixed-dim text-white"
-                : "bg-primary text-on-primary"
-            }`}
+            className={`px-10 py-3 rounded-xl text-sm font-bold shadow-[0px_20px_40px_rgba(27,43,94,0.15)] hover:scale-105 active:scale-95 transition-all flex items-center gap-2 ${justSaved
+              ? "bg-tertiary-fixed-dim text-white"
+              : "bg-primary text-on-primary"
+              }`}
           >
             {justSaved ? "Tersimpan" : "Save Question"}
             <span className="material-symbols-outlined text-lg">
