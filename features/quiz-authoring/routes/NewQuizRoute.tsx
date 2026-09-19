@@ -17,7 +17,7 @@ export default function NewQuizPage() {
     e.preventDefault();
     const trimmed = title.trim();
     if (!trimmed) {
-      setError("Please enter a quiz name first.");
+      setError("Masukkan nama quiz terlebih dahulu.");
       return;
     }
     setError(null);
@@ -25,10 +25,10 @@ export default function NewQuizPage() {
     try {
       const hostId = getHostId();
       const templateId = await createDraftTemplate(hostId, trimmed);
-      toast.success(`Quiz "${trimmed}" created! Add your questions 🎉`);
+      toast.success(`Quiz "${trimmed}" dibuat! Tambahkan pertanyaanmu 🎉`);
       router.push(`/host/quiz/${templateId}/edit`);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Failed to create quiz.";
+      const msg = err instanceof Error ? err.message : "Gagal membuat quiz.";
       setError(msg);
       toast.error(msg);
       setCreating(false);
@@ -56,7 +56,7 @@ export default function NewQuizPage() {
             className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#94A3B8] hover:text-[#F8FAFC] transition-colors mb-6"
           >
             <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-            Back to Dashboard
+            Kembali ke Dashboard
           </button>
           <div className="w-16 h-16 bg-[#1C2D42] border border-[#B88B4A]/30 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#B88B4A]">
             <span
@@ -67,10 +67,10 @@ export default function NewQuizPage() {
             </span>
           </div>
           <h1 className="text-3xl font-black text-[#F8FAFC] tracking-tight">
-            Create New Quiz
+            Buat Quiz Baru
           </h1>
           <p className="text-[#94A3B8] mt-2 text-sm">
-            Give it a name first, then add your questions in the editor.
+            Beri nama dulu, lalu tambahkan pertanyaanmu di editor.
           </p>
         </div>
 
@@ -82,7 +82,7 @@ export default function NewQuizPage() {
                 htmlFor="quiz-title"
                 className="block text-[11px] font-mono font-bold uppercase tracking-widest text-[#94A3B8] mb-2"
               >
-                Quiz Name
+                Nama Quiz
               </label>
               <input
                 id="quiz-title"
@@ -92,16 +92,15 @@ export default function NewQuizPage() {
                   setTitle(e.target.value);
                   if (error) setError(null);
                 }}
-                placeholder="e.g., History & Science Quiz 2026"
+                placeholder="contoh: Kuis Sejarah & Sains 2026"
                 autoFocus
                 autoComplete="off"
                 maxLength={120}
                 disabled={creating}
-                className={`w-full px-4 py-3.5 rounded-xl border bg-[#0A121B] text-[#F8FAFC] text-base font-semibold placeholder:text-[#64748B] focus:outline-none transition-all ${
-                  error
-                    ? "border-error focus:border-error"
-                    : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
-                }`}
+                className={`w-full px-4 py-3.5 rounded-xl border bg-[#0A121B] text-[#F8FAFC] text-base font-semibold placeholder:text-[#64748B] focus:outline-none transition-all ${error
+                  ? "border-error focus:border-error"
+                  : "border-[#283E58] focus:border-[#B88B4A] focus:ring-1 focus:ring-[#B88B4A]"
+                  }`}
               />
               <AnimatePresence>
                 {error && (
@@ -117,7 +116,7 @@ export default function NewQuizPage() {
                 )}
               </AnimatePresence>
               <p className="mt-1.5 text-xs text-[#64748B] font-mono">
-                {title.length}/120 characters
+                {title.length}/120 karakter
               </p>
             </div>
 
@@ -130,7 +129,7 @@ export default function NewQuizPage() {
                 lightbulb
               </span>
               <p className="text-xs text-[#94A3B8] leading-relaxed">
-                You can change the quiz name anytime in the editor. Once named, it's saved as a draft and you can start adding questions.
+                Kamu bisa mengubah nama quiz kapan saja di editor. Setelah memberi nama, quiz akan langsung tersimpan sebagai draft dan kamu bisa mulai menambahkan pertanyaan.
               </p>
             </div>
 
@@ -144,7 +143,7 @@ export default function NewQuizPage() {
               {creating ? (
                 <>
                   <span className="w-4 h-4 border-2 border-[#0D1722]/30 border-t-[#0D1722] rounded-full animate-spin" />
-                  Creating Quiz...
+                  Membuat Quiz...
                 </>
               ) : (
                 <>
@@ -154,7 +153,7 @@ export default function NewQuizPage() {
                   >
                     edit_note
                   </span>
-                  Continue to Editor
+                  Lanjut ke Editor
                 </>
               )}
             </motion.button>
@@ -163,7 +162,7 @@ export default function NewQuizPage() {
 
         {/* Footer hint */}
         <p className="text-center text-xs text-[#64748B] mt-6 font-mono">
-          Quiz is saved automatically as you edit questions.
+          Quiz tersimpan otomatis saat kamu mengedit pertanyaan.
         </p>
       </motion.div>
     </div>
