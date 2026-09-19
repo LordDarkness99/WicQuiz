@@ -20,10 +20,10 @@ const atkinsonHyperlegible = Atkinson_Hyperlegible({
 });
 
 export const metadata: Metadata = {
-  title: "QuizTime — Real-Time Pub Quiz",
+  title: "WicQuiz — Wicaksana Quiz",
   description:
     "Host fun, interactive pub quizzes for your team meetings. Real-time scoring, horse race leaderboards, and six question types.",
-  icons: { icon: "/favicon.ico" },
+  icons: { icon: "/ikon.png" },
 };
 
 export default function RootLayout({
