@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReducedMotion } from "@/shared/hooks/useReducedMotion";
 import type { Question } from "@/shared/domain/types";
+import SpeakButton from "@/shared/ui/SpeakButton";
 
 interface AnswerButtonsProps {
   question: Question;
@@ -35,9 +36,61 @@ export default function AnswerButtons({
   correctAnswer,
 }: AnswerButtonsProps) {
   const [typeInValue, setTypeInValue] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
   const reduced = useReducedMotion();
 
   const isLockedIn = lockedAnswer != null;
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const handleMicClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (typeof window === "undefined") return;
+
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Browser Anda tidak mendukung fitur input suara.");
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "id-ID";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setTypeInValue((prev) => prev ? prev + " " + transcript : transcript);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
 
   if (
     question.type === "multiple_choice" ||
@@ -110,7 +163,16 @@ export default function AnswerButtons({
                 <span className="absolute top-2 left-3 text-xs font-bold opacity-60">
                   {style.label}
                 </span>
-                <span className="flex items-center justify-center w-full h-full text-center">
+                <div 
+                  className="absolute top-2 right-2 z-10"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <SpeakButton
+                    text={option}
+                    className="w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 text-current transition-colors"
+                  />
+                </div>
+                <span className="flex items-center justify-center w-full h-full text-center px-6">
                   {option}
                 </span>
               </motion.button>
@@ -199,18 +261,36 @@ export default function AnswerButtons({
             disabled && !isLockedIn ? "opacity-50 pointer-events-none" : ""
           } ${isLockedIn ? "pointer-events-none" : ""}`}
         >
-          <input
-            type="text"
-            value={isLockedIn ? lockedAnswer ?? "" : typeInValue}
-            onChange={(e) => setTypeInValue(e.target.value)}
-            placeholder="Type your answer..."
-            disabled={disabled || isLockedIn}
-            className={`w-full min-h-[3.5rem] rounded-2xl border-2 bg-white px-5 py-3 text-lg text-ink placeholder:text-ink/40 focus:outline-none transition-colors ${
-              isLockedIn
-                ? "border-[#1b2b5e] ring-2 ring-[#1b2b5e]/30"
-                : "border-navy/20 focus:border-coral"
-            }`}
-          />
+          <div className="relative w-full">
+            <input
+              type="text"
+              value={isLockedIn ? lockedAnswer ?? "" : typeInValue}
+              onChange={(e) => setTypeInValue(e.target.value)}
+              placeholder="Type your answer..."
+              disabled={disabled || isLockedIn}
+              className={`w-full min-h-[3.5rem] rounded-2xl border-2 bg-white pl-5 pr-14 py-3 text-lg text-ink placeholder:text-ink/40 focus:outline-none transition-colors ${
+                isLockedIn
+                  ? "border-[#1b2b5e] ring-2 ring-[#1b2b5e]/30"
+                  : "border-navy/20 focus:border-coral"
+              }`}
+            />
+            {!isLockedIn && !disabled && (
+              <button
+                type="button"
+                onClick={handleMicClick}
+                className={`absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-xl transition-colors ${
+                  isListening 
+                    ? "bg-coral text-white animate-pulse" 
+                    : "bg-navy/5 text-navy hover:bg-navy/10"
+                }`}
+                title="Bicara untuk menjawab"
+              >
+                <span className="material-symbols-outlined text-[20px]">
+                  {isListening ? "mic" : "mic_none"}
+                </span>
+              </button>
+            )}
+          </div>
           {!isLockedIn && (
             <motion.button
               whileTap={{ scale: 0.9 }}

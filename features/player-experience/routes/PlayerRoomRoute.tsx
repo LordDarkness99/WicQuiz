@@ -835,16 +835,23 @@ export default function PlayPage() {
                   <span className="text-sm font-bold text-navy/60">
                     Q{questionNumber}/{totalQuestions}
                   </span>
-                  {currentQuestion.is_joker && (
-                    <motion.span
-                      initial={{ scale: 0, rotate: -12 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                      className="px-3 py-1 rounded-xl bg-amber text-white text-xs font-extrabold uppercase tracking-wider"
-                    >
-                      Joker x2
-                    </motion.span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {currentQuestion.type === "type_in" && (
+                      <span className="px-3 py-1 rounded-xl bg-coral/10 text-coral border border-coral/20 text-xs font-extrabold uppercase tracking-wider">
+                        Essay
+                      </span>
+                    )}
+                    {currentQuestion.is_joker && (
+                      <motion.span
+                        initial={{ scale: 0, rotate: -12 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                        className="px-3 py-1 rounded-xl bg-amber text-white text-xs font-extrabold uppercase tracking-wider"
+                      >
+                        Joker x2
+                      </motion.span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Timer — show full bar while image loading, real value once ready */}
@@ -917,11 +924,18 @@ export default function PlayPage() {
                 <span className="text-sm font-bold text-navy/60">
                   Q{questionNumber}/{totalQuestions}
                 </span>
-                {currentQuestion.is_joker && (
-                  <span className="px-3 py-1 rounded-xl bg-amber text-white text-xs font-extrabold uppercase tracking-wider">
-                    Joker x2
-                  </span>
-                )}
+                <div className="flex items-center gap-2">
+                  {currentQuestion.type === "type_in" && (
+                    <span className="px-3 py-1 rounded-xl bg-coral/10 text-coral border border-coral/20 text-xs font-extrabold uppercase tracking-wider">
+                      Essay
+                    </span>
+                  )}
+                  {currentQuestion.is_joker && (
+                    <span className="px-3 py-1 rounded-xl bg-amber text-white text-xs font-extrabold uppercase tracking-wider">
+                      Joker x2
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Timer continues */}
