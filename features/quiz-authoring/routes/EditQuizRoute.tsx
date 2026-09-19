@@ -146,8 +146,8 @@ export default function EditQuizPage() {
         question_text: q.question_text.trim(),
         options:
           q.type === "multiple_choice" ||
-          q.type === "image_question" ||
-          q.type === "true_false"
+            q.type === "image_question" ||
+            q.type === "true_false"
             ? q.options
             : null,
         correct_answer: q.correct_answer.trim(),
