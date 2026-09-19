@@ -83,6 +83,28 @@ function ordinalSuffix(n: number): string {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
+function getFullQuestionTextForSpeech(question: Question): string {
+  let text = question.question_text;
+  if (!text.endsWith(".") && !text.endsWith("?")) {
+    text += ".";
+  }
+  
+  if (question.type === "multiple_choice" || question.type === "image_question") {
+    if (question.options && question.options.length > 0) {
+      text += " Pilihan jawabannya adalah: ";
+      const labels = ["A", "B", "C", "D", "E"];
+      question.options.forEach((opt, idx) => {
+        text += `${labels[idx] || ""}, ${opt}. `;
+      });
+    }
+  } else if (question.type === "true_false") {
+    text += " Pilihan jawabannya adalah: Benar, atau Salah.";
+  } else if (question.type === "type_in") {
+    text += " Silakan ketik atau sebutkan jawaban Anda.";
+  }
+  return text.trim();
+}
+
 // ─── Component ───────────────────────────────────────────────────
 
 export default function PlayPage() {
@@ -894,7 +916,7 @@ export default function PlayPage() {
                   <h2 className="text-xl font-bold text-navy leading-snug flex items-start gap-2">
                     <span className="flex-1">{currentQuestion.question_text}</span>
                     <SpeakButton
-                      text={currentQuestion.question_text}
+                      text={getFullQuestionTextForSpeech(currentQuestion)}
                       autoSpeak={accessibility.settings.speakText}
                       className="shrink-0 w-8 h-8 bg-navy/10 text-navy hover:bg-navy/20"
                     />
