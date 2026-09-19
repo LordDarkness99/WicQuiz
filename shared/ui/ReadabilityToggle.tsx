@@ -95,7 +95,7 @@ export default function ReadabilityToggle() {
         <div
           role="dialog"
           aria-label="Easy reading settings"
-          className="readability-panel absolute bottom-full right-0 mb-3 w-[calc(100vw-2rem)] sm:w-84 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-[#B88B4A]/30 bg-[#121F2E]/95 backdrop-blur-xl p-4 sm:p-5 shadow-2xl text-[#F8FAFC]"
+          className="readability-panel absolute bottom-full right-0 mb-3 w-[calc(100vw-2rem)] sm:w-auto sm:min-w-[360px] max-w-md max-h-[calc(100vh-6rem)] overflow-y-auto overflow-x-hidden rounded-2xl border border-[#B88B4A]/30 bg-[#121F2E]/95 backdrop-blur-xl p-4 sm:p-5 shadow-2xl text-[#F8FAFC]"
         >
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#283E58]">
             <p className="text-sm font-extrabold text-[#F8FAFC] flex items-center gap-1.5">
@@ -118,7 +118,7 @@ export default function ReadabilityToggle() {
                   type="button"
                   aria-pressed={settings.fontMode === opt.value}
                   onClick={() => setFontMode(opt.value)}
-                  className={`flex items-center justify-between rounded-xl border px-3 py-2 text-left text-sm transition-all cursor-pointer ${settings.fontMode === opt.value
+                  className={`flex flex-wrap items-center justify-between gap-x-2 gap-y-1 rounded-xl border px-3 py-2 text-left text-sm transition-all cursor-pointer ${settings.fontMode === opt.value
                     ? "border-[#B88B4A] bg-[#B88B4A]/20 text-[#F8FAFC] shadow-xs"
                     : "border-[#283E58] bg-[#162536]/40 text-[#94A3B8] hover:border-[#B88B4A]/40 hover:text-white"
                     }`}
@@ -139,8 +139,11 @@ export default function ReadabilityToggle() {
             <legend className="mb-2 text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8]">
               Text size
             </legend>
-            <div className="flex items-center gap-3 px-2 py-2">
-              <span className="text-xs font-bold text-[#64748B]">A</span>
+            <div className="flex items-center gap-2 px-1 py-2">
+              <div className="flex flex-col items-center text-[#64748B] shrink-0" aria-hidden="true">
+                <span className="text-xs font-bold">A</span>
+                <span className="text-[8px] font-mono mt-0.5 uppercase tracking-wider">Decrease</span>
+              </div>
               <div className="flex-1">
                 <input
                   type="range"
@@ -162,7 +165,10 @@ export default function ReadabilityToggle() {
                   <span>1.075x</span>
                 </div>
               </div>
-              <span className="text-base font-bold text-[#F8FAFC]">A</span>
+              <div className="flex flex-col items-center shrink-0" aria-hidden="true">
+                <span className="text-base font-bold text-[#F8FAFC]">A</span>
+                <span className="text-[8px] font-mono text-[#64748B] mt-0.5 uppercase tracking-wider">Increase</span>
+              </div>
             </div>
           </fieldset>
 
@@ -170,7 +176,7 @@ export default function ReadabilityToggle() {
             <legend className="mb-2 text-[11px] font-mono font-bold uppercase tracking-wider text-[#94A3B8]">
               Theme & Contrast
             </legend>
-            <div className="grid grid-cols-4 gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {BG_OPTIONS.map((opt) => {
                 const isLight = opt.value === "soft";
                 return (
@@ -180,7 +186,7 @@ export default function ReadabilityToggle() {
                     aria-pressed={settings.bgTheme === opt.value}
                     onClick={() => setBgTheme(opt.value)}
                     title={opt.label}
-                    className={`h-9 flex flex-col items-center justify-center rounded-lg border-2 transition-all cursor-pointer ${isLight ? "theme-swatch-soft" : "theme-swatch-dark"
+                    className={`flex-auto min-w-[72px] min-h-[36px] px-2 py-1.5 flex flex-col items-center justify-center rounded-lg border-2 transition-all cursor-pointer ${isLight ? "theme-swatch-soft" : "theme-swatch-dark"
                       } ${settings.bgTheme === opt.value
                         ? "border-[#B88B4A] scale-105 shadow-md ring-2 ring-[#B88B4A]/40"
                         : "border-[#283E58] hover:border-[#B88B4A]/50"

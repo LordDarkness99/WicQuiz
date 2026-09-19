@@ -386,9 +386,9 @@ export default function EditQuizPage() {
             </span>
             <span className="hidden sm:inline">Dashboard</span>
           </button>
-          <div className="h-8 w-px bg-outline-variant/30 flex-shrink-0" />
+          <div className="min-h-[32px] self-stretch w-px bg-outline-variant/30 flex-shrink-0" />
           <input
-            className="bg-transparent border-none font-bold text-primary-container p-0 focus:ring-0 focus:outline-none text-sm tracking-tight w-full sm:w-64 min-w-[100px]"
+            className="bg-transparent border-none font-bold text-primary-container p-0 focus:ring-0 focus:outline-none text-sm tracking-tight w-full flex-1 sm:min-w-[256px]"
             type="text"
             value={title}
             onChange={(e) => handleTitleChange(e.target.value)}

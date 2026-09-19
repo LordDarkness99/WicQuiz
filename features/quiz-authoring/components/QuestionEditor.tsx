@@ -261,13 +261,13 @@ export default function QuestionEditor({
                   return (
                     <div
                       key={i}
-                      className={`p-3 sm:p-5 rounded-xl shadow-sm flex items-center gap-3 sm:gap-4 group transition-all border-2 ${isCorrect
+                      className={`p-3 sm:p-5 rounded-xl shadow-sm flex flex-wrap items-center gap-3 sm:gap-4 group transition-all border-2 ${isCorrect
                         ? "border-emerald-500 bg-emerald-50/50 shadow-md ring-1 ring-emerald-500"
                         : "bg-surface-container-lowest border-transparent focus-within:border-primary-fixed hover:border-outline-variant/30"
                         }`}
                     >
                       <div
-                        className={`w-10 h-10 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0 cursor-pointer`}
+                        className={`min-w-[40px] min-h-[40px] px-2 py-2 rounded-xl ${answerColors[i]} flex items-center justify-center text-white font-black text-xs shrink-0 cursor-pointer`}
                         onClick={() => {
                           if (opt.trim()) update({ correct_answer: opt });
                         }}
@@ -276,7 +276,7 @@ export default function QuestionEditor({
                         {answerLabels[i]}
                       </div>
                       <input
-                        className="flex-1 border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface bg-transparent placeholder:text-outline"
+                        className="flex-1 min-w-[120px] border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface bg-transparent placeholder:text-outline"
                         type="text"
                         value={opt}
                         onChange={(e) => {
@@ -375,13 +375,13 @@ export default function QuestionEditor({
       </div>
 
       {/* Settings Controls */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-8 pt-4">
-        <div className="flex items-center gap-4 sm:gap-6">
+      <div className="flex flex-col md:flex-row flex-wrap items-stretch md:items-center justify-between gap-4 md:gap-8 pt-4">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           <div className="flex flex-col gap-1 flex-1 sm:flex-none">
             <label className="text-[10px] font-black uppercase tracking-widest text-outline">
               Time Limit
             </label>
-            <div className="flex items-center bg-surface-container-low rounded-xl px-3 sm:px-4 py-2 w-full sm:w-32">
+            <div className="flex items-center bg-surface-container-low rounded-xl px-3 sm:px-4 py-2 w-full sm:min-w-[128px]">
               <input
                 className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface w-full"
                 type="number"
@@ -395,12 +395,12 @@ export default function QuestionEditor({
               <span className="text-[10px] sm:text-xs font-bold text-outline">SEC</span>
             </div>
           </div>
-          <div className="h-10 w-px bg-outline-variant/30 mt-4" />
+          <div className="min-h-[40px] self-stretch w-px bg-outline-variant/30 mt-4" />
           <div className="flex flex-col gap-1 flex-1 sm:flex-none">
             <label className="text-[10px] font-black uppercase tracking-widest text-outline">
               Points
             </label>
-            <div className="flex items-center bg-surface-container-low rounded-xl px-3 sm:px-4 py-2 w-full sm:w-32">
+            <div className="flex items-center bg-surface-container-low rounded-xl px-3 sm:px-4 py-2 w-full sm:min-w-[128px]">
               <input
                 className="bg-transparent border-none focus:ring-0 focus:outline-none p-0 font-bold text-on-surface w-full"
                 type="number"
