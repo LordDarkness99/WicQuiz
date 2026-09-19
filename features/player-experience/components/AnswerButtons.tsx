@@ -112,8 +112,10 @@ export default function AnswerButtons({
             const isWrongSelected = isRevealed && isSelected && option !== correctAnswer;
 
             return (
-              <motion.button
+              <motion.div
                 key={index}
+                role="button"
+                tabIndex={disabled || isLockedIn ? -1 : 0}
                 whileTap={isLockedIn ? undefined : { scale: 0.88 }}
                 animate={
                   reduced
@@ -148,7 +150,7 @@ export default function AnswerButtons({
                   isRevealed && isCorrectOption
                     ? "bg-[#22c55e] text-white"
                     : style.bg + " " + style.text
-                } relative rounded-xl p-6 min-h-[80px] font-bold text-lg shadow-md transition-colors ${
+                } relative rounded-xl p-6 min-h-[80px] font-bold text-lg shadow-md transition-colors cursor-pointer select-none ${
                   isSelected && !isRevealed
                     ? "ring-4 ring-[#1b2b5e] ring-offset-2 ring-offset-cream scale-95"
                     : isFaded && !isRevealed
@@ -156,16 +158,28 @@ export default function AnswerButtons({
                     : !isRevealed
                     ? "scale-95 active:scale-90"
                     : ""
-                } ${isWrongSelected ? "border-2 border-[#FF6B6B]" : ""}`}
-                onClick={() => onAnswer(option)}
-                disabled={disabled || isLockedIn}
+                } ${isWrongSelected ? "border-2 border-[#FF6B6B]" : ""} ${
+                  disabled || isLockedIn ? "pointer-events-none" : ""
+                }`}
+                onClick={() => {
+                  if (!disabled && !isLockedIn) onAnswer(option);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    if (!disabled && !isLockedIn) onAnswer(option);
+                  }
+                }}
               >
                 <span className="absolute top-2 left-3 text-xs font-bold opacity-60">
                   {style.label}
                 </span>
                 <div 
-                  className="absolute top-2 right-2 z-10"
-                  onClick={(e) => e.stopPropagation()}
+                  className="absolute top-2 right-2 z-10 pointer-events-auto"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onKeyDown={(e) => e.stopPropagation()}
                 >
                   <SpeakButton
                     text={option}
@@ -175,7 +189,7 @@ export default function AnswerButtons({
                 <span className="flex items-center justify-center w-full h-full text-center px-6">
                   {option}
                 </span>
-              </motion.button>
+              </motion.div>
             );
           })}
         </div>
@@ -200,8 +214,10 @@ export default function AnswerButtons({
             const isWrongSelected = isRevealed && isSelected && val !== correctAnswer;
 
             return (
-              <motion.button
+              <motion.div
                 key={val}
+                role="button"
+                tabIndex={disabled || isLockedIn ? -1 : 0}
                 whileTap={isLockedIn ? undefined : { scale: 0.88 }}
                 animate={
                   reduced
@@ -228,9 +244,9 @@ export default function AnswerButtons({
                     ? { duration: 0.45, ease: "easeOut" }
                     : undefined
                 }
-                className={`rounded-xl p-6 min-h-[80px] ${
+                className={`relative rounded-xl p-6 min-h-[80px] ${
                   isRevealed && isCorrectOption ? "bg-[#22c55e]" : bgColor
-                } text-white font-bold text-2xl shadow-md transition-colors ${
+                } text-white font-bold text-2xl shadow-md transition-colors cursor-pointer select-none flex items-center justify-center ${
                   isSelected && !isRevealed
                     ? "ring-4 ring-[#1b2b5e] ring-offset-2 ring-offset-cream scale-95"
                     : isFaded && !isRevealed
@@ -238,12 +254,33 @@ export default function AnswerButtons({
                     : !isRevealed
                     ? "scale-95 active:scale-90"
                     : ""
-                } ${isWrongSelected ? "border-2 border-[#FF6B6B]" : ""}`}
-                onClick={() => onAnswer(val)}
-                disabled={disabled || isLockedIn}
+                } ${isWrongSelected ? "border-2 border-[#FF6B6B]" : ""} ${
+                  disabled || isLockedIn ? "pointer-events-none" : ""
+                }`}
+                onClick={() => {
+                  if (!disabled && !isLockedIn) onAnswer(val);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    if (!disabled && !isLockedIn) onAnswer(val);
+                  }
+                }}
               >
-                {val}
-              </motion.button>
+                <div 
+                  className="absolute top-2 right-2 z-10 pointer-events-auto"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onKeyDown={(e) => e.stopPropagation()}
+                >
+                  <SpeakButton
+                    text={val === "True" ? "Benar" : "Salah"}
+                    className="w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 text-current transition-colors"
+                  />
+                </div>
+                <span>{val}</span>
+              </motion.div>
             );
           })}
         </div>
